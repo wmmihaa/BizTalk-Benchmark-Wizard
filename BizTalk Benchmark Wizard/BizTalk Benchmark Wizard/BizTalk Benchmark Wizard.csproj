@@ -118,6 +118,8 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Helper\BizTalkHelper.cs" />
+    <Compile Include="Helper\PerflogHelper.cs" />
     <Compile Include="Resources\Styles\Gauge.xaml.cs">
       <DependentUpon>Gauge.xaml</DependentUpon>
     </Compile>
