@@ -1,0 +1,446 @@
+﻿<Window x:Class="BizTalk_Benchmark_Wizard.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:BizTalk_Benchmark_Wizard"
+        xmlns:c="clr-namespace:BizTalk_Benchmark_Wizard.Resources.Styles"
+        xmlns:my1="clr-namespace:bLogical.GaugeControl;assembly=bLogical.GaugeControl"
+        xmlns:dropShadow="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero"
+        Title="BizTalk Benchmark Wizard" 
+        Height="447" 
+        Width="709" 
+        ResizeMode="NoResize" xmlns:my="http://schemas.microsoft.com/wpf/2008/toolkit" Loaded="Window_Loaded">
+    <Window.Resources>
+        <Style  TargetType="{x:Type TabControl}">
+            <Setter Property="OverridesDefaultStyle" Value="True" />
+            <Setter Property="SnapsToDevicePixels" Value="True" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type TabControl}">
+                        <Grid KeyboardNavigation.TabNavigation="Local">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <TabPanel Name="HeaderPanel"
+                                        Grid.Row="0"
+                                        Panel.ZIndex="1" 
+                                        Margin="0,0,4,-1" 
+                                        IsItemsHost="True"
+                                        KeyboardNavigation.TabIndex="1"
+                                        Background="Transparent" />
+                            <Border Name="Border" 
+                                    Grid.Row="1" 
+                                    Margin="0,0,0,0"
+			                        BorderBrush="Gainsboro"
+			                        CornerRadius="5,5,5,5"
+                                    KeyboardNavigation.TabNavigation="Local"
+                                    KeyboardNavigation.DirectionalNavigation="Contained"
+                                    KeyboardNavigation.TabIndex="2"
+                                    BorderThickness="0,0,0,0"
+			                        Background="{StaticResource BrushedMetalBackground}">
+
+                                <ContentPresenter Name="PART_SelectedContentHost"
+                                                  Margin="4"
+                                                  ContentSource="SelectedContent" />
+                            </Border>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style TargetType="{x:Type TabItem}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type TabItem}">
+                        <Grid>
+
+                            <Border Name="Border"
+                                     Background="Transparent"
+                                     BorderBrush="Transparent" 
+                                     BorderThickness="1,1,1,1" 
+                                     CornerRadius="6,6,0,0" >
+                                <ContentPresenter x:Name="ContentSite"
+                                                   VerticalAlignment="Center"
+                                                   HorizontalAlignment="Center"
+                                                   ContentSource="Header"
+                                                   Margin="12,2,12,2"/>
+                            </Border>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style TargetType="{x:Type Label}">
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="FontFamily" Value="Calibri"/>
+        </Style>
+        <Style x:Key="RoundedButton" TargetType="{x:Type Button}">
+            <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"/>
+            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+            <Setter Property="BorderThickness" Value="3"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Padding" Value="0,0,1,1"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <ControlTemplate.Resources>
+                            <Storyboard x:Key="ShowShine">
+                                <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="Shine" Storyboard.TargetProperty="(UIElement.Opacity)">
+                                    <SplineDoubleKeyFrame KeyTime="00:00:00.5000000" Value="1"/>
+                                </DoubleAnimationUsingKeyFrames>
+                            </Storyboard>
+                            <Storyboard x:Key="HideShine">
+                                <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="Shine" Storyboard.TargetProperty="(UIElement.Opacity)">
+                                    <SplineDoubleKeyFrame KeyTime="00:00:00.3000000" Value="0"/>
+                                </DoubleAnimationUsingKeyFrames>
+                            </Storyboard>
+                        </ControlTemplate.Resources>
+                        <Border CornerRadius="5,5,5,5" BorderThickness="1,1,1,1" RenderTransformOrigin="0.5,0.5" x:Name="border" BorderBrush="#FFFFFFFF">
+                            <Border.RenderTransform>
+                                <TransformGroup>
+                                    <ScaleTransform ScaleX="1" ScaleY="1"/>
+                                    <SkewTransform AngleX="0" AngleY="0"/>
+                                    <RotateTransform Angle="0"/>
+                                    <TranslateTransform X="0" Y="0"/>
+                                </TransformGroup>
+                            </Border.RenderTransform>
+                            <Border Background="{TemplateBinding Background}" CornerRadius="5,5,5,5" x:Name="border1">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="0.5*"/>
+                                        <RowDefinition Height="0.5*"/>
+                                    </Grid.RowDefinitions>
+                                    <Border Grid.Row="0" CornerRadius="5,5,0,0">
+                                        <Border.Background>
+                                            <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                                <GradientStop Color="#00FFFFFF" Offset="0"/>
+                                                <GradientStop Color="#7EFFFFFF" Offset="1"/>
+                                            </LinearGradientBrush>
+                                        </Border.Background>
+                                    </Border>
+                                    <Border Grid.Row="1" Opacity="0" x:Name="Shine" Width="Auto" Height="Auto" CornerRadius="0,0,5,5" Margin="1,0,-1,0" Background="{TemplateBinding BorderBrush}"/>
+                                    <ContentPresenter VerticalAlignment="Center"  Grid.RowSpan="2" HorizontalAlignment="Center" x:Name="contentPresenter"/>
+                                </Grid>
+                            </Border>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Opacity" TargetName="border1" Value="0.5"/>
+                                <Setter Property="Opacity" TargetName="border" Value="1"/>
+                                <Setter Property="Opacity" TargetName="contentPresenter" Value="0.5"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="RenderTransform" TargetName="border">
+                                    <Setter.Value>
+                                        <TransformGroup>
+                                            <ScaleTransform ScaleX="0.9" ScaleY="0.9"/>
+                                            <SkewTransform AngleX="0" AngleY="0"/>
+                                            <RotateTransform Angle="0"/>
+                                            <TranslateTransform X="0" Y="0"/>
+                                        </TransformGroup>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Trigger.ExitActions>
+                                    <BeginStoryboard Storyboard="{StaticResource HideShine}" x:Name="HideShine_BeginStoryboard"/>
+                                </Trigger.ExitActions>
+                                <Trigger.EnterActions>
+                                    <BeginStoryboard x:Name="ShowShine_BeginStoryboard" Storyboard="{StaticResource ShowShine}"/>
+                                </Trigger.EnterActions>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="{x:Type TextBox}" TargetType="{x:Type TextBoxBase}">
+            <Setter Property="SnapsToDevicePixels" Value="True"/>
+            <Setter Property="OverridesDefaultStyle" Value="True"/>
+            <Setter Property="KeyboardNavigation.TabNavigation" Value="None"/>
+            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+            <Setter Property="MinWidth" Value="20"/>
+            <Setter Property="MinHeight" Value="20"/>
+            <Setter Property="AllowDrop" Value="true"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type TextBoxBase}">
+                        <Border Name="Border"
+                                  CornerRadius="5" 
+                                  Padding="2"
+                                  Background="{StaticResource WindowBackgroundBrush}"
+                                  BorderBrush="{StaticResource SolidBorderBrush}"
+                                  BorderThickness="1" >
+                            <ScrollViewer Margin="0" x:Name="PART_ContentHost"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter TargetName="Border" Property="Background" Value="{StaticResource DisabledBackgroundBrush}"/>
+                                <Setter TargetName="Border" Property="BorderBrush" Value="{StaticResource DisabledBackgroundBrush}"/>
+                                <Setter Property="Foreground" Value="{StaticResource DisabledForegroundBrush}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+    <Grid>
+        <Canvas>
+            <TabControl Height="430"
+                        Name="tabControl1" 
+                        Width="693"
+                        Background="Transparent" 
+                        Canvas.Top="-14"
+                        Margin="5,0,0,0" TabStripPlacement="Bottom" >
+                <TabItem Header="" Name="tabWelcome">
+                    <Grid Background="Transparent">
+                        <Label Height="61" Margin="20,34,19,0" VerticalAlignment="Top" FontSize="30" FontWeight="Bold" FontFamily="Calibri">Welcome to BizTalk Benchmark Wizard</Label>
+
+                        <Label Margin="20,80,19,129" Name="label2"  FontFamily="Calibri">
+                            <TextBlock TextWrapping="Wrap">The purpose of this tool is to verify your BizTalk environment performs as expected. The typical use case where you would <LineBreak/>use the BizTalk Benchmark Wizard would be after BizTalk Server is installed and before deploying any solutions to the environment.<LineBreak/>
+                                <LineBreak/>BizTalk Benchmark Wizard performs load to BizTalk Server in relation to a specific scenario. During the execution of the test, counter information is collected and benchmarked against collected statistics relevant to your BizTalk Server environment<LineBreak/>
+                                After completion of the test, a result is presented showing whether or not your BizTalk investment is performing as expected.<LineBreak/>
+                                <LineBreak/>The executed scenarios may or may not be relative to any realistic scenario, and is only intended for testing.</TextBlock>
+                        </Label>
+
+                    </Grid>
+                </TabItem>
+                <TabItem Header="" Name="tabPrerequsites">
+                    <Grid>
+                        <Label Height="61" Margin="20,34,19,0" VerticalAlignment="Top" FontSize="30" FontWeight="Bold" FontFamily="Calibri">Prerequsites</Label>
+
+                        <StackPanel Orientation="Vertical" Margin="20,80" >
+                            <StackPanel Orientation="Horizontal">
+                                <Image Height="30" Source="Resources/Images/passed.png"/>
+                                <Label FontFamily="Calibri" MaxWidth="550">
+                                    <TextBlock TextWrapping="Wrap">Data Collector Sets will be created for further analyzes after the completion of the test. The following Data Collector Sets will be created:</TextBlock>
+                                </Label>
+                            </StackPanel>
+                            <StackPanel Height="15"/>
+                            <StackPanel Orientation="Horizontal">
+                                    <Image Height="30" Source="Resources/Images/cross.png"/>
+                                    <Label FontFamily="Calibri" FontWeight="Bold"   MaxWidth="550" >
+                                        <TextBlock TextWrapping="Wrap">The BizTalk Benchmark Application package is not properly installed. Make sure to install the BizTalk Benchmark Application.MSI on all application servers. Complete the installation by importing the BizTalk Benchmark Application.MSI to the BizTalk Server Group.</TextBlock>
+                                    </Label>
+                                </StackPanel>
+                        </StackPanel>
+                    </Grid>
+                </TabItem>
+                <TabItem Header="" Name="tabEnvironment">
+                    <Grid>
+                        <Label Height="61" Margin="20,34,19,0" VerticalAlignment="Top" FontSize="30" FontWeight="Bold" FontFamily="Calibri">Scenarios</Label>
+
+                        <Label Margin="20,75,19,129" FontFamily="Calibri">
+                            <TextBlock TextWrapping="Wrap">
+                                BizTalk Benchmark Wizard uses Microsoft LoadGen 2007 to generate message transmission loads to run performance and stress tests for Microsoft BizTalk Server applications. 
+                                <LineBreak/><LineBreak/>Depending on which scenario you select below, a different script will be executed. Microsoft LoadGen 2007 was installed together with BizTalk Benchmark Wizard, and can be used afterwards to continue analyzing your environment.
+                            </TextBlock>
+                        </Label>
+                        <Canvas Margin="20,170" >
+                            <StackPanel Orientation="Vertical">
+                                <StackPanel Orientation="Horizontal">
+                                    <Label Canvas.Left="26" Canvas.Top="16" Height="28" Name="label1" Width="120">Select scenario:</Label>
+                                    <ComboBox Canvas.Left="121" Canvas.Top="16" Height="23" Name="cbScenario" Width="510" SelectionChanged="cbScenario_SelectionChanged" />
+                                </StackPanel>
+                                <my:DataGrid Name="environments" 
+                                     ItemsSource="{Binding}" 
+                                     AutoGenerateColumns="False" 
+                                     Height="139" 
+                                     Width="634" 
+                                     Canvas.Left="25" 
+                                     Canvas.Top="45">
+                                    <my:DataGrid.Columns>
+                                        <my:DataGridTextColumn Header="Name"  Binding="{Binding Name}" Width="100"/>
+                                        <my:DataGridTextColumn Header="#BTS Srv"  Binding="{Binding NuberOfActiveBizTalkServers}" Width="70"/>
+                                        <my:DataGridTextColumn Header="BTS Config"  Binding="{Binding BizTalkServerConfiguration}"  Width="200"/>
+                                        <my:DataGridTextColumn Header="#SQL Srv"  Binding="{Binding NuberOfActiveSQLServers}"  Width="70"/>
+                                        <my:DataGridTextColumn Header="SQL Config"  Binding="{Binding SQLServerConfiguration}"  Width="100"/>
+                                    </my:DataGrid.Columns>
+
+                                </my:DataGrid>
+                            </StackPanel>
+
+                        </Canvas>
+                    </Grid>
+
+                </TabItem>
+                <TabItem Header="" Name="tabScenario">
+                    <Grid>
+                        <Label Height="61" Margin="20,34,19,0" VerticalAlignment="Top" FontSize="30" FontWeight="Bold" FontFamily="Calibri">
+                            <TextBlock Name="ScenarioName" TextWrapping="Wrap">Scenario</TextBlock>
+                        </Label>
+
+                        <Label FontFamily="Calibri" Margin="0,80,19,129">
+                            <TextBlock Name="ScenarioDescription"  TextWrapping="Wrap">...</TextBlock>
+                        </Label>
+
+                        <Canvas>
+                            <Image Name="ScenairoPicture1" Source="Resources/Images/scenario1.png" Width="400" Canvas.Top="217" Canvas.Left="36.654" Height="151" Visibility="Visible"/>
+                            <Image Name="ScenairoPicture2" Source="Resources/Images/scenario2.png" Width="400" Canvas.Top="217" Canvas.Left="36.654" Height="151" Visibility="Hidden"/>
+                        </Canvas>
+                    </Grid>
+                </TabItem>
+                <TabItem Header="" Name="tabPrepare">
+                    <Grid>
+                        <Label Height="61" Margin="20,34,19,0" VerticalAlignment="Top" FontSize="30" FontWeight="Bold" FontFamily="Calibri">Prepare</Label>
+
+                        <Label Margin="20,80,19,129" FontFamily="Calibri">
+                            <TextBlock Name="TESTLABEL" TextWrapping="Wrap">In order to create a comparable result, please terminate all suspended instances, and stop all Host Instances not running the WCF-NetTcp adapter. Make sure to have at least one Host Instance with tracking enabled.</TextBlock>
+                        </Label>
+
+                    </Grid>
+                </TabItem>
+                <TabItem Header="" Name="tabRun">
+                    <Grid>
+                        <Canvas>
+                            <StackPanel Orientation="Horizontal" Margin="0,30" >
+                                <StackPanel Width="20"/>
+                                <my1:GaugeControl Name="CPUGauge" Caption="Avg CPU"></my1:GaugeControl>
+                                <StackPanel Width="30"/>
+                                <my1:GaugeControl Name="ProcessedGauge" Caption="Avg Received msgs/sec" ></my1:GaugeControl>
+                                <StackPanel Width="30"/>
+                                <my1:GaugeControl Name="ReceivedGauge" Caption="Avg Processed msgs/sec"></my1:GaugeControl>
+                            </StackPanel>
+                            <ProgressBar Name="Progress" Width="580" Foreground="Green"  Value="70" Height="20" Minimum="0" Maximum="100" Margin="10" Canvas.Left="70" Canvas.Top="266.224"/>
+
+                            <Label Canvas.Left="22" Canvas.Top="274" Height="28" Name="label3" Width="120">Progress:</Label>
+                        </Canvas>
+                    </Grid>
+                </TabItem>
+                <TabItem Header="" Name="tabAnalyze">
+                    <Grid>
+                        <StackPanel Orientation="Vertical" Margin="20">
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                <Image Source="Resources/Images/failed.png" Width="100" Height="100"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" >
+                                <Label FontSize="42" FontWeight="Bold">
+                                    <TextBlock Text="Failed!"/>
+                                </Label>
+                            </StackPanel>
+                            <StackPanel HorizontalAlignment="Center">
+                                <my:DataGrid Name="ResultGrid" 
+                                     ItemsSource="{Binding}" 
+                                     AutoGenerateColumns="False" 
+                                     Height="110" 
+                                     Width="524" 
+                                     Canvas.Left="25" 
+                                     Canvas.Top="45">
+                                    <my:DataGrid.Columns>
+                                        <my:DataGridTextColumn Header="Counter"  Binding="{Binding CouterValue}" Width="230"/>
+                                        <my:DataGridTextColumn Header="Test Value"  Binding="{Binding TestValue}" Width="100"/>
+                                        <my:DataGridTextColumn Header="KPI"  Binding="{Binding KPI}"  Width="100"/>
+                                        <my:DataGridTextColumn Header="Status"  Binding="{Binding Status}"  Width="70"/>
+                                    </my:DataGrid.Columns>
+                                </my:DataGrid>
+                            </StackPanel>
+                            <StackPanel HorizontalAlignment="Center" Width="530">
+                                <Label>
+                                    <TextBlock Name="ResultDescription" TextWrapping="Wrap">
+                                        <LineBreak/> The test did not complete with expected results. To further analyze the environment we recommend you to study the Data Collector Sets created using the <Hyperlink NavigateUri="http://www.codeplex.com/PAL">Performance Analysis of Logs (PAL) tool</Hyperlink>.
+                                    </TextBlock>
+                                </Label>
+                            </StackPanel>
+                        </StackPanel>
+                        <Canvas>
+                            
+                        </Canvas>
+                    </Grid>
+                </TabItem>
+
+            </TabControl>
+            <TextBlock Canvas.Left="30" Canvas.Top="370">
+                 <Hyperlink NavigateUri="http://bbw.codeplex.com">http://bbw.codeplex.com</Hyperlink>.
+            </TextBlock>
+            <Button Canvas.Left="501" Canvas.Top="365" Height="23" Name="btnBack" Width="74" Click="btnBack_Click" Style="{DynamicResource RoundedButton}" Visibility="Hidden">Back</Button>
+            <Button Canvas.Left="581" Canvas.Top="365" Height="23" Name="btnNext" Width="74" Click="btnNext_Click" Style="{DynamicResource RoundedButton}" >Next</Button>
+        </Canvas>
+
+        <Popup x:Name="PopupLogin" 
+               AllowsTransparency="True"
+               IsOpen="False"
+               Width="400"
+               Height="158"
+               Placement="Center" PopupAnimation="Fade">
+
+            <Grid>
+                <dropShadow:SystemDropShadowChrome CornerRadius="3,13,3,13" Color="#71000000">
+                    <Grid x:Name="MyElement" />
+                </dropShadow:SystemDropShadowChrome>
+
+                <Grid>
+                    <Border Margin="0,0,5,5"
+			                BorderBrush="Gainsboro"
+			                CornerRadius="5,5,5,5"
+			                BorderThickness="1,1,1,1"
+			                Background="{StaticResource BrushedMetalBackground}"/>
+
+                    <StackPanel Orientation="Vertical" Width="365" Margin="0,25">
+                        <StackPanel Orientation="Horizontal">
+                            <Label Height="28" HorizontalAlignment="Left" VerticalAlignment="Top" Width="139.944">BizTalk Database Server:</Label>
+                            <TextBox x:Name="txtServer1" Height="23" Width="215.557" VerticalAlignment="Top" TextAlignment="Right">(local)</TextBox>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Label Height="28" HorizontalAlignment="Left" VerticalAlignment="Top" Width="139.944">Management Database:</Label>
+                            <TextBox x:Name="txtMgmtDb1" Height="23" TextAlignment="Right" VerticalAlignment="Top" Width="215.557">BizTalkMgmtDb</TextBox>
+                        </StackPanel>
+                        <StackPanel Height="20"/>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,10,0">
+                            <Button Height="23" Style="{DynamicResource RoundedButton}" Name="btnOk1" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="75.263" Click="btnOk_Click">Ok</Button>
+                            <StackPanel Width="5"/>
+                            <Button Height="23" Style="{DynamicResource RoundedButton}" HorizontalAlignment="Right" Name="btnCancel1" VerticalAlignment="Bottom" Width="75" Click="btnCancel_Click">Cancel</Button>
+                        </StackPanel>
+                    </StackPanel>
+
+                </Grid>
+            </Grid>
+        </Popup>
+        <Popup x:Name="PopupException" 
+               AllowsTransparency="True"
+               IsOpen="False"
+               Width="400"
+               Height="200"
+               Placement="Center" PopupAnimation="Fade">
+
+            <Grid>
+                <dropShadow:SystemDropShadowChrome CornerRadius="3,13,3,13" Color="#71000000">
+                    <Grid x:Name="MyExceptionElement" />
+                </dropShadow:SystemDropShadowChrome>
+
+                <Grid>
+                    <Border Margin="0,0,5,5"
+			                    BorderBrush="Gainsboro"
+			                    CornerRadius="5,5,5,5"
+			                    BorderThickness="1,1,1,1"
+			                    Background="{StaticResource BrushedMetalBackground}"/>
+
+                    <StackPanel Orientation="Vertical"
+                                    HorizontalAlignment="Left" 
+                                    VerticalAlignment="Top"
+                                    Width="380"
+                                    Height="140"
+                                    Margin="10"
+                                    >
+                        <StackPanel Orientation="Horizontal">
+                            <Image Height="50" 
+                                       Width="50" 
+                                       Name="image1" 
+                                       Stretch="Fill"  
+                                       Source="Resources/Images/cross.png"/>
+                            <TextBlock Text=" "/>
+                            <TextBlock Text="An error has occured." FontSize="15" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </StackPanel>
+                    <TextBox Margin="10,60,10,45" 
+                             Name="txtException" 
+                             ScrollViewer.VerticalScrollBarVisibility="Auto"
+                             TextWrapping="Wrap"/>
+                    <Button Height="23" Margin="162,0,162,15" Name="btnExceptionOk" Style="{DynamicResource RoundedButton}" VerticalAlignment="Bottom" Click="btnExceptionOk_Click">Ok</Button>
+                </Grid>
+            </Grid>
+        </Popup>
+    </Grid>
+
+</Window>
