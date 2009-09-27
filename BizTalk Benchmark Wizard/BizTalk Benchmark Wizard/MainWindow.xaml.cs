@@ -11,6 +11,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Collections.ObjectModel;
+using BizTalk_Benchmark_Wizard.Helper;
 
 namespace BizTalk_Benchmark_Wizard
 {
@@ -21,6 +22,8 @@ namespace BizTalk_Benchmark_Wizard
     {
         bool _isLogedIn = false;
         List<Scenario> _scenarios;
+        BizTalkHelper _bizTalkHelper = new BizTalkHelper();
+        PerflogHelper _perflogHelper = new PerflogHelper();
         public IEnumerable<Environment> Environments;
         public List<Result> Results = new List<Result>();
         public MainWindow()
@@ -39,6 +42,7 @@ namespace BizTalk_Benchmark_Wizard
     
             this.environments.DataContext = Environments;
         }
+
         private void btnBack_Click(object sender, RoutedEventArgs e)
         {
             if (tabControl1.SelectedIndex > 0)
@@ -58,9 +62,9 @@ namespace BizTalk_Benchmark_Wizard
             if (tabControl1.SelectedIndex == 0 && !_isLogedIn)
             {
                 PopupLogin.IsOpen = true;
+
                 return;
             }
-
             if (tabControl1.SelectedIndex > 0)
                 btnBack.Visibility = Visibility.Visible;
             else
@@ -87,6 +91,7 @@ namespace BizTalk_Benchmark_Wizard
             this.Cursor = Cursors.Wait;
             try
             {
+                RefreshPreRequsites(); 
                 tabControl1.SelectedIndex++;
             }
             catch (Exception ex)
@@ -137,6 +142,30 @@ namespace BizTalk_Benchmark_Wizard
             Results.Add(new Result() { CouterValue = "Avg Processor time (BizTalk)", TestValue = "89", KPI = "< 90", Status = "Succeeded" });
             Results.Add(new Result() { CouterValue = "Avg Processed msgs / sec (*)", TestValue = "344", KPI = "> 500", Status = "Failed" });
             ResultGrid.DataContext = Results;
+        }
+        void RefreshPreRequsites()
+        {
+            picInstallCollectorSet.Source = _perflogHelper.IsDataCollectorSetsCreated ?
+                       new System.Windows.Media.Imaging.BitmapImage(new Uri("pack://application:,,,/BizTalk Benchmark Wizard;component/Resources/Images/passed.png")) :
+                       new System.Windows.Media.Imaging.BitmapImage(new Uri("pack://application:,,,/BizTalk Benchmark Wizard;component/Resources/Images/checklist.png"));
+
+            btnCreateCollectors.Visibility = _perflogHelper.IsDataCollectorSetsCreated ? Visibility.Hidden : Visibility.Visible;
+
+            picInstallHost.Source = _bizTalkHelper.IsBizTalkHostsInstalled ?
+                new System.Windows.Media.Imaging.BitmapImage(new Uri("pack://application:,,,/BizTalk Benchmark Wizard;component/Resources/Images/passed.png")) :
+                new System.Windows.Media.Imaging.BitmapImage(new Uri("pack://application:,,,/BizTalk Benchmark Wizard;component/Resources/Images/checklist.png"));
+
+            btnCreateHosts.Visibility = _bizTalkHelper.IsBizTalkHostsInstalled ? Visibility.Hidden : Visibility.Visible;
+
+            picInstalledScenario.Source = _bizTalkHelper.IsBizTalkScenariosInstalled ?
+                new System.Windows.Media.Imaging.BitmapImage(new Uri("pack://application:,,,/BizTalk Benchmark Wizard;component/Resources/Images/passed.png")) :
+                new System.Windows.Media.Imaging.BitmapImage(new Uri("pack://application:,,,/BizTalk Benchmark Wizard;component/Resources/Images/checklist.png"));
+
+            if (_bizTalkHelper.IsBizTalkHostsInstalled && _bizTalkHelper.IsBizTalkScenariosInstalled)
+                btnNext.Visibility = Visibility.Visible;
+            else
+                btnNext.Visibility = Visibility.Collapsed;
+
         }
     }
     public class Result

@@ -13,11 +13,11 @@ namespace BizTalk_Benchmark_Wizard.Helper
         }
         public bool IsBizTalkScenariosInstalled
         {
-            get { return false; }
+            get { return true; }
         }
         public bool IsBizTalkHostsInstalled
         {
-            get { return false; }
+            get { return true; }
         }
         public void CreateBizTalkHosts(string group, string username, string password)
         { 

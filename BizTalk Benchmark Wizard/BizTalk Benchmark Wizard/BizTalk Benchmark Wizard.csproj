@@ -38,10 +38,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="bLogical.GaugeControl, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\ConsoleApplication1\bLogical.GaugeControl\bin\Debug\bLogical.GaugeControl.dll</HintPath>
-    </Reference>
     <Reference Include="PresentationFramework.Aero">
       <RequiredTargetFramework>3.0</RequiredTargetFramework>
     </Reference>
@@ -183,6 +179,15 @@
   <ItemGroup>
     <Resource Include="Resources\Images\passed.png" />
     <Resource Include="Resources\Images\failed.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\checklist.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\bLogical.GaugeControl\bLogical.GaugeControl.csproj">
+      <Project>{C78E61D3-799D-4959-8EB9-E14534CEA9E7}</Project>
+      <Name>bLogical.GaugeControl</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

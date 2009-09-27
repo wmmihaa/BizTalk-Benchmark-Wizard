@@ -213,19 +213,40 @@
 
                         <StackPanel Orientation="Vertical" Margin="20,80" >
                             <StackPanel Orientation="Horizontal">
-                                <Image Height="30" Source="Resources/Images/passed.png"/>
-                                <Label FontFamily="Calibri" MaxWidth="550">
-                                    <TextBlock TextWrapping="Wrap">Data Collector Sets will be created for further analyzes after the completion of the test. The following Data Collector Sets will be created:</TextBlock>
-                                </Label>
+                                <Image Name="picInstallCollectorSet" Height="40" Source="Resources/Images/checklist.png"/>
+                                <StackPanel Orientation="Horizontal">
+                                    <Label FontFamily="Calibri" MaxWidth="550" Width="500">
+                                        <TextBlock TextWrapping="Wrap"><Bold>Optional</Bold> - Create Data Collector Sets for further analyzes after the completion of the test.</TextBlock>
+                                    </Label>
+                                    <Button Height="23" Style="{DynamicResource RoundedButton}" HorizontalAlignment="Right" Name="btnCreateCollectors" VerticalAlignment="Center" Width="75">Create</Button>
+                                </StackPanel>
                             </StackPanel>
                             <StackPanel Height="15"/>
                             <StackPanel Orientation="Horizontal">
-                                    <Image Height="30" Source="Resources/Images/cross.png"/>
-                                    <Label FontFamily="Calibri" FontWeight="Bold"   MaxWidth="550" >
-                                        <TextBlock TextWrapping="Wrap">The BizTalk Benchmark Application package is not properly installed. Make sure to install the BizTalk Benchmark Application.MSI on all application servers. Complete the installation by importing the BizTalk Benchmark Application.MSI to the BizTalk Server Group.</TextBlock>
+                                <Image Name="picInstallHost" Height="40" Source="Resources/Images/checklist.png"/>
+                                <StackPanel Orientation="Horizontal">
+                                    <Label FontFamily="Calibri" MaxWidth="550" Width="500">
+                                        <TextBlock TextWrapping="Wrap"><Bold>Mandatory</Bold> - Create Hosts, Host Instances and Adapter handlers</TextBlock>
+                                    </Label>
+                                    <Button Height="23" Style="{DynamicResource RoundedButton}" HorizontalAlignment="Right" Name="btnCreateHosts" VerticalAlignment="Center" Width="75">Create</Button>
+                                </StackPanel>
+                            </StackPanel>
+                            <StackPanel Height="15"/>
+                            <StackPanel Orientation="Horizontal">
+                                <Image Name="picInstalledScenario" Height="40" Source="Resources/Images/checklist.png"/>
+                                <StackPanel Orientation="Horizontal">
+                                    <Label FontFamily="Calibri" MaxWidth="550" Width="480">
+                                        <TextBlock TextWrapping="Wrap"><Bold>Mandatory</Bold> - Install testing scenario on all BizTalk servers.</TextBlock>
+                                    </Label>
+                                    <Label FontFamily="Calibri">
+                                        <TextBlock TextWrapping="Wrap"><Bold>This is a manual step.</Bold></TextBlock>
                                     </Label>
                                 </StackPanel>
+
+
+                            </StackPanel>
                         </StackPanel>
+
                     </Grid>
                 </TabItem>
                 <TabItem Header="" Name="tabEnvironment">
@@ -345,7 +366,7 @@
                             </StackPanel>
                         </StackPanel>
                         <Canvas>
-                            
+
                         </Canvas>
                     </Grid>
                 </TabItem>

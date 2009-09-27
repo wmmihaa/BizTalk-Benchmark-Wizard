@@ -3,7 +3,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     Height="222.411" Width="193.256" Loaded="UserControl_Loaded">
     <UserControl.Resources>
-        
+
         <SolidColorBrush x:Key="DisabledForegroundBrush" Color="#888" />
         <SolidColorBrush x:Key="DisabledBackgroundBrush" Color="#EEE" />
         <SolidColorBrush x:Key="WindowBackgroundBrush" Color="#FFF" />
@@ -53,7 +53,6 @@
                                        Canvas.Left="0" 
                                        Canvas.Top="0">
             </Image>
-            <TextBox Canvas.Left="70.4" Canvas.Top="141.6" Height="20" Name="DigitalGauge" Width="49.2" Text="{Binding AvgCounter}" TextAlignment="Right" />
             <Image  x:Name="needle" Source="Resources/Images/needle.png" Canvas.Left="87.465" Canvas.Top="93.296" Height="77.469" Width="15.827">
                 <Image.RenderTransform>
                     <RotateTransform Angle="{Binding Counter}" CenterX="8" CenterY="0" />
@@ -66,11 +65,21 @@
 
                 </Image.RenderTransform>
             </Image>
-            <Image  Source="Resources/Images/round.png" Width="37.485" Canvas.Top="75.803" Canvas.Left="77.469" Height="37.485" />
+            <Image  Source="Resources/Images/round.png" Width="37.485" Canvas.Top="75.803" Canvas.Left="77.469" Height="37.485"/>
             <Label Canvas.Left="0.833" Canvas.Top="192.423" Height="32.322" Width="190.757" FontFamily="Calibri" FontSize="14">
                 <TextBlock Name="lblDescription" TextAlignment="Center" Width="190">Label</TextBlock>
             </Label>
 
+            <TextBlock Margin="63,136" Name="l1" Foreground="LightGreen" Text="0" TextAlignment="Left"/>
+            <TextBlock Margin="40,115" Name="l2" Foreground="LightGreen" Text="50" TextAlignment="Left"/>
+            <TextBlock Margin="35,81" Name="l3" Foreground="LightGreen" Text="100" TextAlignment="Left"/>
+            <TextBlock Margin="48,49" Name="l4" Foreground="LightGreen" Text="150" TextAlignment="Left"/>
+            <TextBlock Margin="72,35" Name="l5" Foreground="LightGreen" Text="200" TextAlignment="Left"/>
+            <TextBlock Margin="103,35" Name="l6" Foreground="LightGreen" Text="250" TextAlignment="Left"/>
+            <TextBlock Margin="112,49" Name="l7" Foreground="LightGreen" Text="300" TextAlignment="Right" Width="30" />
+            <TextBlock Margin="125,81" Name="l8" Foreground="LightGreen" Text="350" TextAlignment="Right" Width="30"/>
+            <TextBlock Margin="118,115" Name="l9" Foreground="LightGreen" Text="400" TextAlignment="Right" Width="30"/>
+            <TextBlock Margin="99,136" Name="l10" Foreground="LightGreen" Text="450" TextAlignment="Right" Width="30" />
         </Canvas>
     </Grid>
 </UserControl>

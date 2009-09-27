@@ -23,20 +23,41 @@ namespace bLogical.GaugeControl
     {
         const int MINVALUE = 30;
         const int MAXVALUE = 300;
-
+        int _maxValue = MAXVALUE;
+        public int MaxValue
+        {
+            get { return _maxValue; }
+            set
+            {
+                if (l2 != null)
+                {
+                    int stepVal = value / 9;
+                    l2.Text = stepVal.ToString();
+                    l3.Text = (stepVal * 2).ToString();
+                    l4.Text = (stepVal * 3).ToString();
+                    l5.Text = (stepVal * 4).ToString();
+                    l6.Text = (stepVal * 5).ToString();
+                    l7.Text = (stepVal * 6).ToString();
+                    l8.Text = (stepVal * 7).ToString();
+                    l9.Text = (stepVal * 8).ToString();
+                    l10.Text = (stepVal * 9).ToString();
+                }
+                _maxValue = value;
+            }
+        }
         public string Caption { get; set; }
 
         public GaugeControl()
         {
+            this.MaxValue = 300;
             InitializeComponent();
         }
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
             lblDescription.Text = Caption;
             needle.DataContext = this;
-            DigitalGauge.DataContext = this;
             avgNeedle.DataContext = this;
-            //Counter = 30;
+            SetCounter(0, 0);
         }
         public static readonly DependencyProperty CounterProperty = DependencyProperty.Register(
                                                                             "Counter",
@@ -48,7 +69,6 @@ namespace bLogical.GaugeControl
                                                                             typeof(int),
                                                                             typeof(GaugeControl),
                                                                             new PropertyMetadata(0));
-      
         /// <summary>
         /// Gets or sets the Counter property.
         /// </summary>
@@ -56,15 +76,14 @@ namespace bLogical.GaugeControl
         {
             set
             {
-                int newValue = value / Level;
+                int newValue = value;
 
-                if (newValue > MAXVALUE + MINVALUE)
-                    newValue = MAXVALUE + MINVALUE;
+                if (newValue > MaxValue + MINVALUE)
+                    newValue = MaxValue + MINVALUE;
 
                 this.Dispatcher.BeginInvoke(DispatcherPriority.Background,
                     (SendOrPostCallback)delegate { SetValue(CounterProperty, newValue); },
                     value);
-
             }
             get
             {
@@ -72,10 +91,10 @@ namespace bLogical.GaugeControl
                     System.Windows.Threading.DispatcherPriority.Background,
                     (DispatcherOperationCallback)delegate { return GetValue(CounterProperty); }, CounterProperty);
 
-                if (counter * Level > MAXVALUE + MINVALUE)
-                    return MAXVALUE + MINVALUE;
+                if (counter > MaxValue + MINVALUE)
+                    return MaxValue + MINVALUE;
 
-                return counter * Level;
+                return counter;
             }
         }
         /// <summary>
@@ -85,10 +104,10 @@ namespace bLogical.GaugeControl
         {
             set
             {
-                int newValue = value / Level;
+                int newValue = value;
 
-                if (newValue > MAXVALUE + MINVALUE)
-                    newValue = MAXVALUE + MINVALUE;
+                if (newValue > MaxValue + MINVALUE)
+                    newValue = MaxValue + MINVALUE;
 
                 this.Dispatcher.BeginInvoke(DispatcherPriority.Background,
                     (SendOrPostCallback)delegate { SetValue(AvgCounterProperty, newValue); },
@@ -101,16 +120,36 @@ namespace bLogical.GaugeControl
                     System.Windows.Threading.DispatcherPriority.Background,
                     (DispatcherOperationCallback)delegate { return GetValue(CounterProperty); }, CounterProperty);
 
-                if (counter * Level > MAXVALUE + MINVALUE)
-                    return MAXVALUE + MINVALUE;
+                if (counter > MaxValue + MINVALUE)
+                    return MaxValue + MINVALUE;
 
-                return counter * Level;
+                return counter;
             }
         }
- 
-        public int Level { get; set; }
+        public void SetCounter(int newCounterValue, int newAvgCounterValue)
+        {
+            newCounterValue = ConvertValue(newCounterValue);
+            newAvgCounterValue = ConvertValue(newAvgCounterValue);
 
-        public void SetCounter (int newCounterValue, int newAvgCounterValue)
+            bool up = newCounterValue > Counter;
+            int start = Counter;
+            int internalCounter = start;
+            while (internalCounter != newCounterValue)
+            {
+                Dictionary<GaugeControl, int> tst = new Dictionary<GaugeControl, int>();
+                tst.Add(this, internalCounter);
+                ThreadPool.QueueUserWorkItem(new WaitCallback(rotateNeedleStatic), tst);
+                internalCounter = up ? internalCounter + 1 : internalCounter - 1;
+            }
+            AvgCounter = newAvgCounterValue;
+        }
+        int ConvertValue(int val)
+        {
+            double percentage = (double)MAXVALUE / (double)MaxValue;
+            double newVal = val * percentage;
+            return (int)newVal + MINVALUE;
+        }
+        public void SetCounter_OLD(int newCounterValue, int newAvgCounterValue)
         {
             bool up = newCounterValue > Counter;
             int start = Counter;
