@@ -20,29 +20,29 @@ namespace BizTalk_Benchmark_Wizard
     /// </summary>
     public partial class MainWindow : Window
     {
+        #region Private Members
         bool _isLogedIn = false;
         List<Scenario> _scenarios;
-        BizTalkHelper _bizTalkHelper = new BizTalkHelper();
-        PerflogHelper _perflogHelper = new PerflogHelper();
+        BizTalkHelper _bizTalkHelper = null;
+        PerflogHelper _perflogHelper = null;
+        #endregion
+        #region Public Members
         public IEnumerable<Environment> Environments;
         public List<Result> Results = new List<Result>();
+        #endregion
+        #region Constructor
         public MainWindow()
         {
             InitializeComponent();
-            
-            _scenarios = ScenariosFactory.Load();
-            
 
-            foreach (var scenario in _scenarios)
-                cbScenario.Items.Add(scenario.Name);
-
-            cbScenario.SelectedIndex = 0;
-
-            Environments = _scenarios[0].Environments;
-    
-            this.environments.DataContext = Environments;
+            LoadScenarions();
         }
+        #endregion
+        #region Events
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
 
+        }
         private void btnBack_Click(object sender, RoutedEventArgs e)
         {
             if (tabControl1.SelectedIndex > 0)
@@ -131,20 +131,29 @@ namespace BizTalk_Benchmark_Wizard
             this.environments.DataContext = Environments;
             
         }
-        private void Window_Loaded(object sender, RoutedEventArgs e)
+        private void btnCreateHosts_Click(object sender, RoutedEventArgs e)
         {
-            
-        }
 
+        }
+        private void btnCreateCollectors_Click(object sender, RoutedEventArgs e)
+        {
+            _perflogHelper.CreateDataCollectorSets();
+        }
+        #endregion
+        #region Private Methods
         void ShowResult()
         {
-            Results.Add(new Result() { CouterValue = "Avg Processor time (SQL)", TestValue = "50", KPI = "< 60", Status = "Succeeded" });
-            Results.Add(new Result() { CouterValue = "Avg Processor time (BizTalk)", TestValue = "89", KPI = "< 90", Status = "Succeeded" });
-            Results.Add(new Result() { CouterValue = "Avg Processed msgs / sec (*)", TestValue = "344", KPI = "> 500", Status = "Failed" });
+            // Hard coded for demo purpose. This information should be collected from the test result
+            Results.Add(new Result() { CouterName = "Avg Processor time (SQL)", TestValue = "50", KPI = "< 60", Status = "Succeeded" });
+            Results.Add(new Result() { CouterName = "Avg Processor time (BizTalk)", TestValue = "89", KPI = "< 90", Status = "Succeeded" });
+            Results.Add(new Result() { CouterName = "Avg Processed msgs / sec (*)", TestValue = "344", KPI = "> 500", Status = "Failed" });
             ResultGrid.DataContext = Results;
         }
         void RefreshPreRequsites()
         {
+            _bizTalkHelper = new BizTalkHelper(txtServer1.Text, txtMgmtDb1.Text);
+            _perflogHelper = new PerflogHelper(_bizTalkHelper.GetServers(txtServer1.Text, txtMgmtDb1.Text));
+
             picInstallCollectorSet.Source = _perflogHelper.IsDataCollectorSetsCreated ?
                        new System.Windows.Media.Imaging.BitmapImage(new Uri("pack://application:,,,/BizTalk Benchmark Wizard;component/Resources/Images/passed.png")) :
                        new System.Windows.Media.Imaging.BitmapImage(new Uri("pack://application:,,,/BizTalk Benchmark Wizard;component/Resources/Images/checklist.png"));
@@ -167,12 +176,41 @@ namespace BizTalk_Benchmark_Wizard
                 btnNext.Visibility = Visibility.Collapsed;
 
         }
+        void LoadScenarions()
+        { 
+            _scenarios = ScenariosFactory.Load();
+            
+            foreach (var scenario in _scenarios)
+                cbScenario.Items.Add(scenario.Name);
+
+            cbScenario.SelectedIndex = 0;
+
+            Environments = _scenarios[0].Environments;
+    
+            this.environments.DataContext = Environments;
+        }
+        #endregion
     }
-    public class Result
+    /// <summary>
+    /// Used for presenting the test result
+    /// </summary>
+    internal class Result
     {
-        public string CouterValue { get; set; }
+        /// <summary>
+        /// Eg "Avg Processed msgs / sec (*)
+        /// </summary>
+        public string CouterName { get; set; }
+        /// <summary>
+        /// Test result
+        /// </summary>
         public string TestValue { get; set; }
+        /// <summary>
+        /// Value collected from the Scenarios 
+        /// </summary>
         public string KPI { get; set; }
+        /// <summary>
+        /// Sucess / Failed
+        /// </summary>
         public string Status { get; set; }
     }
 }

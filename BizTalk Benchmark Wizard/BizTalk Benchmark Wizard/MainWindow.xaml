@@ -218,7 +218,7 @@
                                     <Label FontFamily="Calibri" MaxWidth="550" Width="500">
                                         <TextBlock TextWrapping="Wrap"><Bold>Optional</Bold> - Create Data Collector Sets for further analyzes after the completion of the test.</TextBlock>
                                     </Label>
-                                    <Button Height="23" Style="{DynamicResource RoundedButton}" HorizontalAlignment="Right" Name="btnCreateCollectors" VerticalAlignment="Center" Width="75">Create</Button>
+                                    <Button Height="23" Style="{DynamicResource RoundedButton}" HorizontalAlignment="Right" Name="btnCreateCollectors" VerticalAlignment="Center" Width="75" Click="btnCreateCollectors_Click">Create</Button>
                                 </StackPanel>
                             </StackPanel>
                             <StackPanel Height="15"/>
@@ -228,7 +228,7 @@
                                     <Label FontFamily="Calibri" MaxWidth="550" Width="500">
                                         <TextBlock TextWrapping="Wrap"><Bold>Mandatory</Bold> - Create Hosts, Host Instances and Adapter handlers</TextBlock>
                                     </Label>
-                                    <Button Height="23" Style="{DynamicResource RoundedButton}" HorizontalAlignment="Right" Name="btnCreateHosts" VerticalAlignment="Center" Width="75">Create</Button>
+                                    <Button Height="23" Style="{DynamicResource RoundedButton}" HorizontalAlignment="Right" Name="btnCreateHosts" VerticalAlignment="Center" Width="75" Click="btnCreateHosts_Click">Create</Button>
                                 </StackPanel>
                             </StackPanel>
                             <StackPanel Height="15"/>
