@@ -67,13 +67,13 @@ namespace BizTalk_Benchmark_Wizard.Helper
         /// <returns></returns>
         private bool IsDataCollectorSetCreatedForServer(string collectorsetName)
         {
-            return true;
+            return false;
 
             // This does not work at the moment...
             using (ProcessHelper p = new ProcessHelper())
             {
                 string format = string.Format(@"query ""{0}""", collectorsetName);
-                p.Execute("logman", format, 120000);
+                p.Execute("logman", format, 10000);
             }
             Thread.Sleep(100);
             if (!string.IsNullOrEmpty(ProcessHelper.ErrorMessage) || ProcessHelper.OutPutMessage.ToUpper().Contains("ERROR"))

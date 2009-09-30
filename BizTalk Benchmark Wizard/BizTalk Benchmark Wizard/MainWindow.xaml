@@ -193,7 +193,7 @@
                         Width="693"
                         Background="Transparent" 
                         Canvas.Top="-14"
-                        Margin="5,0,0,0" TabStripPlacement="Bottom" >
+                        Margin="5,0,0,0" TabStripPlacement="Bottom" SelectionChanged="tabControl1_SelectionChanged">
                 <TabItem Header="" Name="tabWelcome">
                     <Grid Background="Transparent">
                         <Label Height="61" Margin="20,34,19,0" VerticalAlignment="Top" FontSize="30" FontWeight="Bold" FontFamily="Calibri">Welcome to BizTalk Benchmark Wizard</Label>
@@ -238,7 +238,7 @@
                                     <Label FontFamily="Calibri" MaxWidth="550" Width="480">
                                         <TextBlock TextWrapping="Wrap"><Bold>Mandatory</Bold> - Install testing scenario on all BizTalk servers.</TextBlock>
                                     </Label>
-                                    <Label FontFamily="Calibri">
+                                    <Label Name="lblInstalledScenarioManual" FontFamily="Calibri">
                                         <TextBlock TextWrapping="Wrap"><Bold>This is a manual step.</Bold></TextBlock>
                                     </Label>
                                 </StackPanel>
@@ -324,7 +324,7 @@
                                 <StackPanel Width="30"/>
                                 <my1:GaugeControl Name="ReceivedGauge" Caption="Avg Processed msgs/sec"></my1:GaugeControl>
                             </StackPanel>
-                            <ProgressBar Name="Progress" Width="580" Foreground="Green"  Value="70" Height="20" Minimum="0" Maximum="100" Margin="10" Canvas.Left="70" Canvas.Top="266.224"/>
+                            <ProgressBar Name="Progress" Width="580" Foreground="Green"  Value="{Binding ProcessValue}" Height="20" Minimum="0" Maximum="100" Margin="10" Canvas.Left="70" Canvas.Top="266.224"/>
 
                             <Label Canvas.Left="22" Canvas.Top="274" Height="28" Name="label3" Width="120">Progress:</Label>
                         </Canvas>
@@ -350,7 +350,7 @@
                                      Canvas.Left="25" 
                                      Canvas.Top="45">
                                     <my:DataGrid.Columns>
-                                        <my:DataGridTextColumn Header="Counter"  Binding="{Binding CouterValue}" Width="230"/>
+                                        <my:DataGridTextColumn Header="Counter"  Binding="{Binding CouterName}" Width="230"/>
                                         <my:DataGridTextColumn Header="Test Value"  Binding="{Binding TestValue}" Width="100"/>
                                         <my:DataGridTextColumn Header="KPI"  Binding="{Binding KPI}"  Width="100"/>
                                         <my:DataGridTextColumn Header="Status"  Binding="{Binding Status}"  Width="70"/>
@@ -366,7 +366,7 @@
                             </StackPanel>
                         </StackPanel>
                         <Canvas>
-
+                            <Button Height="23" Style="{DynamicResource RoundedButton}" HorizontalAlignment="Right" Name="btnGenerateReport" VerticalAlignment="Bottom" Width="116" Click="btnGenerateReport_Click" Canvas.Left="366" Canvas.Top="357">Generate report</Button>
                         </Canvas>
                     </Grid>
                 </TabItem>

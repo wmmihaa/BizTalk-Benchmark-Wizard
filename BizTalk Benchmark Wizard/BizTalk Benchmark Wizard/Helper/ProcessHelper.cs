@@ -37,7 +37,7 @@ namespace BizTalk_Benchmark_Wizard.Helper
             process.StartInfo.FileName = fileName;
             process.StartInfo.Arguments = arguments;
             process.StartInfo.UseShellExecute = false;
-            process.StartInfo.CreateNoWindow = false;
+            process.StartInfo.CreateNoWindow = true;
 
             process.OutputDataReceived += new DataReceivedEventHandler(process_OutputDataReceived);
             process.ErrorDataReceived += new DataReceivedEventHandler(process_ErrorDataReceived);

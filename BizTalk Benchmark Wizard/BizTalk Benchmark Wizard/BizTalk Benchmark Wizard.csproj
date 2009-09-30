@@ -119,6 +119,8 @@
     <Compile Include="Helper\BizTalkHelper.cs" />
     <Compile Include="Helper\PerflogHelper.cs" />
     <Compile Include="Helper\ProcessHelper.cs" />
+    <Compile Include="Resources\Class1.cs" />
+    <Compile Include="Resources\Styles\Class1.cs" />
     <Compile Include="Scenarios.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
@@ -167,9 +169,9 @@
     </Resource>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\Scenarios.xml">
+    <Content Include="Resources\Scenarios.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Images\scenario1.png" />
