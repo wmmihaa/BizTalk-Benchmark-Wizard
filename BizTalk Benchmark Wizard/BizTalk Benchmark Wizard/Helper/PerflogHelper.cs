@@ -67,19 +67,19 @@ namespace BizTalk_Benchmark_Wizard.Helper
         /// <returns></returns>
         private bool IsDataCollectorSetCreatedForServer(string collectorsetName)
         {
-            return false;
-
-            // This does not work at the moment...
             using (ProcessHelper p = new ProcessHelper())
             {
                 string format = string.Format(@"query ""{0}""", collectorsetName);
-                p.Execute("logman", format, 10000);
+                p.Execute("logman", format, 1);
             }
-            Thread.Sleep(100);
-            if (!string.IsNullOrEmpty(ProcessHelper.ErrorMessage) || ProcessHelper.OutPutMessage.ToUpper().Contains("ERROR"))
-                return false;
 
-            return true;
+            if (ProcessHelper.OutPutMessage.Contains("Data Collector Set was not found."))
+                return false;
+            else if (ProcessHelper.OutPutMessage.Contains("The command completed successfully."))
+                return true;
+            else
+                throw new Exception("An unexpected error occured while checking for PerfMon Collector Set");
+
         }
         /// <summary>
         /// Creates a collector set for  a specific server

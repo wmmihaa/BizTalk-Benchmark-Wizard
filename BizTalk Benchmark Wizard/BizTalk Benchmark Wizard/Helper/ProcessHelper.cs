@@ -39,22 +39,13 @@ namespace BizTalk_Benchmark_Wizard.Helper
             process.StartInfo.UseShellExecute = false;
             process.StartInfo.CreateNoWindow = true;
 
-            process.OutputDataReceived += new DataReceivedEventHandler(process_OutputDataReceived);
-            process.ErrorDataReceived += new DataReceivedEventHandler(process_ErrorDataReceived);
-
             process.Start();
+            process.WaitForExit(waitForExitSeconds); //Set to 1ms or process will never end.
 
-            process.WaitForExit(waitForExitSeconds);
+            OutPutMessage = process.StandardOutput.ReadToEnd();
+            ErrorMessage = process.StandardError.ReadToEnd();
 
-            process.BeginErrorReadLine();
-            process.BeginOutputReadLine();
-
-            if (process.HasExited == false)
-            {
-                string msg = string.Format(@"The command: ""{0} {1}"" did not execute in  a timely fashion ({2} ms).", fileName, arguments, waitForExitSeconds.ToString());
-                throw new TimeoutException(msg);
-            }
-
+            return;
         }
         void process_ErrorDataReceived(object sender, DataReceivedEventArgs e)
         {
