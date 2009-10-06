@@ -185,6 +185,36 @@
                 </Setter.Value>
             </Setter>
         </Style>
+        <Style x:Key="RoundedPasswordBox" TargetType="{x:Type PasswordBox}">
+            <Setter Property="SnapsToDevicePixels" Value="True"/>
+            <Setter Property="OverridesDefaultStyle" Value="True"/>
+            <Setter Property="KeyboardNavigation.TabNavigation" Value="None"/>
+            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+            <Setter Property="MinWidth" Value="20"/>
+            <Setter Property="MinHeight" Value="20"/>
+            <Setter Property="AllowDrop" Value="true"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type PasswordBox}">
+                        <Border Name="Border"
+                                  CornerRadius="5" 
+                                  Padding="2"
+                                  Background="{StaticResource WindowBackgroundBrush}"
+                                  BorderBrush="{StaticResource SolidBorderBrush}"
+                                  BorderThickness="1" >
+                            <ScrollViewer Margin="0" x:Name="PART_ContentHost"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter TargetName="Border" Property="Background" Value="{StaticResource DisabledBackgroundBrush}"/>
+                                <Setter TargetName="Border" Property="BorderBrush" Value="{StaticResource DisabledBackgroundBrush}"/>
+                                <Setter Property="Foreground" Value="{StaticResource DisabledForegroundBrush}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </Window.Resources>
     <Grid>
         <Canvas>
@@ -210,7 +240,6 @@
                 <TabItem Header="" Name="tabPrerequsites">
                     <Grid>
                         <Label Height="61" Margin="20,34,19,0" VerticalAlignment="Top" FontSize="30" FontWeight="Bold" FontFamily="Calibri">Prerequsites</Label>
-
                         <StackPanel Orientation="Vertical" Margin="20,80" >
                             <StackPanel Orientation="Horizontal">
                                 <Image Name="picInstallCollectorSet" Height="40" Source="Resources/Images/checklist.png"/>
@@ -246,7 +275,6 @@
 
                             </StackPanel>
                         </StackPanel>
-
                     </Grid>
                 </TabItem>
                 <TabItem Header="" Name="tabEnvironment">
@@ -459,6 +487,74 @@
                              ScrollViewer.VerticalScrollBarVisibility="Auto"
                              TextWrapping="Wrap"/>
                     <Button Height="23" Margin="162,0,162,15" Name="btnExceptionOk" Style="{DynamicResource RoundedButton}" VerticalAlignment="Bottom" Click="btnExceptionOk_Click">Ok</Button>
+                </Grid>
+            </Grid>
+        </Popup>
+        <Popup x:Name="PopupServiceAccountAndGroups" 
+               AllowsTransparency="True"
+               IsOpen="False"
+               Width="450"
+               Height="370"
+               Placement="Center" PopupAnimation="Fade">
+            <Grid>
+                <dropShadow:SystemDropShadowChrome CornerRadius="3,13,3,13" Color="#71000000">
+                    <Grid x:Name="MyElement3" />
+                </dropShadow:SystemDropShadowChrome>
+                <Grid>
+                    <Border Margin="0,0,5,5"
+			                BorderBrush="Gainsboro"
+			                CornerRadius="5,5,5,5"
+			                BorderThickness="1,1,1,1"
+			                Background="{StaticResource BrushedMetalBackground}"/>
+                    <StackPanel Orientation="Vertical" Margin="10" Width="400">
+                        <Label FontFamily="Calibri" FontSize="17" MaxWidth="400" Width="400">
+                            <TextBlock TextWrapping="Wrap"><Bold>Servers, Windows accounts and Groups</Bold></TextBlock>
+                        </Label>
+                        <Label FontFamily="Calibri" MaxWidth="400" Width="400">
+                            <TextBlock TextWrapping="Wrap">The following servers where found:</TextBlock>
+                        </Label>
+                        <my:DataGrid Name="servers" 
+                                     ItemsSource="{Binding}" 
+                                     AutoGenerateColumns="False" 
+                                     Height="100" 
+                                     Width="400">
+                            <my:DataGrid.Columns>
+                                <my:DataGridTextColumn Header="Server Name"  Binding="{Binding Name}" Width="200"/>
+                                <my:DataGridTextColumn Header="Server Type"  Binding="{Binding NuberOfActiveBizTalkServers}" Width="70"/>
+                            </my:DataGrid.Columns>
+                        </my:DataGrid>
+                        <StackPanel Height="10"/>
+                        <Label FontFamily="Calibri" MaxWidth="400" Width="400">
+                            <TextBlock TextWrapping="Wrap">This wizard will create Hosts, Host Instances and Adapter handlers. Please provide the name of Windows group which will be used to control
+                                <LineBreak/> the access to the Hosts. You also need to provide the name of the user to run the Host Instances.</TextBlock>
+                        </Label>
+                        <StackPanel Height="5"/>
+                        <StackPanel Orientation="Horizontal">
+                            <Label FontFamily="Calibri" MaxWidth="400" Width="95">
+                                <TextBlock TextWrapping="Wrap"><Bold>Windows group:</Bold></TextBlock>
+                            </Label>
+                            <TextBox Name="txtWindowsGroup" Width="300" Height="12"></TextBox>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+
+                            <Label FontFamily="Calibri" MaxWidth="400" Width="95">
+                                <TextBlock TextWrapping="Wrap"><Bold>Service account:</Bold></TextBlock>
+                            </Label>
+                            <TextBox Name="txtServiceAccount" Width="110" Height="12" Text="BizTalk Application Users"/>
+                            <StackPanel Width="10"/>
+                            <Label FontFamily="Calibri" MaxWidth="400" Width="70">
+                                <TextBlock TextWrapping="Wrap"><Bold>Password:</Bold></TextBlock>
+                            </Label>
+                            <PasswordBox Name="txtPasswrod" Width="110" Height="12" Style="{DynamicResource RoundedPasswordBox}"></PasswordBox>
+
+                        </StackPanel>
+                        <StackPanel Height="15"/>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,10,0">
+                            <Button Height="23" Style="{DynamicResource RoundedButton}" Name="btnOk2" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="75.263">Ok</Button>
+                            <StackPanel Width="5"/>
+                            <Button Height="23" Style="{DynamicResource RoundedButton}" HorizontalAlignment="Right" Name="btnCancel2" VerticalAlignment="Bottom" Width="75">Cancel</Button>
+                        </StackPanel>
+                    </StackPanel>
                 </Grid>
             </Grid>
         </Popup>

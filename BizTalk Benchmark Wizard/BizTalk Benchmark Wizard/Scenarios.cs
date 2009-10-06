@@ -22,8 +22,15 @@ namespace BizTalk_Benchmark_Wizard
         {
             try
             {
+                string filePath = Path.Combine(
+                    Path.GetDirectoryName(
+                        System.Reflection.Assembly.GetExecutingAssembly().Location), @"Resources\Scenarios.xml");
+            
+                if(!File.Exists(filePath))
+                    throw new ApplicationException("[Scenarios.xml] were not found");
+
                 XmlSerializer ser = new XmlSerializer(typeof(List<Scenario>));
-                XmlReader reader = XmlReader.Create(@"C:\Users\Administrator\Documents\Visual Studio 2008\Projects\BizTalk Benchmark Wizard\Resources\Scenarios.xml");
+                XmlReader reader = XmlReader.Create(filePath);
                 return (List<Scenario>)ser.Deserialize(reader);
             }
             catch (Exception ex)

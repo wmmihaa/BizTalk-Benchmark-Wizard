@@ -42,6 +42,30 @@ namespace BizTalk_Benchmark_Wizard
         #region Public Members
         public IEnumerable<Environment> Environments;
         public List<Result> Results = new List<Result>();
+        public int ProcessValue
+        {
+            set
+            {
+                int newValue = value;
+
+                this.Dispatcher.BeginInvoke(DispatcherPriority.Background,
+                    (SendOrPostCallback)delegate { SetValue(ProcessValueProperty, newValue); }, value);
+            }
+            get
+            {
+                int processValue = (int)this.Dispatcher.Invoke(
+                    System.Windows.Threading.DispatcherPriority.Background,
+                    (DispatcherOperationCallback)delegate { return GetValue(ProcessValueProperty); }, ProcessValueProperty);
+
+                return processValue;
+            }
+        }
+        
+        public static readonly DependencyProperty ProcessValueProperty = DependencyProperty.Register(
+                                                                            "ProcessValue",
+                                                                            typeof(int),
+                                                                            typeof(MainWindow),
+                                                                            new PropertyMetadata(0));
         #endregion
         #region Constructor
         public MainWindow()
@@ -157,7 +181,10 @@ namespace BizTalk_Benchmark_Wizard
         }
         private void btnCreateHosts_Click(object sender, RoutedEventArgs e)
         {
-
+            foreach (Server server in _bizTalkHelper.GetServers(txtServer1.Text, txtMgmtDb1.Text).Where(s => s.Type == ServerType.BIZTALK))
+            {
+                _bizTalkHelper.CreateBizTalkHosts(server.Name, "IDCVDEV02\\BtsUsr","Linus1234");
+            }
         }
         private void btnCreateCollectors_Click(object sender, RoutedEventArgs e)
         {
@@ -256,33 +283,7 @@ namespace BizTalk_Benchmark_Wizard
             this.environments.DataContext = Environments;
         }
         #endregion
-
-        public static readonly DependencyProperty ProcessValueProperty = DependencyProperty.Register(
-                                                                            "ProcessValue",
-                                                                            typeof(int),
-                                                                            typeof(MainWindow),
-                                                                            new PropertyMetadata(0));
-        public int ProcessValue
-        {
-            set
-            {
-                int newValue = value;
-
-                this.Dispatcher.BeginInvoke(DispatcherPriority.Background,
-                    (SendOrPostCallback)delegate { SetValue(ProcessValueProperty, newValue); },value);
-            }
-            get
-            {
-                int processValue = (int)this.Dispatcher.Invoke(
-                    System.Windows.Threading.DispatcherPriority.Background,
-                    (DispatcherOperationCallback)delegate { return GetValue(ProcessValueProperty); }, ProcessValueProperty);
-
-                return processValue;
-            }
-        }
         #region Run Tests
-        
-
         void PrepareTest() 
         {
             // Configure tests...

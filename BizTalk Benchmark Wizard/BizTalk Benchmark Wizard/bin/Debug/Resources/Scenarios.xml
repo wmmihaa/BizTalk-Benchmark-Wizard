@@ -1,0 +1,126 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ArrayOfScenario xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Scenario>
+    <Name>Messaging Single and Multi Message Box</Name>
+    <Description>
+      1. Loadgen generates a new XML message and sends it over NetTCP
+      2. A WCF-NetTCP Receive Location receives a the xml document from Loadgen.
+      3. The PassThruReceive pipeline performs no processing and the message is published by the EPM to the MessageBox.
+      4. The WCF One-Way Send Port, which is the only subscriber to the message, retrieves the message from the MessageBox
+      5. The PassThruTransmit pipeline provides no additional processing
+      6. The message is delivered to the back end WCF service by the WCF NetTCP adapter
+    </Description>
+    <Environments>
+      <Environment>
+        <Name>1BTS + 1SQL</Name>
+        <Description>...</Description>
+        <NuberOfActiveBizTalkServers>1</NuberOfActiveBizTalkServers>
+        <BizTalkServerConfiguration>1*CPU, 4GB RAM</BizTalkServerConfiguration>
+        <NuberOfActiveSQLServers>1</NuberOfActiveSQLServers>
+        <SQLServerConfiguration>1*CPU, 4GB RAM</SQLServerConfiguration>
+        <MaxExpectedCpuUtilizationBizTalk>95</MaxExpectedCpuUtilizationBizTalk>
+        <MaxExpectedCpuUtilizationSql>45</MaxExpectedCpuUtilizationSql>
+        <MinExpectedDocsProcessed>1000</MinExpectedDocsProcessed>
+        <MinExpectedDocsReceived>1000</MinExpectedDocsReceived>
+      </Environment>
+      <Environment>
+        <Name>2BTS + 3SQL</Name>
+        <Description>...</Description>
+        <NuberOfActiveBizTalkServers>2</NuberOfActiveBizTalkServers>
+        <BizTalkServerConfiguration>1*CPU, 4GB RAM</BizTalkServerConfiguration>
+        <NuberOfActiveSQLServers>3</NuberOfActiveSQLServers>
+        <SQLServerConfiguration>1*CPU, 4GB RAM</SQLServerConfiguration>
+        <MaxExpectedCpuUtilizationBizTalk>80</MaxExpectedCpuUtilizationBizTalk>
+        <MaxExpectedCpuUtilizationSql>30</MaxExpectedCpuUtilizationSql>
+        <MinExpectedDocsProcessed>1300</MinExpectedDocsProcessed>
+        <MinExpectedDocsReceived>1300</MinExpectedDocsReceived>
+      </Environment>
+      <Environment>
+        <Name>3BTS + 3SQL</Name>
+        <Description>...</Description>
+        <NuberOfActiveBizTalkServers>3</NuberOfActiveBizTalkServers>
+        <BizTalkServerConfiguration>1*CPU, 4GB RAM</BizTalkServerConfiguration>
+        <NuberOfActiveSQLServers>3</NuberOfActiveSQLServers>
+        <SQLServerConfiguration>1*CPU, 4GB RAM</SQLServerConfiguration>
+        <MaxExpectedCpuUtilizationBizTalk>70</MaxExpectedCpuUtilizationBizTalk>
+        <MaxExpectedCpuUtilizationSql>40</MaxExpectedCpuUtilizationSql>
+        <MinExpectedDocsProcessed>2000</MinExpectedDocsProcessed>
+        <MinExpectedDocsReceived>2000</MinExpectedDocsReceived>
+      </Environment>
+      <Environment>
+        <Name>3BTS + 3SQL</Name>
+        <Description>...</Description>
+        <NuberOfActiveBizTalkServers>3</NuberOfActiveBizTalkServers>
+        <BizTalkServerConfiguration>1*CPU, 4GB RAM</BizTalkServerConfiguration>
+        <NuberOfActiveSQLServers>4</NuberOfActiveSQLServers>
+        <SQLServerConfiguration>1*CPU, 4GB RAM</SQLServerConfiguration>
+        <MaxExpectedCpuUtilizationBizTalk>50</MaxExpectedCpuUtilizationBizTalk>
+        <MaxExpectedCpuUtilizationSql>40</MaxExpectedCpuUtilizationSql>
+        <MinExpectedDocsProcessed>1900</MinExpectedDocsProcessed>
+        <MinExpectedDocsReceived>1900</MinExpectedDocsReceived>
+      </Environment>
+    </Environments>
+  </Scenario>
+  <Scenario>
+    <Name>Orchestration Single Message Box</Name>
+    <Description>
+      1. Loadgen generates a new XML message and sends it over NetTCP
+      2. A WCF-NetTCP Receive Location receives a the xml document from Loadgen.
+      3. The XMLReceive pipeline performs no processing and the message is published by the EPM to the MessageBox.
+      4. The message is delivered to a simple Orchestration which consists of a receive location and a send port
+      5. The WCF One-Way Send Port, which is the only subscriber to the Orchestration message, retrieves the message from the MsgBox
+      6. The PassThruTransmit pipeline provides no additional processing
+      7. The message is delivered to the back end WCF service by the WCF NetTCP adapter
+    </Description>
+    <Environments>
+      <Environment>
+        <Name>1BTS + 1SQL</Name>
+        <Description>...</Description>
+        <NuberOfActiveBizTalkServers>1</NuberOfActiveBizTalkServers>
+        <BizTalkServerConfiguration>1*CPU, 4GB RAM</BizTalkServerConfiguration>
+        <NuberOfActiveSQLServers>1</NuberOfActiveSQLServers>
+        <SQLServerConfiguration>1*CPU, 4GB RAM</SQLServerConfiguration>
+        <MaxExpectedCpuUtilizationBizTalk>95</MaxExpectedCpuUtilizationBizTalk>
+        <MaxExpectedCpuUtilizationSql>45</MaxExpectedCpuUtilizationSql>
+        <MinExpectedDocsProcessed>390</MinExpectedDocsProcessed>
+        <MinExpectedDocsReceived>390</MinExpectedDocsReceived>
+      </Environment>
+      <Environment>
+        <Name>2BTS + 1SQL</Name>
+        <Description>...</Description>
+        <NuberOfActiveBizTalkServers>2</NuberOfActiveBizTalkServers>
+        <BizTalkServerConfiguration>1*CPU, 4GB RAM</BizTalkServerConfiguration>
+        <NuberOfActiveSQLServers>1</NuberOfActiveSQLServers>
+        <SQLServerConfiguration>1*CPU, 4GB RAM</SQLServerConfiguration>
+        <MaxExpectedCpuUtilizationBizTalk>80</MaxExpectedCpuUtilizationBizTalk>
+        <MaxExpectedCpuUtilizationSql>70</MaxExpectedCpuUtilizationSql>
+        <MinExpectedDocsProcessed>600</MinExpectedDocsProcessed>
+        <MinExpectedDocsReceived>600</MinExpectedDocsReceived>
+      </Environment>
+      <Environment>
+        <Name>3BTS + 1SQL</Name>
+        <Description>...</Description>
+        <NuberOfActiveBizTalkServers>3</NuberOfActiveBizTalkServers>
+        <BizTalkServerConfiguration>1*CPU, 4GB RAM</BizTalkServerConfiguration>
+        <NuberOfActiveSQLServers>1</NuberOfActiveSQLServers>
+        <SQLServerConfiguration>1*CPU, 4GB RAM</SQLServerConfiguration>
+        <MaxExpectedCpuUtilizationBizTalk>35</MaxExpectedCpuUtilizationBizTalk>
+        <MaxExpectedCpuUtilizationSql>59</MaxExpectedCpuUtilizationSql>
+        <MinExpectedDocsProcessed>600</MinExpectedDocsProcessed>
+        <MinExpectedDocsReceived>600</MinExpectedDocsReceived>
+      </Environment>
+      <Environment>
+        <Name>4BTS + 1SQL</Name>
+        <Description>...</Description>
+        <NuberOfActiveBizTalkServers>4</NuberOfActiveBizTalkServers>
+        <BizTalkServerConfiguration>1*CPU, 4GB RAM</BizTalkServerConfiguration>
+        <NuberOfActiveSQLServers>1</NuberOfActiveSQLServers>
+        <SQLServerConfiguration>1*CPU, 4GB RAM</SQLServerConfiguration>
+        <MaxExpectedCpuUtilizationBizTalk>30</MaxExpectedCpuUtilizationBizTalk>
+        <MaxExpectedCpuUtilizationSql>69</MaxExpectedCpuUtilizationSql>
+        <MinExpectedDocsProcessed>540</MinExpectedDocsProcessed>
+        <MinExpectedDocsReceived>540</MinExpectedDocsReceived>
+      </Environment>
+    </Environments>
+  </Scenario>
+</ArrayOfScenario>

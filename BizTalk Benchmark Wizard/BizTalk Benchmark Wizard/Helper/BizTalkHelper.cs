@@ -106,23 +106,23 @@ namespace BizTalk_Benchmark_Wizard.Helper
 
             string hostName = "BBW_RxHost";
             this.UnInstallAndUnMap(hostName, servername);
-            this.CreateHost(hostName, HostType.InProcess, _btsAdmGroup, true, false, false);
+            this.CreateHost(hostName, HostType.InProcess, _btsAdmGroup, false, false, false);
             this.CreateHostInstance(hostName, servername, username, password);
-            this.CreateHandler(hostName, "WCF-NetTcp", HandlerType.Receive);
-            this.StartHostInstance(hostName);
+            //this.CreateHandler(hostName, "WCF-NetTcp", HandlerType.Receive);
+            //this.StartHostInstance(hostName);
 
-            hostName = "BBW_TxHost";
-            this.UnInstallAndUnMap(hostName, servername);
-            this.CreateHost(hostName, HostType.InProcess, _btsAdmGroup, true, false, false);
-            this.CreateHostInstance(hostName, servername, username, password);
-            this.CreateHandler(hostName, "WCF-NetTcp", HandlerType.Send);
-            this.StartHostInstance(hostName);
+            //hostName = "BBW_TxHost";
+            //this.UnInstallAndUnMap(hostName, servername);
+            //this.CreateHost(hostName, HostType.InProcess, _btsAdmGroup, false, false, false);
+            //this.CreateHostInstance(hostName, servername, username, password);
+            //this.CreateHandler(hostName, "WCF-NetTcp", HandlerType.Send);
+            //this.StartHostInstance(hostName);
 
-            hostName = "BBW_PxHost";
-            this.UnInstallAndUnMap(hostName, servername);
-            this.CreateHost(hostName, HostType.InProcess, _btsAdmGroup, true, true, false);
-            this.CreateHostInstance(hostName, servername, username, password);
-            this.StartHostInstance(hostName);
+            //hostName = "BBW_PxHost";
+            //this.UnInstallAndUnMap(hostName, servername);
+            //this.CreateHost(hostName, HostType.InProcess, _btsAdmGroup, false, true, false);
+            //this.CreateHostInstance(hostName, servername, username, password);
+            //this.StartHostInstance(hostName);
         }
         #endregion
 
