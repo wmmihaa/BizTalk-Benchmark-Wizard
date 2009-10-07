@@ -533,14 +533,14 @@
                             <Label FontFamily="Calibri" MaxWidth="400" Width="95">
                                 <TextBlock TextWrapping="Wrap"><Bold>Windows group:</Bold></TextBlock>
                             </Label>
-                            <TextBox Name="txtWindowsGroup" Width="300" Height="12"></TextBox>
+                            <TextBox Name="txtWindowsGroup" Width="300" Height="12" Text="BizTalk Application Users"/>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal">
 
                             <Label FontFamily="Calibri" MaxWidth="400" Width="95">
                                 <TextBlock TextWrapping="Wrap"><Bold>Service account:</Bold></TextBlock>
                             </Label>
-                            <TextBox Name="txtServiceAccount" Width="110" Height="12" Text="BizTalk Application Users"/>
+                            <TextBox Name="txtServiceAccount" Width="110" Height="12"/>
                             <StackPanel Width="10"/>
                             <Label FontFamily="Calibri" MaxWidth="400" Width="70">
                                 <TextBlock TextWrapping="Wrap"><Bold>Password:</Bold></TextBlock>
@@ -550,9 +550,7 @@
                         </StackPanel>
                         <StackPanel Height="15"/>
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,10,0">
-                            <Button Height="23" Style="{DynamicResource RoundedButton}" Name="btnOk2" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="75.263">Ok</Button>
-                            <StackPanel Width="5"/>
-                            <Button Height="23" Style="{DynamicResource RoundedButton}" HorizontalAlignment="Right" Name="btnCancel2" VerticalAlignment="Bottom" Width="75">Cancel</Button>
+                            <Button Height="23" Style="{DynamicResource RoundedButton}" Name="btnOk2" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="75.263" Click="btnOk2_Click">Ok</Button>
                         </StackPanel>
                     </StackPanel>
                 </Grid>

@@ -72,6 +72,10 @@ namespace BizTalk_Benchmark_Wizard
         /// </summary>
         public string Description { get; set; }
         /// <summary>
+        /// The file path to the script file
+        /// </summary>
+        public string LoadGenScripfile { get; set; }
+        /// <summary>
         /// Number of BizTalk Servrs
         /// </summary>
         public int NuberOfActiveBizTalkServers { get; set; }

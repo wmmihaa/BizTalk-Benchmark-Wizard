@@ -100,29 +100,60 @@ namespace BizTalk_Benchmark_Wizard.Helper
         /// <param name="servername"></param>
         /// <param name="username"></param>
         /// <param name="password"></param>
-        public void CreateBizTalkHosts(string servername, string username, string password)
+        public void CreateBizTalkHosts(string servername, string windowsGroup, string username, string password)
         {
             this.StopAllHostInstances();
 
             string hostName = "BBW_RxHost";
             this.UnInstallAndUnMap(hostName, servername);
-            this.CreateHost(hostName, HostType.InProcess, _btsAdmGroup, false, false, false);
+            this.CreateHost(hostName, HostType.InProcess, windowsGroup, false, false, false);
             this.CreateHostInstance(hostName, servername, username, password);
-            //this.CreateHandler(hostName, "WCF-NetTcp", HandlerType.Receive);
-            //this.StartHostInstance(hostName);
+            this.CreateHandler(hostName, "WCF-NetTcp", HandlerType.Receive);
+            this.StartHostInstance(hostName);
 
-            //hostName = "BBW_TxHost";
-            //this.UnInstallAndUnMap(hostName, servername);
-            //this.CreateHost(hostName, HostType.InProcess, _btsAdmGroup, false, false, false);
-            //this.CreateHostInstance(hostName, servername, username, password);
-            //this.CreateHandler(hostName, "WCF-NetTcp", HandlerType.Send);
-            //this.StartHostInstance(hostName);
+            hostName = "BBW_TxHost";
+            this.UnInstallAndUnMap(hostName, servername);
+            this.CreateHost(hostName, HostType.InProcess, windowsGroup, false, false, false);
+            this.CreateHostInstance(hostName, servername, username, password);
+            this.CreateHandler(hostName, "WCF-NetTcp", HandlerType.Send);
+            this.StartHostInstance(hostName);
 
-            //hostName = "BBW_PxHost";
-            //this.UnInstallAndUnMap(hostName, servername);
-            //this.CreateHost(hostName, HostType.InProcess, _btsAdmGroup, false, true, false);
-            //this.CreateHostInstance(hostName, servername, username, password);
-            //this.StartHostInstance(hostName);
+            hostName = "BBW_PxHost";
+            this.UnInstallAndUnMap(hostName, servername);
+            this.CreateHost(hostName, HostType.InProcess, windowsGroup, false, true, false);
+            this.CreateHostInstance(hostName, servername, username, password);
+            this.StartHostInstance(hostName);
+        }
+        /// <summary>
+        /// Returns a list of application servers
+        /// </summary>
+        /// <returns></returns>
+        public List<string> GetApplicationServerNames()
+        {
+            List<string> applicationServers = new List<string>();
+            try
+            {
+                //Create EnumerationOptions and run wql query
+                EnumerationOptions enumOptions = new EnumerationOptions();
+                enumOptions.ReturnImmediately = false;
+
+                //Search for all HostInstances of 'InProcess' type in the Biztalk namespace scope
+                ManagementObjectSearcher searchObject =
+                    new ManagementObjectSearcher(BIZTALKSCOPE, "Select * from MSBTS_ServerHost", enumOptions);
+
+                //Enumerate through the result set and start each HostInstance if it is already stopped
+                foreach (ManagementObject inst in searchObject.Get())
+                {
+                    string serverName = inst["servername"] as string;
+                    if (!applicationServers.Contains(serverName))
+                        applicationServers.Add(serverName);
+                }
+                return applicationServers;
+            }
+            catch (Exception ex)
+            {
+                throw new ApplicationException("Unable to find running hosts", ex);
+            }
         }
         #endregion
 
@@ -200,33 +231,6 @@ namespace BizTalk_Benchmark_Wizard.Helper
                 reader.Close();
             }
             return computerName;
-        }
-        private List<string> GetApplicationServerNames()
-        {
-            List<string> applicationServers = new List<string>();
-            try
-            {
-                //Create EnumerationOptions and run wql query
-                EnumerationOptions enumOptions = new EnumerationOptions();
-                enumOptions.ReturnImmediately = false;
-
-                //Search for all HostInstances of 'InProcess' type in the Biztalk namespace scope
-                ManagementObjectSearcher searchObject =
-                    new ManagementObjectSearcher(BIZTALKSCOPE, "Select * from MSBTS_ServerHost", enumOptions);
-
-                //Enumerate through the result set and start each HostInstance if it is already stopped
-                foreach (ManagementObject inst in searchObject.Get())
-                {
-                    string serverName = inst["servername"] as string;
-                    if (!applicationServers.Contains(serverName))
-                        applicationServers.Add(serverName);
-                }
-                return applicationServers;
-            }
-            catch (Exception ex)
-            {
-                throw new ApplicationException("Unable to find running hosts", ex);
-            }
         }
         private void CreateCollectorSet(string serverName, string template)
         {

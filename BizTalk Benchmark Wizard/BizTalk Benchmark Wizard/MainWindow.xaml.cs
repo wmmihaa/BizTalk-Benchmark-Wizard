@@ -15,6 +15,7 @@ using BizTalk_Benchmark_Wizard.Helper;
 using System.Timers;
 using System.Windows.Threading;
 using System.Threading;
+using System.Diagnostics;
 
 namespace BizTalk_Benchmark_Wizard
 {
@@ -32,12 +33,14 @@ namespace BizTalk_Benchmark_Wizard
         List<Scenario> _scenarios;
         BizTalkHelper _bizTalkHelper = null;
         PerflogHelper _perflogHelper = null;
+        LoadGenHelper _loadGenHelper = null;
         System.Timers.Timer _timer = null;
         DateTime _testStartTime;
         long _avgCpuValue = 0;
         long _avgProcessedValue = 0;
         long _avgRreceivedValue = 0;
-        int _timerCount = 0;
+        float _timerCount = 0;
+        
         #endregion
         #region Public Members
         public IEnumerable<Environment> Environments;
@@ -148,6 +151,14 @@ namespace BizTalk_Benchmark_Wizard
             }
             finally { this.Cursor = null; }
         }
+        private void btnOk2_Click(object sender, RoutedEventArgs e)
+        {
+            PopupServiceAccountAndGroups.IsOpen = false;
+            foreach (Server server in _bizTalkHelper.GetServers(txtServer1.Text, txtMgmtDb1.Text).Where(s => s.Type == ServerType.BIZTALK))
+            {
+                _bizTalkHelper.CreateBizTalkHosts(server.Name, txtWindowsGroup.Text, txtServiceAccount.Text, txtPasswrod.Password);
+            }
+        }
         private void btnExceptionOk_Click(object sender, RoutedEventArgs e)
         {
             PopupException.IsOpen = false;
@@ -181,10 +192,7 @@ namespace BizTalk_Benchmark_Wizard
         }
         private void btnCreateHosts_Click(object sender, RoutedEventArgs e)
         {
-            foreach (Server server in _bizTalkHelper.GetServers(txtServer1.Text, txtMgmtDb1.Text).Where(s => s.Type == ServerType.BIZTALK))
-            {
-                _bizTalkHelper.CreateBizTalkHosts(server.Name, "IDCVDEV02\\BtsUsr","Linus1234");
-            }
+            PopupServiceAccountAndGroups.IsOpen = true;                    
         }
         private void btnCreateCollectors_Click(object sender, RoutedEventArgs e)
         {
@@ -288,10 +296,6 @@ namespace BizTalk_Benchmark_Wizard
         {
             // Configure tests...
 
-            RunTest();
-        }
-        void RunTest()
-        {
             btnBack.Visibility = Visibility.Hidden;
             btnNext.Visibility = Visibility.Hidden;
             _testStartTime = DateTime.Now;
@@ -299,62 +303,57 @@ namespace BizTalk_Benchmark_Wizard
             _avgProcessedValue = 0;
             _avgRreceivedValue = 0;
             _timerCount = 0;
-            CPUGauge.MaxValue = 450;
+            CPUGauge.MaxValue = 180;
             ProcessedGauge.MaxValue = 450;
             ReceivedGauge.MaxValue = 450;
-            ProcessValue=0;
+            ProcessValue = 0;
             Progress.DataContext = this;
+            
+            RunTest();
+        }
+        void RunTest()
+        {
+            _loadGenHelper = new LoadGenHelper();
+            _loadGenHelper.RunTests((Environment)environments.SelectedItem, _bizTalkHelper.GetApplicationServerNames());
+            _loadGenHelper.OnComplete += new LoadGenHelper.CompleteHandler(_loadGenHelper_OnComplete);
             _timer = new System.Timers.Timer(TIMERTICKS);
             _timer.Elapsed += new ElapsedEventHandler(_timer_CollectData);
             _timer.Start();
             
         }
+
+        void _loadGenHelper_OnComplete()
+        {
+            _timer.Stop();
+            //btnNext.Visibility = Visibility.Visible;
+        }
         void _timer_CollectData(object sender, ElapsedEventArgs e)
         {
+            _timer.Enabled = false;
             _timerCount++;
-            _timer.Stop();
-            int secondsLeftToRun = _testStartTime.AddMinutes(TESTRUNFORNUMBEROFMINUTES).Subtract(DateTime.Now).Seconds;
-            double percentLeftToRun = (double)secondsLeftToRun / (double)(TESTRUNFORNUMBEROFMINUTES * 60);
-            //double p = 100 * 1d-percentLeftToRun;
-            ProcessValue = (int)((1d-percentLeftToRun)*100d);
-
-            if (DateTime.Now < _testStartTime.AddMinutes(TESTRUNFORNUMBEROFMINUTES))//Tests run for 30min
+            float cpuValue=0;
+            float processedValue=0;
+            float receivedValue=0;
+            
+            foreach (PerfCounter c in _loadGenHelper.PerfCounters)
             {
-                Random rnd = new Random(DateTime.Now.Millisecond);
-
-                // Collect counter values
-                int cpuValue = rnd.Next(0, 100);
-                int processedValue = rnd.Next(100, 450);
-                int receivedValue = rnd.Next(100, 450);
-
-                // Increace MaxValue properties on Gauges if counter values are bigger then MaxValue 
-                //if (cpuValue > CPUGauge.MaxValue)
-                //    CPUGauge.MaxValue += 450;
-                //if (processedValue > ProcessedGauge.MaxValue)
-                //    ProcessedGauge.MaxValue += 450;
-                //if (receivedValue > ReceivedGauge.MaxValue)
-                //    ReceivedGauge.MaxValue += 450;
-
-                // Collect avg values
-                _avgCpuValue += cpuValue;
-                _avgProcessedValue += processedValue;
-                _avgRreceivedValue += receivedValue;
-
-                // Set gauge values
-                CPUGauge.SetCounter(cpuValue, (int)_avgCpuValue / _timerCount);
-                ProcessedGauge.SetCounter(processedValue, (int)_avgProcessedValue / _timerCount);
-                ReceivedGauge.SetCounter(receivedValue, (int)_avgRreceivedValue / _timerCount);
-
-                _timer.Start();
+                cpuValue += c.CPUCounterValue;
+                processedValue += c.ProcessedCounterValue;
+                receivedValue += c.ReceivedCounterValue;
             }
-            else
-            {
-                _timer.Stop();
-                //btnBack.Visibility = Visibility.Visible;
-                //btnNext.Visibility = Visibility.Visible;
 
-            }
+            _avgCpuValue = (long)((_avgCpuValue + cpuValue) * _timerCount);
+            _avgProcessedValue = (long)((_avgProcessedValue + processedValue) * _timerCount);
+            _avgRreceivedValue = (long)((_avgRreceivedValue + receivedValue) * _timerCount);
+
+            // Set gauge values
+            CPUGauge.SetCounter((int)cpuValue, (int)(_avgCpuValue / _timerCount));
+            ProcessedGauge.SetCounter( (int)processedValue, (int)(_avgProcessedValue / _timerCount));
+            ReceivedGauge.SetCounter((int)receivedValue, (int)(_avgRreceivedValue / _timerCount));
+
+            _timer.Enabled = true;
         }
+        
         #endregion
     }
     /// <summary>
@@ -379,4 +378,5 @@ namespace BizTalk_Benchmark_Wizard
         /// </summary>
         public string Status { get; set; }
     }
+    
 }

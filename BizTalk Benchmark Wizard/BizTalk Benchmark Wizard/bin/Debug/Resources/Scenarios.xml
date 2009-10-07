@@ -14,6 +14,7 @@
       <Environment>
         <Name>1BTS + 1SQL</Name>
         <Description>...</Description>
+        <LoadGenScripfile>LoadGenSettings_001.xml</LoadGenScripfile>
         <NuberOfActiveBizTalkServers>1</NuberOfActiveBizTalkServers>
         <BizTalkServerConfiguration>1*CPU, 4GB RAM</BizTalkServerConfiguration>
         <NuberOfActiveSQLServers>1</NuberOfActiveSQLServers>
@@ -26,6 +27,7 @@
       <Environment>
         <Name>2BTS + 3SQL</Name>
         <Description>...</Description>
+        <LoadGenScripfile>LoadGenSettings_001.xml</LoadGenScripfile>
         <NuberOfActiveBizTalkServers>2</NuberOfActiveBizTalkServers>
         <BizTalkServerConfiguration>1*CPU, 4GB RAM</BizTalkServerConfiguration>
         <NuberOfActiveSQLServers>3</NuberOfActiveSQLServers>
@@ -38,6 +40,7 @@
       <Environment>
         <Name>3BTS + 3SQL</Name>
         <Description>...</Description>
+        <LoadGenScripfile>LoadGenSettings_001.xml</LoadGenScripfile>
         <NuberOfActiveBizTalkServers>3</NuberOfActiveBizTalkServers>
         <BizTalkServerConfiguration>1*CPU, 4GB RAM</BizTalkServerConfiguration>
         <NuberOfActiveSQLServers>3</NuberOfActiveSQLServers>
@@ -50,6 +53,7 @@
       <Environment>
         <Name>3BTS + 3SQL</Name>
         <Description>...</Description>
+        <LoadGenScripfile>LoadGenSettings_001.xml</LoadGenScripfile>
         <NuberOfActiveBizTalkServers>3</NuberOfActiveBizTalkServers>
         <BizTalkServerConfiguration>1*CPU, 4GB RAM</BizTalkServerConfiguration>
         <NuberOfActiveSQLServers>4</NuberOfActiveSQLServers>
@@ -76,6 +80,7 @@
       <Environment>
         <Name>1BTS + 1SQL</Name>
         <Description>...</Description>
+        <LoadGenScripfile>LoadGenSettings_001.xml</LoadGenScripfile>
         <NuberOfActiveBizTalkServers>1</NuberOfActiveBizTalkServers>
         <BizTalkServerConfiguration>1*CPU, 4GB RAM</BizTalkServerConfiguration>
         <NuberOfActiveSQLServers>1</NuberOfActiveSQLServers>
@@ -88,6 +93,7 @@
       <Environment>
         <Name>2BTS + 1SQL</Name>
         <Description>...</Description>
+        <LoadGenScripfile>LoadGenSettings_001.xml</LoadGenScripfile>
         <NuberOfActiveBizTalkServers>2</NuberOfActiveBizTalkServers>
         <BizTalkServerConfiguration>1*CPU, 4GB RAM</BizTalkServerConfiguration>
         <NuberOfActiveSQLServers>1</NuberOfActiveSQLServers>
@@ -100,6 +106,7 @@
       <Environment>
         <Name>3BTS + 1SQL</Name>
         <Description>...</Description>
+        <LoadGenScripfile>LoadGenSettings_001.xml</LoadGenScripfile>
         <NuberOfActiveBizTalkServers>3</NuberOfActiveBizTalkServers>
         <BizTalkServerConfiguration>1*CPU, 4GB RAM</BizTalkServerConfiguration>
         <NuberOfActiveSQLServers>1</NuberOfActiveSQLServers>
@@ -112,6 +119,7 @@
       <Environment>
         <Name>4BTS + 1SQL</Name>
         <Description>...</Description>
+        <LoadGenScripfile>LoadGenSettings_001.xml</LoadGenScripfile>
         <NuberOfActiveBizTalkServers>4</NuberOfActiveBizTalkServers>
         <BizTalkServerConfiguration>1*CPU, 4GB RAM</BizTalkServerConfiguration>
         <NuberOfActiveSQLServers>1</NuberOfActiveSQLServers>
