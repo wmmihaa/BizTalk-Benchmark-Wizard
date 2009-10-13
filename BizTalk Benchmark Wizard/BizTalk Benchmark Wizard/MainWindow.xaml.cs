@@ -75,28 +75,29 @@ namespace BizTalk_Benchmark_Wizard
         {
             InitializeComponent();
 
-            LoadScenarions();
+            //LoadScenarions();
         }
         #endregion
         #region Events
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-
+            LoadScenarions();
         }
         private void btnNext_Click(object sender, RoutedEventArgs e)
         {
             switch (tabControl1.SelectedIndex)
             { 
                 case 0:
-                    if (!_isLogedIn)
-                    {
-                        PopupLogin.IsOpen = true;
-                        return;
-                    }
-                    break;
+                   break;
                 case 1:
                     break;
                 case 2:
+                    if (!_isLogedIn)
+                    {
+                        btnNext.IsEnabled = false;
+                        PopupLogin.IsOpen = true;
+                        return;
+                    }
                     break;
                 case 3:
                     break;
@@ -138,7 +139,8 @@ namespace BizTalk_Benchmark_Wizard
             this.Cursor = Cursors.Wait;
             try
             {
-                RefreshPreRequsites(); 
+                RefreshPreRequsites();
+                btnNext.IsEnabled = true;
                 tabControl1.SelectedIndex++;
             }
             catch (Exception ex)
@@ -278,17 +280,25 @@ namespace BizTalk_Benchmark_Wizard
             
         }
         void LoadScenarions()
-        { 
-            _scenarios = ScenariosFactory.Load();
-            
-            foreach (var scenario in _scenarios)
-                cbScenario.Items.Add(scenario.Name);
+        {
 
-            cbScenario.SelectedIndex = 0;
+            try
+            {
+                _scenarios = ScenariosFactory.Load();
 
-            Environments = _scenarios[0].Environments;
-    
-            this.environments.DataContext = Environments;
+                foreach (var scenario in _scenarios)
+                    cbScenario.Items.Add(scenario.Name);
+
+                cbScenario.SelectedIndex = 0;
+
+                Environments = _scenarios[0].Environments;
+
+                this.environments.DataContext = Environments;
+            }
+            catch (Exception ex)
+            {
+                throw new ApplicationException("Unable to load Senarios configuration", ex);
+            }
         }
         #endregion
         #region Run Tests

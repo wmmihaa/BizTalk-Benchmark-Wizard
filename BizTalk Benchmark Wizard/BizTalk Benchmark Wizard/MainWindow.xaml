@@ -215,6 +215,22 @@
                 </Setter.Value>
             </Setter>
         </Style>
+        <Style x:Key="RoundedDataGrid" TargetType="{x:Type my:DataGrid}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type my:DataGrid}">
+                        <Border Name="Border"
+                                  CornerRadius="5" 
+                                  Padding="2"
+                                  Background="{StaticResource WindowBackgroundBrush}"
+                                  BorderBrush="{StaticResource SolidBorderBrush}"
+                                  BorderThickness="1" >
+                            <ScrollViewer Margin="0" x:Name="PART_ContentHost"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </Window.Resources>
     <Grid>
         <Canvas>
@@ -235,6 +251,60 @@
                                 <LineBreak/>The executed scenarios may or may not be relative to any realistic scenario, and is only intended for testing.</TextBlock>
                         </Label>
 
+                    </Grid>
+                </TabItem>
+                <TabItem Header="" Name="tabScenario">
+                    <Grid>
+                        <Label Height="61" Margin="20,34,19,0" VerticalAlignment="Top" FontSize="30" FontWeight="Bold" FontFamily="Calibri">Scenarios</Label>
+
+                        <Label Margin="20,75,19,129" FontFamily="Calibri">
+                            <TextBlock TextWrapping="Wrap">
+                                BizTalk Benchmark Wizard uses Microsoft LoadGen 2007 to generate message transmission loads to run performance and stress tests for Microsoft BizTalk Server applications. 
+                                <LineBreak/><LineBreak/>Depending on which scenario you select below, a different script will be executed. Microsoft LoadGen 2007 was installed together with BizTalk Benchmark Wizard, and can be used afterwards to continue analyzing your environment.
+                            </TextBlock>
+                        </Label>
+                        <Canvas Margin="20,170" >
+                            <StackPanel Orientation="Vertical">
+                                <StackPanel Orientation="Horizontal">
+                                    <Label Canvas.Left="26" Canvas.Top="16" Height="28" Name="label1" Width="120">Select scenario:</Label>
+                                    <ComboBox Canvas.Left="121" Canvas.Top="16" Height="23" Name="cbScenario" Width="510" SelectionChanged="cbScenario_SelectionChanged" />
+                                </StackPanel>
+                                <my:DataGrid Name="environments" 
+                                     ItemsSource="{Binding}" 
+                                     AutoGenerateColumns="False" 
+                                     Height="139" 
+                                     Width="634" 
+                                     Canvas.Left="25" 
+                                     Canvas.Top="45">
+                                    
+                                    <my:DataGrid.Columns>
+                                        <my:DataGridTextColumn Header="Name"  Binding="{Binding Name}" Width="100"/>
+                                        <my:DataGridTextColumn Header="#BTS Srv"  Binding="{Binding NuberOfActiveBizTalkServers}" Width="70"/>
+                                        <my:DataGridTextColumn Header="BTS Config"  Binding="{Binding BizTalkServerConfiguration}"  Width="200"/>
+                                        <my:DataGridTextColumn Header="#SQL Srv"  Binding="{Binding NuberOfActiveSQLServers}"  Width="70"/>
+                                        <my:DataGridTextColumn Header="SQL Config"  Binding="{Binding SQLServerConfiguration}"  Width="100"/>
+                                    </my:DataGrid.Columns>
+
+                                </my:DataGrid>
+                            </StackPanel>
+
+                        </Canvas>
+                    </Grid>
+                </TabItem>
+                <TabItem Header="" Name="tabScenarioDescription">
+                    <Grid>
+                        <Label Height="61" Margin="20,34,19,0" VerticalAlignment="Top" FontSize="30" FontWeight="Bold" FontFamily="Calibri">
+                            <TextBlock Name="ScenarioName" TextWrapping="Wrap">Scenario</TextBlock>
+                        </Label>
+
+                        <Label FontFamily="Calibri" Margin="0,80,19,129">
+                            <TextBlock Name="ScenarioDescription"  TextWrapping="Wrap">...</TextBlock>
+                        </Label>
+
+                        <Canvas>
+                            <Image Name="ScenairoPicture1" Source="Resources/Images/scenario1.png" Width="400" Canvas.Top="217" Canvas.Left="36.654" Height="151" Visibility="Visible"/>
+                            <Image Name="ScenairoPicture2" Source="Resources/Images/scenario2.png" Width="400" Canvas.Top="217" Canvas.Left="36.654" Height="151" Visibility="Hidden"/>
+                        </Canvas>
                     </Grid>
                 </TabItem>
                 <TabItem Header="" Name="tabPrerequsites">
@@ -275,60 +345,6 @@
 
                             </StackPanel>
                         </StackPanel>
-                    </Grid>
-                </TabItem>
-                <TabItem Header="" Name="tabEnvironment">
-                    <Grid>
-                        <Label Height="61" Margin="20,34,19,0" VerticalAlignment="Top" FontSize="30" FontWeight="Bold" FontFamily="Calibri">Scenarios</Label>
-
-                        <Label Margin="20,75,19,129" FontFamily="Calibri">
-                            <TextBlock TextWrapping="Wrap">
-                                BizTalk Benchmark Wizard uses Microsoft LoadGen 2007 to generate message transmission loads to run performance and stress tests for Microsoft BizTalk Server applications. 
-                                <LineBreak/><LineBreak/>Depending on which scenario you select below, a different script will be executed. Microsoft LoadGen 2007 was installed together with BizTalk Benchmark Wizard, and can be used afterwards to continue analyzing your environment.
-                            </TextBlock>
-                        </Label>
-                        <Canvas Margin="20,170" >
-                            <StackPanel Orientation="Vertical">
-                                <StackPanel Orientation="Horizontal">
-                                    <Label Canvas.Left="26" Canvas.Top="16" Height="28" Name="label1" Width="120">Select scenario:</Label>
-                                    <ComboBox Canvas.Left="121" Canvas.Top="16" Height="23" Name="cbScenario" Width="510" SelectionChanged="cbScenario_SelectionChanged" />
-                                </StackPanel>
-                                <my:DataGrid Name="environments" 
-                                     ItemsSource="{Binding}" 
-                                     AutoGenerateColumns="False" 
-                                     Height="139" 
-                                     Width="634" 
-                                     Canvas.Left="25" 
-                                     Canvas.Top="45">
-                                    <my:DataGrid.Columns>
-                                        <my:DataGridTextColumn Header="Name"  Binding="{Binding Name}" Width="100"/>
-                                        <my:DataGridTextColumn Header="#BTS Srv"  Binding="{Binding NuberOfActiveBizTalkServers}" Width="70"/>
-                                        <my:DataGridTextColumn Header="BTS Config"  Binding="{Binding BizTalkServerConfiguration}"  Width="200"/>
-                                        <my:DataGridTextColumn Header="#SQL Srv"  Binding="{Binding NuberOfActiveSQLServers}"  Width="70"/>
-                                        <my:DataGridTextColumn Header="SQL Config"  Binding="{Binding SQLServerConfiguration}"  Width="100"/>
-                                    </my:DataGrid.Columns>
-
-                                </my:DataGrid>
-                            </StackPanel>
-
-                        </Canvas>
-                    </Grid>
-
-                </TabItem>
-                <TabItem Header="" Name="tabScenario">
-                    <Grid>
-                        <Label Height="61" Margin="20,34,19,0" VerticalAlignment="Top" FontSize="30" FontWeight="Bold" FontFamily="Calibri">
-                            <TextBlock Name="ScenarioName" TextWrapping="Wrap">Scenario</TextBlock>
-                        </Label>
-
-                        <Label FontFamily="Calibri" Margin="0,80,19,129">
-                            <TextBlock Name="ScenarioDescription"  TextWrapping="Wrap">...</TextBlock>
-                        </Label>
-
-                        <Canvas>
-                            <Image Name="ScenairoPicture1" Source="Resources/Images/scenario1.png" Width="400" Canvas.Top="217" Canvas.Left="36.654" Height="151" Visibility="Visible"/>
-                            <Image Name="ScenairoPicture2" Source="Resources/Images/scenario2.png" Width="400" Canvas.Top="217" Canvas.Left="36.654" Height="151" Visibility="Hidden"/>
-                        </Canvas>
                     </Grid>
                 </TabItem>
                 <TabItem Header="" Name="tabPrepare">

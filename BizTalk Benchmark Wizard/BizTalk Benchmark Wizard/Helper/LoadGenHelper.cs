@@ -8,6 +8,8 @@ using LoadGen;
 using System.Globalization;
 using System.IO;
 using System.Diagnostics;
+using System.Configuration;
+using System.ServiceModel.Configuration;
 
 namespace BizTalk_Benchmark_Wizard.Helper
 {
@@ -19,10 +21,12 @@ namespace BizTalk_Benchmark_Wizard.Helper
         List<LoadGen.LoadGen> _loadGenClients = new List<LoadGen.LoadGen>();
         int _numberOfLoadGenStopped = 0;
         int _numberOfLoadGenClients = 0;
+        
         public LoadGenHelper()
         {
             
         }
+        
         public void RunTests(Environment environment, List<string> servers)
         {
             int n = _numberOfLoadGenClients;
@@ -47,6 +51,7 @@ namespace BizTalk_Benchmark_Wizard.Helper
             foreach (LoadGen.LoadGen loadGen in _loadGenClients)
                 loadGen.Stop();
         }
+        
         private string CreateLoadGenScript(string template, string server)
         {
             string rootPath = Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location), "Resources\\LoadGenScripts");
@@ -75,6 +80,8 @@ namespace BizTalk_Benchmark_Wizard.Helper
             LoadGen.LoadGen loadGen = null;
             try
             {
+                UpdateServiceAddress(server, "ClientEndPoint1");
+
                 XmlDocument doc = new XmlDocument();
                 doc.Load(scriptFile);
 
@@ -86,7 +93,6 @@ namespace BizTalk_Benchmark_Wizard.Helper
                 loadGen = new LoadGen.LoadGen(doc.FirstChild);
                 loadGen.LoadGenStopped += new LoadGenEventHandler(LoadGen_Stopped);
                 
-
                 loadGen.Start();
             }
             catch (ConfigException cex)
@@ -98,7 +104,6 @@ namespace BizTalk_Benchmark_Wizard.Helper
                 throw;
             }
 
-            //Thread.Sleep(0x1388);
             return loadGen;
         }
         private void CreateCounterCollectors(string server)
@@ -139,6 +144,33 @@ namespace BizTalk_Benchmark_Wizard.Helper
             _numberOfLoadGenStopped++;
             if (_numberOfLoadGenClients == _numberOfLoadGenStopped)
                 RaiseCompleteEvent();
+        }
+        private void UpdateServiceAddress(string address, string endpointName)
+        {
+            Configuration config = ConfigurationManager.OpenExeConfiguration(System.Reflection.Assembly.GetExecutingAssembly().Location);
+
+            ClientSection clientSection = (ClientSection)config.GetSection("system.serviceModel/client");
+            ChannelEndpointElement endpointElement = null;
+            foreach (ChannelEndpointElement element in clientSection.Endpoints)
+            {
+                if (element.Name == endpointName)
+                {
+                    endpointElement = element;
+                    break;
+                }
+            }
+            if (endpointElement != null)
+            {
+                endpointElement.Address = new Uri(endpointElement.Address.ToString().Replace("[ServerName]",address));
+                config.Save();
+                ConfigurationManager.RefreshSection("system.serviceModel/client");
+
+
+            }
+            else
+            {
+                throw new ApplicationException(string.Format("Could not find {0} endpoint configuration section", endpointName));
+            }
         }
     }
     public class PerfCounter
