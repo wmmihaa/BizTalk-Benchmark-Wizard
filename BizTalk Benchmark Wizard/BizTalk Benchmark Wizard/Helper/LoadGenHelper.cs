@@ -11,6 +11,7 @@ using System.Diagnostics;
 using System.Configuration;
 using System.ServiceModel.Configuration;
 
+
 namespace BizTalk_Benchmark_Wizard.Helper
 {
     internal class LoadGenHelper
@@ -50,6 +51,34 @@ namespace BizTalk_Benchmark_Wizard.Helper
         {
             foreach (LoadGen.LoadGen loadGen in _loadGenClients)
                 loadGen.Stop();
+        }
+        public bool TestIndigoService(string server)
+        {
+            try
+            {
+                IndigoService.ServiceTwoWaysVoidNonTransactionalClient proxy = new BizTalk_Benchmark_Wizard.IndigoService.ServiceTwoWaysVoidNonTransactionalClient("netTcpBinding_IServiceTwoWaysVoidNonTransactional");
+
+                proxy.Endpoint.Address = new System.ServiceModel.EndpointAddress(proxy.Endpoint.Address.Uri.ToString().Replace("servername", server));
+                
+                string xml = "<Response><resp>This is a response</resp></Response>";
+
+                using (proxy as IDisposable)
+                {
+                    System.ServiceModel.Channels.MessageVersion version = System.ServiceModel.Channels.MessageVersion.Soap12WSAddressing10;
+                    MemoryStream stream = new MemoryStream(Encoding.Default.GetBytes(xml), 0, Encoding.Default.GetBytes(xml).Length);
+                    stream.Seek(0L, SeekOrigin.Begin);
+                    XmlTextReader reader = new XmlTextReader(stream);
+                    System.ServiceModel.Channels.Message request = System.ServiceModel.Channels.Message.CreateMessage(version, "http://tempuri.org/IServiceTwoWaysVoidNonTransactional/ConsumeMessage", (XmlReader)reader);
+                    
+
+                    proxy.ConsumeMessage(request);
+                }
+            }
+            catch(Exception ex)
+            {
+                return false;
+            }
+            return true;
         }
         
         private string CreateLoadGenScript(string template, string server)
@@ -161,7 +190,7 @@ namespace BizTalk_Benchmark_Wizard.Helper
             }
             if (endpointElement != null)
             {
-                endpointElement.Address = new Uri(endpointElement.Address.ToString().Replace("[ServerName]",address));
+                endpointElement.Address = new Uri(endpointElement.Address.ToString().ToLower().Replace("servername",address));
                 config.Save();
                 ConfigurationManager.RefreshSection("system.serviceModel/client");
 
@@ -172,6 +201,9 @@ namespace BizTalk_Benchmark_Wizard.Helper
                 throw new ApplicationException(string.Format("Could not find {0} endpoint configuration section", endpointName));
             }
         }
+        
+
+
     }
     public class PerfCounter
     {
@@ -212,4 +244,13 @@ namespace BizTalk_Benchmark_Wizard.Helper
         }
         public string Server = string.Empty;
     }
+    [System.ServiceModel.ServiceContract]
+    public interface IServiceTwoWaysVoidNonTransactional
+    {
+        // Methods
+        [System.ServiceModel.OperationContract(Action = "*")]
+        void ConsumeMessage(System.ServiceModel.Channels.Message msg);
+    }
+
+
 }

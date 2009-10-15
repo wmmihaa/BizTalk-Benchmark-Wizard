@@ -215,22 +215,6 @@
                 </Setter.Value>
             </Setter>
         </Style>
-        <Style x:Key="RoundedDataGrid" TargetType="{x:Type my:DataGrid}">
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type my:DataGrid}">
-                        <Border Name="Border"
-                                  CornerRadius="5" 
-                                  Padding="2"
-                                  Background="{StaticResource WindowBackgroundBrush}"
-                                  BorderBrush="{StaticResource SolidBorderBrush}"
-                                  BorderThickness="1" >
-                            <ScrollViewer Margin="0" x:Name="PART_ContentHost"/>
-                        </Border>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
     </Window.Resources>
     <Grid>
         <Canvas>
@@ -251,6 +235,46 @@
                                 <LineBreak/>The executed scenarios may or may not be relative to any realistic scenario, and is only intended for testing.</TextBlock>
                         </Label>
 
+                    </Grid>
+                </TabItem>
+                <TabItem Header="" Name="tabPrerequsites">
+                    <Grid>
+                        <Label Height="61" Margin="20,34,19,0" VerticalAlignment="Top" FontSize="30" FontWeight="Bold" FontFamily="Calibri">Prerequsites</Label>
+                        <StackPanel Orientation="Vertical" Margin="20,80" >
+                            <StackPanel Orientation="Horizontal">
+                                <Image Name="picInstallCollectorSet" Height="40" Source="Resources/Images/checklist.png"/>
+                                <StackPanel Orientation="Horizontal">
+                                    <Label FontFamily="Calibri" MaxWidth="550" Width="500">
+                                        <TextBlock TextWrapping="Wrap"><Bold>Optional</Bold> - Create Data Collector Sets for further analyzes after the completion of the test.</TextBlock>
+                                    </Label>
+                                    <Button Height="23" Style="{DynamicResource RoundedButton}" HorizontalAlignment="Right" Name="btnCreateCollectors" VerticalAlignment="Center" Width="75" Click="btnCreateCollectors_Click">Create</Button>
+                                </StackPanel>
+                            </StackPanel>
+                            <StackPanel Height="15"/>
+                            <StackPanel Orientation="Horizontal">
+                                <Image Name="picInstallHost" Height="40" Source="Resources/Images/checklist.png"/>
+                                <StackPanel Orientation="Horizontal">
+                                    <Label FontFamily="Calibri" MaxWidth="550" Width="500">
+                                        <TextBlock TextWrapping="Wrap"><Bold>Mandatory</Bold> - Create Hosts, Host Instances and Adapter handlers</TextBlock>
+                                    </Label>
+                                    <Button Height="23" Style="{DynamicResource RoundedButton}" HorizontalAlignment="Right" Name="btnCreateHosts" VerticalAlignment="Center" Width="75" Click="btnCreateHosts_Click">Create</Button>
+                                </StackPanel>
+                            </StackPanel>
+                            <StackPanel Height="15"/>
+                            <StackPanel Orientation="Horizontal">
+                                <Image Name="picInstalledScenario" Height="40" Source="Resources/Images/checklist.png"/>
+                                <StackPanel Orientation="Horizontal">
+                                    <Label FontFamily="Calibri" MaxWidth="550" Width="480">
+                                        <TextBlock TextWrapping="Wrap"><Bold>Mandatory</Bold> - Install testing scenario on all BizTalk servers.</TextBlock>
+                                    </Label>
+                                    <Label Name="lblInstalledScenarioManual" FontFamily="Calibri">
+                                        <TextBlock TextWrapping="Wrap"><Bold>This is a manual step.</Bold></TextBlock>
+                                    </Label>
+                                </StackPanel>
+
+
+                            </StackPanel>
+                        </StackPanel>
                     </Grid>
                 </TabItem>
                 <TabItem Header="" Name="tabScenario">
@@ -306,55 +330,37 @@
                             <Image Name="ScenairoPicture2" Source="Resources/Images/scenario2.png" Width="400" Canvas.Top="217" Canvas.Left="36.654" Height="151" Visibility="Hidden"/>
                         </Canvas>
                     </Grid>
-                </TabItem>
-                <TabItem Header="" Name="tabPrerequsites">
-                    <Grid>
-                        <Label Height="61" Margin="20,34,19,0" VerticalAlignment="Top" FontSize="30" FontWeight="Bold" FontFamily="Calibri">Prerequsites</Label>
-                        <StackPanel Orientation="Vertical" Margin="20,80" >
-                            <StackPanel Orientation="Horizontal">
-                                <Image Name="picInstallCollectorSet" Height="40" Source="Resources/Images/checklist.png"/>
-                                <StackPanel Orientation="Horizontal">
-                                    <Label FontFamily="Calibri" MaxWidth="550" Width="500">
-                                        <TextBlock TextWrapping="Wrap"><Bold>Optional</Bold> - Create Data Collector Sets for further analyzes after the completion of the test.</TextBlock>
-                                    </Label>
-                                    <Button Height="23" Style="{DynamicResource RoundedButton}" HorizontalAlignment="Right" Name="btnCreateCollectors" VerticalAlignment="Center" Width="75" Click="btnCreateCollectors_Click">Create</Button>
-                                </StackPanel>
-                            </StackPanel>
-                            <StackPanel Height="15"/>
-                            <StackPanel Orientation="Horizontal">
-                                <Image Name="picInstallHost" Height="40" Source="Resources/Images/checklist.png"/>
-                                <StackPanel Orientation="Horizontal">
-                                    <Label FontFamily="Calibri" MaxWidth="550" Width="500">
-                                        <TextBlock TextWrapping="Wrap"><Bold>Mandatory</Bold> - Create Hosts, Host Instances and Adapter handlers</TextBlock>
-                                    </Label>
-                                    <Button Height="23" Style="{DynamicResource RoundedButton}" HorizontalAlignment="Right" Name="btnCreateHosts" VerticalAlignment="Center" Width="75" Click="btnCreateHosts_Click">Create</Button>
-                                </StackPanel>
-                            </StackPanel>
-                            <StackPanel Height="15"/>
-                            <StackPanel Orientation="Horizontal">
-                                <Image Name="picInstalledScenario" Height="40" Source="Resources/Images/checklist.png"/>
-                                <StackPanel Orientation="Horizontal">
-                                    <Label FontFamily="Calibri" MaxWidth="550" Width="480">
-                                        <TextBlock TextWrapping="Wrap"><Bold>Mandatory</Bold> - Install testing scenario on all BizTalk servers.</TextBlock>
-                                    </Label>
-                                    <Label Name="lblInstalledScenarioManual" FontFamily="Calibri">
-                                        <TextBlock TextWrapping="Wrap"><Bold>This is a manual step.</Bold></TextBlock>
-                                    </Label>
-                                </StackPanel>
-
-
-                            </StackPanel>
-                        </StackPanel>
-                    </Grid>
-                </TabItem>
+                </TabItem>  
                 <TabItem Header="" Name="tabPrepare">
                     <Grid>
                         <Label Height="61" Margin="20,34,19,0" VerticalAlignment="Top" FontSize="30" FontWeight="Bold" FontFamily="Calibri">Prepare</Label>
-
-                        <Label Margin="20,80,19,129" FontFamily="Calibri">
-                            <TextBlock Name="TESTLABEL" TextWrapping="Wrap">In order to create a comparable result, please terminate all suspended instances, and stop all Host Instances not running the WCF-NetTcp adapter. Make sure to have at least one Host Instance with tracking enabled.</TextBlock>
-                        </Label>
-
+                        <StackPanel Orientation="Vertical" Margin="20,80,20,61" >
+                            <Label FontFamily="Calibri">
+                                <TextBlock Name="TESTLABEL" TextWrapping="Wrap">In order to create a comparable result, please terminate all suspended instances, and stop all Host Instances <LineBreak/>not running the WCF-NetTcp adapter. Make sure to have at least one Host Instance with tracking enabled.</TextBlock>
+                            </Label>
+                            <Label VerticalAlignment="Top" FontSize="30" FontWeight="Bold" FontFamily="Calibri">Start the Indigo Service</Label>
+                            
+                            <Label FontFamily="Calibri">
+                                <TextBlock TextWrapping="Wrap">Before starting the tests, The service host console application need to be started at the <Bold>{0}</Bold> server. This service
+                                <LineBreak/>is used by the Send port, and would benefit being started on a separate server.<LineBreak/>    
+                                <LineBreak/>1. Copy the IndigoService folder located in the BizTalk Benchmark Wizard install folder to <Bold>{0}</Bold> 
+                                <LineBreak/>2. Start the service by double-click the  <Bold>StartIndigoService.bat</Bold> file.
+                                <LineBreak/>3. Test the Indigo Service by clicking the "Test Indigo service" button bellow.
+                                </TextBlock>
+                            </Label>
+                            <StackPanel Height="15"/>
+                            <StackPanel Orientation="Horizontal">
+                                <Image Name="picServiceIsRunning" Height="40" Source="Resources/Images/checklist.png"/>
+                                <StackPanel Orientation="Horizontal">
+                                    <Label FontFamily="Calibri" MaxWidth="550" Width="470">
+                                        <TextBlock TextWrapping="Wrap"><Bold>Mandatory</Bold> - Test the Indigo Service</TextBlock>
+                                    </Label>
+                                    <Button Height="23" Style="{DynamicResource RoundedButton}" HorizontalAlignment="Right" Name="btnTestService" VerticalAlignment="Center" Width="130" Click="btnTestService_Click">Test the Indigo Service</Button>
+                                </StackPanel>
+                            </StackPanel>
+                            
+                            
+                        </StackPanel>
                     </Grid>
                 </TabItem>
                 <TabItem Header="" Name="tabRun">
@@ -508,9 +514,9 @@
         </Popup>
         <Popup x:Name="PopupServiceAccountAndGroups" 
                AllowsTransparency="True"
-               IsOpen="False"
+               IsOpen="false"
                Width="450"
-               Height="370"
+               Height="230"
                Placement="Center" PopupAnimation="Fade">
             <Grid>
                 <dropShadow:SystemDropShadowChrome CornerRadius="3,13,3,13" Color="#71000000">
@@ -526,7 +532,7 @@
                         <Label FontFamily="Calibri" FontSize="17" MaxWidth="400" Width="400">
                             <TextBlock TextWrapping="Wrap"><Bold>Servers, Windows accounts and Groups</Bold></TextBlock>
                         </Label>
-                        <Label FontFamily="Calibri" MaxWidth="400" Width="400">
+                        <!--<Label FontFamily="Calibri" MaxWidth="400" Width="400">
                             <TextBlock TextWrapping="Wrap">The following servers where found:</TextBlock>
                         </Label>
                         <my:DataGrid Name="servers" 
@@ -539,7 +545,7 @@
                                 <my:DataGridTextColumn Header="Server Type"  Binding="{Binding NuberOfActiveBizTalkServers}" Width="70"/>
                             </my:DataGrid.Columns>
                         </my:DataGrid>
-                        <StackPanel Height="10"/>
+                        <StackPanel Height="10"/>-->
                         <Label FontFamily="Calibri" MaxWidth="400" Width="400">
                             <TextBlock TextWrapping="Wrap">This wizard will create Hosts, Host Instances and Adapter handlers. Please provide the name of Windows group which will be used to control
                                 <LineBreak/> the access to the Hosts. You also need to provide the name of the user to run the Host Instances.</TextBlock>

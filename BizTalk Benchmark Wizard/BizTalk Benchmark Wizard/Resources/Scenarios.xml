@@ -12,12 +12,12 @@
     </Description>
     <Environments>
       <Environment>
-        <Name>1BTS + 1SQL</Name>
-        <Description>...</Description>
+        <Name>1 BTS with SQL</Name>
+        <Description>Single server installation</Description>
         <LoadGenScripfile>LoadGenSettings_001.xml</LoadGenScripfile>
         <NuberOfActiveBizTalkServers>1</NuberOfActiveBizTalkServers>
         <BizTalkServerConfiguration>1*CPU, 4GB RAM</BizTalkServerConfiguration>
-        <NuberOfActiveSQLServers>1</NuberOfActiveSQLServers>
+        <NuberOfActiveSQLServers>0</NuberOfActiveSQLServers>
         <SQLServerConfiguration>1*CPU, 4GB RAM</SQLServerConfiguration>
         <MaxExpectedCpuUtilizationBizTalk>95</MaxExpectedCpuUtilizationBizTalk>
         <MaxExpectedCpuUtilizationSql>45</MaxExpectedCpuUtilizationSql>
@@ -25,12 +25,12 @@
         <MinExpectedDocsReceived>1000</MinExpectedDocsReceived>
       </Environment>
       <Environment>
-        <Name>2BTS + 3SQL</Name>
-        <Description>...</Description>
+        <Name>1 BTS + 1 SQL</Name>
+        <Description>All host running on 1 server</Description>
         <LoadGenScripfile>LoadGenSettings_001.xml</LoadGenScripfile>
-        <NuberOfActiveBizTalkServers>2</NuberOfActiveBizTalkServers>
+        <NuberOfActiveBizTalkServers>1</NuberOfActiveBizTalkServers>
         <BizTalkServerConfiguration>1*CPU, 4GB RAM</BizTalkServerConfiguration>
-        <NuberOfActiveSQLServers>3</NuberOfActiveSQLServers>
+        <NuberOfActiveSQLServers>1</NuberOfActiveSQLServers>
         <SQLServerConfiguration>1*CPU, 4GB RAM</SQLServerConfiguration>
         <MaxExpectedCpuUtilizationBizTalk>80</MaxExpectedCpuUtilizationBizTalk>
         <MaxExpectedCpuUtilizationSql>30</MaxExpectedCpuUtilizationSql>
@@ -38,30 +38,17 @@
         <MinExpectedDocsReceived>1300</MinExpectedDocsReceived>
       </Environment>
       <Environment>
-        <Name>3BTS + 3SQL</Name>
-        <Description>...</Description>
+        <Name>2 BTS + 1 SQL</Name>
+        <Description>R/S host running on separate servers</Description>
         <LoadGenScripfile>LoadGenSettings_001.xml</LoadGenScripfile>
-        <NuberOfActiveBizTalkServers>3</NuberOfActiveBizTalkServers>
+        <NuberOfActiveBizTalkServers>2</NuberOfActiveBizTalkServers>
         <BizTalkServerConfiguration>1*CPU, 4GB RAM</BizTalkServerConfiguration>
-        <NuberOfActiveSQLServers>3</NuberOfActiveSQLServers>
+        <NuberOfActiveSQLServers>1</NuberOfActiveSQLServers>
         <SQLServerConfiguration>1*CPU, 4GB RAM</SQLServerConfiguration>
         <MaxExpectedCpuUtilizationBizTalk>70</MaxExpectedCpuUtilizationBizTalk>
         <MaxExpectedCpuUtilizationSql>40</MaxExpectedCpuUtilizationSql>
         <MinExpectedDocsProcessed>2000</MinExpectedDocsProcessed>
         <MinExpectedDocsReceived>2000</MinExpectedDocsReceived>
-      </Environment>
-      <Environment>
-        <Name>3BTS + 3SQL</Name>
-        <Description>...</Description>
-        <LoadGenScripfile>LoadGenSettings_001.xml</LoadGenScripfile>
-        <NuberOfActiveBizTalkServers>3</NuberOfActiveBizTalkServers>
-        <BizTalkServerConfiguration>1*CPU, 4GB RAM</BizTalkServerConfiguration>
-        <NuberOfActiveSQLServers>4</NuberOfActiveSQLServers>
-        <SQLServerConfiguration>1*CPU, 4GB RAM</SQLServerConfiguration>
-        <MaxExpectedCpuUtilizationBizTalk>50</MaxExpectedCpuUtilizationBizTalk>
-        <MaxExpectedCpuUtilizationSql>40</MaxExpectedCpuUtilizationSql>
-        <MinExpectedDocsProcessed>1900</MinExpectedDocsProcessed>
-        <MinExpectedDocsReceived>1900</MinExpectedDocsReceived>
       </Environment>
     </Environments>
   </Scenario>
@@ -78,56 +65,43 @@
     </Description>
     <Environments>
       <Environment>
-        <Name>1BTS + 1SQL</Name>
-        <Description>...</Description>
+        <Name>1 BTS with SQL</Name>
+        <Description>Single server installation</Description>
+        <LoadGenScripfile>LoadGenSettings_001.xml</LoadGenScripfile>
+        <NuberOfActiveBizTalkServers>1</NuberOfActiveBizTalkServers>
+        <BizTalkServerConfiguration>1*CPU, 4GB RAM</BizTalkServerConfiguration>
+        <NuberOfActiveSQLServers>0</NuberOfActiveSQLServers>
+        <SQLServerConfiguration>1*CPU, 4GB RAM</SQLServerConfiguration>
+        <MaxExpectedCpuUtilizationBizTalk>95</MaxExpectedCpuUtilizationBizTalk>
+        <MaxExpectedCpuUtilizationSql>45</MaxExpectedCpuUtilizationSql>
+        <MinExpectedDocsProcessed>1000</MinExpectedDocsProcessed>
+        <MinExpectedDocsReceived>1000</MinExpectedDocsReceived>
+      </Environment>
+      <Environment>
+        <Name>1 BTS + 1 SQL</Name>
+        <Description>All host running on 1 server</Description>
         <LoadGenScripfile>LoadGenSettings_001.xml</LoadGenScripfile>
         <NuberOfActiveBizTalkServers>1</NuberOfActiveBizTalkServers>
         <BizTalkServerConfiguration>1*CPU, 4GB RAM</BizTalkServerConfiguration>
         <NuberOfActiveSQLServers>1</NuberOfActiveSQLServers>
         <SQLServerConfiguration>1*CPU, 4GB RAM</SQLServerConfiguration>
-        <MaxExpectedCpuUtilizationBizTalk>95</MaxExpectedCpuUtilizationBizTalk>
-        <MaxExpectedCpuUtilizationSql>45</MaxExpectedCpuUtilizationSql>
-        <MinExpectedDocsProcessed>390</MinExpectedDocsProcessed>
-        <MinExpectedDocsReceived>390</MinExpectedDocsReceived>
+        <MaxExpectedCpuUtilizationBizTalk>80</MaxExpectedCpuUtilizationBizTalk>
+        <MaxExpectedCpuUtilizationSql>30</MaxExpectedCpuUtilizationSql>
+        <MinExpectedDocsProcessed>1300</MinExpectedDocsProcessed>
+        <MinExpectedDocsReceived>1300</MinExpectedDocsReceived>
       </Environment>
       <Environment>
-        <Name>2BTS + 1SQL</Name>
-        <Description>...</Description>
+        <Name>2 BTS + 1 SQL</Name>
+        <Description>R/S host running on separate servers</Description>
         <LoadGenScripfile>LoadGenSettings_001.xml</LoadGenScripfile>
         <NuberOfActiveBizTalkServers>2</NuberOfActiveBizTalkServers>
         <BizTalkServerConfiguration>1*CPU, 4GB RAM</BizTalkServerConfiguration>
         <NuberOfActiveSQLServers>1</NuberOfActiveSQLServers>
         <SQLServerConfiguration>1*CPU, 4GB RAM</SQLServerConfiguration>
-        <MaxExpectedCpuUtilizationBizTalk>80</MaxExpectedCpuUtilizationBizTalk>
-        <MaxExpectedCpuUtilizationSql>70</MaxExpectedCpuUtilizationSql>
-        <MinExpectedDocsProcessed>600</MinExpectedDocsProcessed>
-        <MinExpectedDocsReceived>600</MinExpectedDocsReceived>
-      </Environment>
-      <Environment>
-        <Name>3BTS + 1SQL</Name>
-        <Description>...</Description>
-        <LoadGenScripfile>LoadGenSettings_001.xml</LoadGenScripfile>
-        <NuberOfActiveBizTalkServers>3</NuberOfActiveBizTalkServers>
-        <BizTalkServerConfiguration>1*CPU, 4GB RAM</BizTalkServerConfiguration>
-        <NuberOfActiveSQLServers>1</NuberOfActiveSQLServers>
-        <SQLServerConfiguration>1*CPU, 4GB RAM</SQLServerConfiguration>
-        <MaxExpectedCpuUtilizationBizTalk>35</MaxExpectedCpuUtilizationBizTalk>
-        <MaxExpectedCpuUtilizationSql>59</MaxExpectedCpuUtilizationSql>
-        <MinExpectedDocsProcessed>600</MinExpectedDocsProcessed>
-        <MinExpectedDocsReceived>600</MinExpectedDocsReceived>
-      </Environment>
-      <Environment>
-        <Name>4BTS + 1SQL</Name>
-        <Description>...</Description>
-        <LoadGenScripfile>LoadGenSettings_001.xml</LoadGenScripfile>
-        <NuberOfActiveBizTalkServers>4</NuberOfActiveBizTalkServers>
-        <BizTalkServerConfiguration>1*CPU, 4GB RAM</BizTalkServerConfiguration>
-        <NuberOfActiveSQLServers>1</NuberOfActiveSQLServers>
-        <SQLServerConfiguration>1*CPU, 4GB RAM</SQLServerConfiguration>
-        <MaxExpectedCpuUtilizationBizTalk>30</MaxExpectedCpuUtilizationBizTalk>
-        <MaxExpectedCpuUtilizationSql>69</MaxExpectedCpuUtilizationSql>
-        <MinExpectedDocsProcessed>540</MinExpectedDocsProcessed>
-        <MinExpectedDocsReceived>540</MinExpectedDocsReceived>
+        <MaxExpectedCpuUtilizationBizTalk>70</MaxExpectedCpuUtilizationBizTalk>
+        <MaxExpectedCpuUtilizationSql>40</MaxExpectedCpuUtilizationSql>
+        <MinExpectedDocsProcessed>2000</MinExpectedDocsProcessed>
+        <MinExpectedDocsReceived>2000</MinExpectedDocsReceived>
       </Environment>
     </Environments>
   </Scenario>

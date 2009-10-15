@@ -74,8 +74,6 @@ namespace BizTalk_Benchmark_Wizard
         public MainWindow()
         {
             InitializeComponent();
-
-            //LoadScenarions();
         }
         #endregion
         #region Events
@@ -88,16 +86,16 @@ namespace BizTalk_Benchmark_Wizard
             switch (tabControl1.SelectedIndex)
             { 
                 case 0:
-                   break;
-                case 1:
-                    break;
-                case 2:
                     if (!_isLogedIn)
                     {
                         btnNext.IsEnabled = false;
                         PopupLogin.IsOpen = true;
                         return;
                     }
+                   break;
+                case 1: 
+                    break;
+                case 2:
                     break;
                 case 3:
                     break;
@@ -135,8 +133,11 @@ namespace BizTalk_Benchmark_Wizard
         }
         private void btnOk_Click(object sender, RoutedEventArgs e)
         {
-            PopupLogin.IsOpen = false;
             this.Cursor = Cursors.Wait;
+            btnOk1.IsEnabled = false;
+            btnCancel1.IsEnabled = false;
+            PopupLogin.IsOpen = false;
+            PopupLogin.UpdateLayout();
             try
             {
                 RefreshPreRequsites();
@@ -169,13 +170,31 @@ namespace BizTalk_Benchmark_Wizard
         {
 
         }
+        private void btnTestService_Click(object sender, RoutedEventArgs e)
+        {
+            _loadGenHelper = new LoadGenHelper();
+            bool testPass = _loadGenHelper.TestIndigoService("localhost");
+            picServiceIsRunning.Source = testPass ?
+                       new System.Windows.Media.Imaging.BitmapImage(new Uri("pack://application:,,,/BizTalk Benchmark Wizard;component/Resources/Images/passed.png")) :
+                       new System.Windows.Media.Imaging.BitmapImage(new Uri("pack://application:,,,/BizTalk Benchmark Wizard;component/Resources/Images/failed.png"));
+
+            btnNext.IsEnabled = testPass;
+        }
+        private void btnCreateHosts_Click(object sender, RoutedEventArgs e)
+        {
+            PopupServiceAccountAndGroups.IsOpen = true;                    
+        }
+        private void btnCreateCollectors_Click(object sender, RoutedEventArgs e)
+        {
+            _perflogHelper.CreateDataCollectorSets();
+        }
         private void cbScenario_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             string item = (string)e.AddedItems[0];
 
             if (!string.IsNullOrEmpty(item))
                 Environments = _scenarios.First(s => s.Name == item).Environments;
-            
+
             ScenarioDescription.Text = _scenarios.First(s => s.Name == item).Description;
             ScenarioName.Text = _scenarios.First(s => s.Name == item).Name;
 
@@ -190,15 +209,7 @@ namespace BizTalk_Benchmark_Wizard
                 ScenairoPicture2.Visibility = Visibility.Visible;
             }
             this.environments.DataContext = Environments;
-            
-        }
-        private void btnCreateHosts_Click(object sender, RoutedEventArgs e)
-        {
-            PopupServiceAccountAndGroups.IsOpen = true;                    
-        }
-        private void btnCreateCollectors_Click(object sender, RoutedEventArgs e)
-        {
-            _perflogHelper.CreateDataCollectorSets();
+
         }
         private void tabControl1_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -215,10 +226,12 @@ namespace BizTalk_Benchmark_Wizard
                     break;
                 case 3:
                     btnNext.Content = "Next";
+                    btnNext.IsEnabled = true;
                     break;
                 case 4:
                     // Prepare
                     btnNext.Content = "Run Test";
+                    btnNext.IsEnabled = false;
                     break;
                 case 5:
                     //Run test
@@ -323,7 +336,6 @@ namespace BizTalk_Benchmark_Wizard
         }
         void RunTest()
         {
-            _loadGenHelper = new LoadGenHelper();
             _loadGenHelper.RunTests((Environment)environments.SelectedItem, _bizTalkHelper.GetApplicationServerNames());
             _loadGenHelper.OnComplete += new LoadGenHelper.CompleteHandler(_loadGenHelper_OnComplete);
             _timer = new System.Timers.Timer(TIMERTICKS);
@@ -365,6 +377,8 @@ namespace BizTalk_Benchmark_Wizard
         }
         
         #endregion
+
+        
     }
     /// <summary>
     /// Used for presenting the test result
