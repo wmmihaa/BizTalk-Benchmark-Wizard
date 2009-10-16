@@ -237,32 +237,32 @@
 
                     </Grid>
                 </TabItem>
-                <TabItem Header="" Name="tabPrerequsites">
+                <TabItem Header="" Name="tabPrerequsites" >
                     <Grid>
                         <Label Height="61" Margin="20,34,19,0" VerticalAlignment="Top" FontSize="30" FontWeight="Bold" FontFamily="Calibri">Prerequsites</Label>
                         <StackPanel Orientation="Vertical" Margin="20,80" >
                             <StackPanel Orientation="Horizontal">
-                                <Image Name="picInstallCollectorSet" Height="40" Source="Resources/Images/checklist.png"/>
+                                <Image Name="picInstallCollectorSet" Height="40" Source="Resources/Images/unknown.png"/>
                                 <StackPanel Orientation="Horizontal">
                                     <Label FontFamily="Calibri" MaxWidth="550" Width="500">
                                         <TextBlock TextWrapping="Wrap"><Bold>Optional</Bold> - Create Data Collector Sets for further analyzes after the completion of the test.</TextBlock>
                                     </Label>
-                                    <Button Height="23" Style="{DynamicResource RoundedButton}" HorizontalAlignment="Right" Name="btnCreateCollectors" VerticalAlignment="Center" Width="75" Click="btnCreateCollectors_Click">Create</Button>
+                                    <Button Height="23" Style="{DynamicResource RoundedButton}" IsEnabled="False" HorizontalAlignment="Right" Name="btnCreateCollectors" VerticalAlignment="Center" Width="75" Click="btnCreateCollectors_Click">Create</Button>
                                 </StackPanel>
                             </StackPanel>
                             <StackPanel Height="15"/>
                             <StackPanel Orientation="Horizontal">
-                                <Image Name="picInstallHost" Height="40" Source="Resources/Images/checklist.png"/>
+                                <Image Name="picInstallHost" Height="40" Source="Resources/Images/unknown.png"/>
                                 <StackPanel Orientation="Horizontal">
                                     <Label FontFamily="Calibri" MaxWidth="550" Width="500">
                                         <TextBlock TextWrapping="Wrap"><Bold>Mandatory</Bold> - Create Hosts, Host Instances and Adapter handlers</TextBlock>
                                     </Label>
-                                    <Button Height="23" Style="{DynamicResource RoundedButton}" HorizontalAlignment="Right" Name="btnCreateHosts" VerticalAlignment="Center" Width="75" Click="btnCreateHosts_Click">Create</Button>
+                                    <Button Height="23" Style="{DynamicResource RoundedButton}" IsEnabled="False" HorizontalAlignment="Right" Name="btnCreateHosts" VerticalAlignment="Center" Width="75" Click="btnCreateHosts_Click">Create</Button>
                                 </StackPanel>
                             </StackPanel>
                             <StackPanel Height="15"/>
                             <StackPanel Orientation="Horizontal">
-                                <Image Name="picInstalledScenario" Height="40" Source="Resources/Images/checklist.png"/>
+                                <Image Name="picInstalledScenario" Height="40" Source="Resources/Images/unknown.png"/>
                                 <StackPanel Orientation="Horizontal">
                                     <Label FontFamily="Calibri" MaxWidth="550" Width="480">
                                         <TextBlock TextWrapping="Wrap"><Bold>Mandatory</Bold> - Install testing scenario on all BizTalk servers.</TextBlock>
@@ -293,6 +293,7 @@
                                     <Label Canvas.Left="26" Canvas.Top="16" Height="28" Name="label1" Width="120">Select scenario:</Label>
                                     <ComboBox Canvas.Left="121" Canvas.Top="16" Height="23" Name="cbScenario" Width="510" SelectionChanged="cbScenario_SelectionChanged" />
                                 </StackPanel>
+                                
                                 <my:DataGrid Name="environments" 
                                      ItemsSource="{Binding}" 
                                      AutoGenerateColumns="False" 
@@ -300,7 +301,7 @@
                                      Width="634" 
                                      Canvas.Left="25" 
                                      Canvas.Top="45">
-                                    
+
                                     <my:DataGrid.Columns>
                                         <my:DataGridTextColumn Header="Name"  Binding="{Binding Name}" Width="100"/>
                                         <my:DataGridTextColumn Header="#BTS Srv"  Binding="{Binding NuberOfActiveBizTalkServers}" Width="70"/>
@@ -330,7 +331,37 @@
                             <Image Name="ScenairoPicture2" Source="Resources/Images/scenario2.png" Width="400" Canvas.Top="217" Canvas.Left="36.654" Height="151" Visibility="Hidden"/>
                         </Canvas>
                     </Grid>
-                </TabItem>  
+                </TabItem>
+                <TabItem Header="" Name="tabSelectHosts">
+                    <Grid>
+                        <Label Height="61" Margin="20,34,19,0" VerticalAlignment="Top" FontSize="30" FontWeight="Bold" FontFamily="Calibri">
+                            <TextBlock TextWrapping="Wrap">Select Receive and Send hosts</TextBlock>
+                        </Label>
+                        <GroupBox Header="Hosts" x:Name="tbReceivePorts" Margin="68,158,86,107.5">
+                            <Border Margin="0,0,0,0"
+			                        BorderBrush="Gainsboro"
+                                    CornerRadius="5,5,5,5"
+                                    BorderThickness="1,1,1,1">
+                                <StackPanel Orientation="Vertical">
+                                    <ListBox Name="lstHosts" 
+                                        AllowDrop="False"
+                                        BorderBrush="{StaticResource BrushedMetalBackground}" 
+                                        Background="{StaticResource BrushedMetalBackground}"
+                                        ItemsSource="{Binding}">
+                                        <ListBox.ItemTemplate>
+                                            <DataTemplate>
+                                                <StackPanel Orientation="Horizontal">
+                                                    <TextBlock Text="{Binding Path=HostName}" VerticalAlignment="Center" Width="300" Background="White"/>
+                                                    <ComboBox ItemsSource="{Binding Path=BizTalkServers}" Width="100"/>
+                                                </StackPanel>
+                                            </DataTemplate>
+                                        </ListBox.ItemTemplate>
+                                    </ListBox>
+                                </StackPanel>
+                            </Border>
+                        </GroupBox>
+                    </Grid>
+                </TabItem>
                 <TabItem Header="" Name="tabPrepare">
                     <Grid>
                         <Label Height="61" Margin="20,34,19,0" VerticalAlignment="Top" FontSize="30" FontWeight="Bold" FontFamily="Calibri">Prepare</Label>
@@ -339,27 +370,30 @@
                                 <TextBlock Name="TESTLABEL" TextWrapping="Wrap">In order to create a comparable result, please terminate all suspended instances, and stop all Host Instances <LineBreak/>not running the WCF-NetTcp adapter. Make sure to have at least one Host Instance with tracking enabled.</TextBlock>
                             </Label>
                             <Label VerticalAlignment="Top" FontSize="30" FontWeight="Bold" FontFamily="Calibri">Start the Indigo Service</Label>
-                            
+
                             <Label FontFamily="Calibri">
-                                <TextBlock TextWrapping="Wrap">Before starting the tests, The service host console application need to be started at the <Bold>{0}</Bold> server. This service
-                                <LineBreak/>is used by the Send port, and would benefit being started on a separate server.<LineBreak/>    
-                                <LineBreak/>1. Copy the IndigoService folder located in the BizTalk Benchmark Wizard install folder to <Bold>{0}</Bold> 
-                                <LineBreak/>2. Start the service by double-click the  <Bold>StartIndigoService.bat</Bold> file.
-                                <LineBreak/>3. Test the Indigo Service by clicking the "Test Indigo service" button bellow.
+                                <TextBlock TextWrapping="Wrap">Before starting the tests, The Indigo Service host console application need to be started. This service is used by 
+                                <LineBreak/>the BizTalk scenario, and would benefit being started on a separate server.<LineBreak/>    
+                                <LineBreak/>1. Copy the IndigoService folder located in the BizTalk Benchmark Wizard install folder to a separate server. 
+                                <LineBreak/>2. Start the Indigo Service by double-click the  <Bold>StartIndigoService.bat</Bold> file.
+                                <LineBreak/>3. Enter the name of the server where you have started the Indigo Service below.
+                                <LineBreak/>4. Test the Indigo Service by clicking the "Test Indigo service" button bellow.
                                 </TextBlock>
                             </Label>
                             <StackPanel Height="15"/>
                             <StackPanel Orientation="Horizontal">
-                                <Image Name="picServiceIsRunning" Height="40" Source="Resources/Images/checklist.png"/>
+                                <Image Name="picServiceIsRunning" Height="40" Source="Resources/Images/unknown.png"/>
                                 <StackPanel Orientation="Horizontal">
-                                    <Label FontFamily="Calibri" MaxWidth="550" Width="470">
-                                        <TextBlock TextWrapping="Wrap"><Bold>Mandatory</Bold> - Test the Indigo Service</TextBlock>
+                                    <Label FontFamily="Calibri" Height="23" >
+                                        <TextBlock TextWrapping="Wrap"><Bold>Server name:</Bold></TextBlock>
                                     </Label>
+                                    <TextBox Name="txtIndigoServiceServer" Width="280" Height="23" VerticalAlignment="Center" Text="localhost" ></TextBox>
+                                    <StackPanel Width="100"/>
                                     <Button Height="23" Style="{DynamicResource RoundedButton}" HorizontalAlignment="Right" Name="btnTestService" VerticalAlignment="Center" Width="130" Click="btnTestService_Click">Test the Indigo Service</Button>
                                 </StackPanel>
                             </StackPanel>
-                            
-                            
+
+
                         </StackPanel>
                     </Grid>
                 </TabItem>
@@ -434,7 +468,7 @@
                IsOpen="False"
                Width="400"
                Height="158"
-               Placement="Center" PopupAnimation="Fade">
+               Placement="Center" PopupAnimation="Fade" Closed="PopupLogin_Closed">
 
             <Grid>
                 <dropShadow:SystemDropShadowChrome CornerRadius="3,13,3,13" Color="#71000000">
@@ -578,6 +612,7 @@
                 </Grid>
             </Grid>
         </Popup>
+
     </Grid>
 
 </Window>

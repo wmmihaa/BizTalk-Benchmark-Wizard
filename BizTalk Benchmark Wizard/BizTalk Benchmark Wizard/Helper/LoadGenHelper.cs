@@ -58,7 +58,14 @@ namespace BizTalk_Benchmark_Wizard.Helper
             {
                 IndigoService.ServiceTwoWaysVoidNonTransactionalClient proxy = new BizTalk_Benchmark_Wizard.IndigoService.ServiceTwoWaysVoidNonTransactionalClient("netTcpBinding_IServiceTwoWaysVoidNonTransactional");
 
-                proxy.Endpoint.Address = new System.ServiceModel.EndpointAddress(proxy.Endpoint.Address.Uri.ToString().Replace("servername", server));
+                System.ServiceModel.EndpointAddress newAddress =
+                    new System.ServiceModel.EndpointAddress(string.Format("{0}://{1}:{2}{3}",
+                        proxy.Endpoint.Address.Uri.Scheme,
+                        server,
+                        proxy.Endpoint.Address.Uri.Port.ToString(),
+                        proxy.Endpoint.Address.Uri.AbsolutePath));
+
+                proxy.Endpoint.Address = newAddress;
                 
                 string xml = "<Response><resp>This is a response</resp></Response>";
 

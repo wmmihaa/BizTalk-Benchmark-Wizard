@@ -35,6 +35,7 @@ namespace BizTalk_Benchmark_Wizard
         PerflogHelper _perflogHelper = null;
         LoadGenHelper _loadGenHelper = null;
         System.Timers.Timer _timer = null;
+        List<string> _btsServers = new List<string>();
         DateTime _testStartTime;
         long _avgCpuValue = 0;
         long _avgProcessedValue = 0;
@@ -44,6 +45,7 @@ namespace BizTalk_Benchmark_Wizard
         #endregion
         #region Public Members
         public IEnumerable<Environment> Environments;
+        public List<HostMaping> HostMappings;
         public List<Result> Results = new List<Result>();
         public int ProcessValue
         {
@@ -133,26 +135,7 @@ namespace BizTalk_Benchmark_Wizard
         }
         private void btnOk_Click(object sender, RoutedEventArgs e)
         {
-            this.Cursor = Cursors.Wait;
-            btnOk1.IsEnabled = false;
-            btnCancel1.IsEnabled = false;
             PopupLogin.IsOpen = false;
-            PopupLogin.UpdateLayout();
-            try
-            {
-                RefreshPreRequsites();
-                btnNext.IsEnabled = true;
-                tabControl1.SelectedIndex++;
-            }
-            catch (Exception ex)
-            {
-                string msg = "There where a problem connecting to the database.\nMessage:\n" + ex.Message;
-                if (ex.InnerException != null)
-                    msg += "\n\nInner Exception:\n" + ex.InnerException.Message;
-                txtException.Text = msg;
-                PopupException.IsOpen = true;
-            }
-            finally { this.Cursor = null; }
         }
         private void btnOk2_Click(object sender, RoutedEventArgs e)
         {
@@ -160,6 +143,7 @@ namespace BizTalk_Benchmark_Wizard
             foreach (Server server in _bizTalkHelper.GetServers(txtServer1.Text, txtMgmtDb1.Text).Where(s => s.Type == ServerType.BIZTALK))
             {
                 _bizTalkHelper.CreateBizTalkHosts(server.Name, txtWindowsGroup.Text, txtServiceAccount.Text, txtPasswrod.Password);
+                _btsServers.Add(server.Name);
             }
         }
         private void btnExceptionOk_Click(object sender, RoutedEventArgs e)
@@ -172,13 +156,16 @@ namespace BizTalk_Benchmark_Wizard
         }
         private void btnTestService_Click(object sender, RoutedEventArgs e)
         {
+            btnTestService.IsEnabled = false;
+
             _loadGenHelper = new LoadGenHelper();
-            bool testPass = _loadGenHelper.TestIndigoService("localhost");
+            bool testPass = _loadGenHelper.TestIndigoService(txtIndigoServiceServer.Text);
             picServiceIsRunning.Source = testPass ?
                        new System.Windows.Media.Imaging.BitmapImage(new Uri("pack://application:,,,/BizTalk Benchmark Wizard;component/Resources/Images/passed.png")) :
                        new System.Windows.Media.Imaging.BitmapImage(new Uri("pack://application:,,,/BizTalk Benchmark Wizard;component/Resources/Images/failed.png"));
 
             btnNext.IsEnabled = testPass;
+            btnTestService.IsEnabled = true;
         }
         private void btnCreateHosts_Click(object sender, RoutedEventArgs e)
         {
@@ -211,15 +198,22 @@ namespace BizTalk_Benchmark_Wizard
             this.environments.DataContext = Environments;
 
         }
+        private void PopupLogin_Closed(object sender, EventArgs e)
+        {
+            this.Cursor = Cursors.Wait;
+            btnBack.IsEnabled = false;
+            btnNext.IsEnabled = false;
+            tabControl1.SelectedIndex++;
+        }
         private void tabControl1_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-
             switch (((TabControl)sender).SelectedIndex)
             {
                 case 0:
                     btnBack.Visibility = Visibility.Hidden;
                     break;
                 case 1:
+                    this.Dispatcher.BeginInvoke(DispatcherPriority.ApplicationIdle, new Action(delegate() { RefreshPreRequsites(); }));
                     btnBack.Visibility = Visibility.Visible;
                     break;
                 case 2:
@@ -245,10 +239,7 @@ namespace BizTalk_Benchmark_Wizard
                     btnBack.Visibility = Visibility.Visible;
                     btnNext.Visibility = Visibility.Visible;
                     break;
-
-
             }
-
         }
         #endregion
         #region Private Methods
@@ -264,37 +255,70 @@ namespace BizTalk_Benchmark_Wizard
         }
         void RefreshPreRequsites()
         {
-            _bizTalkHelper = new BizTalkHelper(txtServer1.Text, txtMgmtDb1.Text);
-            _perflogHelper = new PerflogHelper(_bizTalkHelper.GetServers(txtServer1.Text, txtMgmtDb1.Text));
-
-            picInstallCollectorSet.Source = _perflogHelper.IsDataCollectorSetsCreated ?
-                       new System.Windows.Media.Imaging.BitmapImage(new Uri("pack://application:,,,/BizTalk Benchmark Wizard;component/Resources/Images/passed.png")) :
-                       new System.Windows.Media.Imaging.BitmapImage(new Uri("pack://application:,,,/BizTalk Benchmark Wizard;component/Resources/Images/checklist.png"));
-
-            btnCreateCollectors.Visibility = _perflogHelper.IsDataCollectorSetsCreated ? Visibility.Hidden : Visibility.Visible;
-
-            picInstallHost.Source = _bizTalkHelper.IsBizTalkHostsInstalled ?
-                new System.Windows.Media.Imaging.BitmapImage(new Uri("pack://application:,,,/BizTalk Benchmark Wizard;component/Resources/Images/passed.png")) :
-                new System.Windows.Media.Imaging.BitmapImage(new Uri("pack://application:,,,/BizTalk Benchmark Wizard;component/Resources/Images/checklist.png"));
-
-            btnCreateHosts.Visibility = _bizTalkHelper.IsBizTalkHostsInstalled ? Visibility.Hidden : Visibility.Visible;
-
-            picInstalledScenario.Source = _bizTalkHelper.IsBizTalkScenariosInstalled ?
-                new System.Windows.Media.Imaging.BitmapImage(new Uri("pack://application:,,,/BizTalk Benchmark Wizard;component/Resources/Images/passed.png")) :
-                new System.Windows.Media.Imaging.BitmapImage(new Uri("pack://application:,,,/BizTalk Benchmark Wizard;component/Resources/Images/checklist.png"));
-
-            if (_bizTalkHelper.IsBizTalkHostsInstalled && _bizTalkHelper.IsBizTalkScenariosInstalled)
+            try
             {
-                btnNext.Visibility = Visibility.Visible;
-                lblInstalledScenarioManual.Visibility = Visibility.Hidden;
+                _bizTalkHelper = new BizTalkHelper(txtServer1.Text, txtMgmtDb1.Text);
+                _perflogHelper = new PerflogHelper(_bizTalkHelper.GetServers(txtServer1.Text, txtMgmtDb1.Text));
+
+                bool isDataCollectorSetsCreated = _perflogHelper.IsDataCollectorSetsCreated;
+
+                picInstallCollectorSet.Source = isDataCollectorSetsCreated ?
+                           new System.Windows.Media.Imaging.BitmapImage(new Uri("pack://application:,,,/BizTalk Benchmark Wizard;component/Resources/Images/passed.png")) :
+                           new System.Windows.Media.Imaging.BitmapImage(new Uri("pack://application:,,,/BizTalk Benchmark Wizard;component/Resources/Images/checklist.png"));
+
+                btnCreateCollectors.Visibility = isDataCollectorSetsCreated ? Visibility.Hidden : Visibility.Visible;
+                btnCreateCollectors.IsEnabled = isDataCollectorSetsCreated ? false : true;
+
+                bool isBizTalkHostsInstalled = _bizTalkHelper.IsBizTalkHostsInstalled;
+
+                picInstallHost.Source = isBizTalkHostsInstalled ?
+                    new System.Windows.Media.Imaging.BitmapImage(new Uri("pack://application:,,,/BizTalk Benchmark Wizard;component/Resources/Images/passed.png")) :
+                    new System.Windows.Media.Imaging.BitmapImage(new Uri("pack://application:,,,/BizTalk Benchmark Wizard;component/Resources/Images/checklist.png"));
+
+                btnCreateHosts.Visibility = isBizTalkHostsInstalled ? Visibility.Hidden : Visibility.Visible;
+                btnCreateHosts.IsEnabled = isBizTalkHostsInstalled ? true : false;
+
+                bool isBizTalkScenariosInstalled = _bizTalkHelper.IsBizTalkScenariosInstalled;
+
+                picInstalledScenario.Source = isBizTalkScenariosInstalled ?
+                    new System.Windows.Media.Imaging.BitmapImage(new Uri("pack://application:,,,/BizTalk Benchmark Wizard;component/Resources/Images/passed.png")) :
+                    new System.Windows.Media.Imaging.BitmapImage(new Uri("pack://application:,,,/BizTalk Benchmark Wizard;component/Resources/Images/checklist.png"));
+
+                if (_btsServers.Count == 0)
+                    foreach (Server server in _bizTalkHelper.GetServers(txtServer1.Text, txtMgmtDb1.Text).Where(s => s.Type == ServerType.BIZTALK))
+                        _btsServers.Add(server.Name);
+                
+                HostMappings = new List<HostMaping>()
+                {
+                    new HostMaping(){HostName="BBW_RxHost", BizTalkServers=_btsServers},
+                    new HostMaping(){HostName="BBW_PxHost", BizTalkServers=_btsServers},
+                    new HostMaping(){HostName="BBW_TxHost", BizTalkServers=_btsServers}
+                };
+                
+                this.lstHosts.DataContext = (IEnumerable<HostMaping>) HostMappings;
+                
+                if (isBizTalkHostsInstalled && isBizTalkScenariosInstalled)
+                {
+                    btnNext.IsEnabled = true;
+                    lblInstalledScenarioManual.Visibility = Visibility.Hidden;
+                }
+                btnBack.IsEnabled = true;
             }
-            else
-                btnNext.Visibility = Visibility.Collapsed;
-            
+            catch (Exception ex)
+            {
+                string msg = "There where a problem connecting to the database.\nMessage:\n" + ex.Message;
+                if (ex.InnerException != null)
+                    msg += "\n\nInner Exception:\n" + ex.InnerException.Message;
+                txtException.Text = msg;
+                PopupException.IsOpen = true;
+            }
+            finally
+            {
+                this.Cursor = null;
+            }
         }
         void LoadScenarions()
         {
-
             try
             {
                 _scenarios = ScenariosFactory.Load();
@@ -313,6 +337,7 @@ namespace BizTalk_Benchmark_Wizard
                 throw new ApplicationException("Unable to load Senarios configuration", ex);
             }
         }
+        
         #endregion
         #region Run Tests
         void PrepareTest() 
@@ -376,9 +401,7 @@ namespace BizTalk_Benchmark_Wizard
             _timer.Enabled = true;
         }
         
-        #endregion
-
-        
+        #endregion 
     }
     /// <summary>
     /// Used for presenting the test result
@@ -401,6 +424,11 @@ namespace BizTalk_Benchmark_Wizard
         /// Sucess / Failed
         /// </summary>
         public string Status { get; set; }
+    }
+    public class HostMaping
+    {
+        public string HostName;
+        public List<string> BizTalkServers = new List<string>();
     }
     
 }

@@ -235,6 +235,7 @@
     <Content Include="Resources\Collector Set Templates\SQL Server.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Resource Include="Resources\Images\unknown.png" />
     <Content Include="Resources\LoadGenScripts\LoadGenSettings_001.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
