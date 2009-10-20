@@ -28,6 +28,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -229,12 +230,17 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Artefacts\IndigoService\IndigoService.exe" />
+    <Content Include="Artefacts\IndigoService\IndigoService.new.exe" />
+    <Content Include="Artefacts\IndigoService\versionwithlogging\IndigoService.exe" />
     <Content Include="Resources\Collector Set Templates\BizTalk Server.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Resources\Collector Set Templates\SQL Server.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Artefacts\IndigoService\Response.xml" />
+    <Content Include="Artefacts\MSI Files\BizTalk Benchmark Wizard.BindingInfo.xml" />
     <Resource Include="Resources\Images\unknown.png" />
     <Content Include="Resources\LoadGenScripts\LoadGenSettings_001.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -245,6 +251,20 @@
     <Content Include="Resources\Scenarios.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Artefacts\IndigoService\ConfigFiles.IndigoService\BasicHttp_1w_NonTransactional IndigoService.exe.config" />
+    <Content Include="Artefacts\IndigoService\ConfigFiles.IndigoService\Custom_NetTcp_1w_NonTransactional IndigoService.exe.config" />
+    <Content Include="Artefacts\IndigoService\ConfigFiles.IndigoService\Custom_NetTcp_1w_Transactional IndigoService.exe.config" />
+    <Content Include="Artefacts\IndigoService\ConfigFiles.IndigoService\NetMsmq_NonTransactional IndigoService.exe.config" />
+    <Content Include="Artefacts\IndigoService\ConfigFiles.IndigoService\NetMsmq_Transactional IndigoService.exe.config" />
+    <Content Include="Artefacts\IndigoService\ConfigFiles.IndigoService\NetTcp_1w_NonTransactional IndigoService.exe.config" />
+    <Content Include="Artefacts\IndigoService\ConfigFiles.IndigoService\NetTcp_1w_Transactional IndigoService.exe.config" />
+    <Content Include="Artefacts\IndigoService\ConfigFiles.IndigoService\NetTcp_2w_NonTransactional IndigoService.exe.config" />
+    <Content Include="Artefacts\IndigoService\ConfigFiles.IndigoService\NetWsHttp_1w_NonTransactional IndigoService.exe.config" />
+    <Content Include="Artefacts\IndigoService\ConfigFiles.IndigoService\NetWsHttp_1w_Transactional IndigoService.exe.config" />
+    <Content Include="Artefacts\IndigoService\IndigoService.exe.config" />
+    <Content Include="Artefacts\IndigoService\IndigoService.exe.org" />
+    <Content Include="Artefacts\IndigoService\StartIndigoService.bat" />
+    <Content Include="Artefacts\MSI Files\BizTalk Benchmark Wizard.msi" />
     <None Include="Service References\IndigoService\Reference.svcmap">
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>

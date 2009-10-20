@@ -66,6 +66,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BlueDot.xaml.cs">
+      <DependentUpon>BlueDot.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="CircularAnimations.xaml.cs">
+      <DependentUpon>CircularAnimations.xaml</DependentUpon>
+    </Compile>
     <Compile Include="GaugeControl.xaml.cs">
       <DependentUpon>GaugeControl.xaml</DependentUpon>
     </Compile>
@@ -93,6 +99,14 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="BlueDot.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="CircularAnimations.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="GaugeControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

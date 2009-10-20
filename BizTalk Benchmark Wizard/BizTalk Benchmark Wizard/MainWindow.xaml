@@ -271,9 +271,8 @@
                                         <TextBlock TextWrapping="Wrap"><Bold>This is a manual step.</Bold></TextBlock>
                                     </Label>
                                 </StackPanel>
-
-
                             </StackPanel>
+
                         </StackPanel>
                     </Grid>
                 </TabItem>
@@ -291,28 +290,41 @@
                             <StackPanel Orientation="Vertical">
                                 <StackPanel Orientation="Horizontal">
                                     <Label Canvas.Left="26" Canvas.Top="16" Height="28" Name="label1" Width="120">Select scenario:</Label>
-                                    <ComboBox Canvas.Left="121" Canvas.Top="16" Height="23" Name="cbScenario" Width="510" SelectionChanged="cbScenario_SelectionChanged" />
+                                    <ComboBox Template="{StaticResource ComboBoxTemplate}" Canvas.Left="121" Canvas.Top="16" Height="23" Name="cbScenario" Width="510" SelectionChanged="cbScenario_SelectionChanged" />
                                 </StackPanel>
-                                
-                                <my:DataGrid Name="environments" 
-                                     ItemsSource="{Binding}" 
-                                     AutoGenerateColumns="False" 
-                                     Height="139" 
-                                     Width="634" 
-                                     Canvas.Left="25" 
-                                     Canvas.Top="45">
-
-                                    <my:DataGrid.Columns>
-                                        <my:DataGridTextColumn Header="Name"  Binding="{Binding Name}" Width="100"/>
-                                        <my:DataGridTextColumn Header="#BTS Srv"  Binding="{Binding NuberOfActiveBizTalkServers}" Width="70"/>
-                                        <my:DataGridTextColumn Header="BTS Config"  Binding="{Binding BizTalkServerConfiguration}"  Width="200"/>
-                                        <my:DataGridTextColumn Header="#SQL Srv"  Binding="{Binding NuberOfActiveSQLServers}"  Width="70"/>
-                                        <my:DataGridTextColumn Header="SQL Config"  Binding="{Binding SQLServerConfiguration}"  Width="100"/>
-                                    </my:DataGrid.Columns>
-
-                                </my:DataGrid>
+                                <StackPanel Orientation="Horizontal" Height="10"/>
+                                <GroupBox Header="Name                   Number of BizTalk Servers    Description" 
+                                          x:Name="environmentsGroup" 
+                                          Height="125" 
+                                          Width="634" 
+                                          Canvas.Left="25" 
+                                          Canvas.Top="45">
+                                    <Border Margin="0,0,0,0"
+			                                BorderBrush="Gainsboro"
+                                            CornerRadius="5,5,5,5"
+                                            BorderThickness="1,1,1,1">
+                                        <StackPanel Orientation="Vertical">
+                                            <ListBox Name="environments" 
+                                                    AllowDrop="False"
+                                                    BorderBrush="{StaticResource BrushedMetalBackground}" 
+                                                    Background="{StaticResource BrushedMetalBackground}"
+                                                    ItemsSource="{Binding}" SelectionChanged="environments_SelectionChanged" MouseUp="environments_MouseUp">
+                                                <ListBox.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <StackPanel Orientation="Horizontal">
+                                                            <TextBlock Text="{Binding Path=Name}" VerticalAlignment="Center" Width="100" FontWeight="Bold"/>
+                                                            <StackPanel Width="60" Orientation="Horizontal"/>
+                                                            <TextBlock Text="{Binding Path=NuberOfActiveBizTalkServers}" VerticalAlignment="Center" Width="50" FontWeight="Bold"/>
+                                                            <StackPanel Width="30" Orientation="Horizontal"/>
+                                                            <TextBlock Text="{Binding Path=Description}" VerticalAlignment="Center" Width="300"/>
+                                                        </StackPanel>
+                                                    </DataTemplate>
+                                                </ListBox.ItemTemplate>
+                                            </ListBox>
+                                        </StackPanel>
+                                    </Border>
+                                </GroupBox>
                             </StackPanel>
-
                         </Canvas>
                     </Grid>
                 </TabItem>
@@ -351,15 +363,26 @@
                                         <ListBox.ItemTemplate>
                                             <DataTemplate>
                                                 <StackPanel Orientation="Horizontal">
-                                                    <TextBlock Text="{Binding Path=HostName}" VerticalAlignment="Center" Width="300" Background="White"/>
-                                                    <ComboBox ItemsSource="{Binding Path=BizTalkServers}" Width="100"/>
+                                                    <TextBlock Text="{Binding Path=HostDescription}" VerticalAlignment="Center" Width="260" FontWeight="Bold"  Height="25"/>
+                                                    <ComboBox Template="{StaticResource ComboBoxTemplate}" 
+                                                              ItemsSource="{Binding Path=Servers}" 
+                                                              SelectedIndex="0" 
+                                                              SelectedValue="{Binding Path=SelectedHost}"
+                                                              Width="250"
+                                                              Height="20"/>
                                                 </StackPanel>
                                             </DataTemplate>
                                         </ListBox.ItemTemplate>
                                     </ListBox>
+                                    
                                 </StackPanel>
                             </Border>
                         </GroupBox>
+                        <StackPanel Height="60" Orientation="Horizontal"/>
+                        <StackPanel Orientation="Horizontal" Margin="68,0,91,67.771" Height="17.776" VerticalAlignment="Bottom">
+                            <CheckBox Name="chbStopAllHosts" IsChecked="False" HorizontalAlignment="Left" />
+                            <TextBlock Text="Stop all unused BizTalk host instances before running the tests."/>
+                        </StackPanel>
                     </Grid>
                 </TabItem>
                 <TabItem Header="" Name="tabPrepare">
@@ -389,7 +412,7 @@
                                     </Label>
                                     <TextBox Name="txtIndigoServiceServer" Width="280" Height="23" VerticalAlignment="Center" Text="localhost" ></TextBox>
                                     <StackPanel Width="100"/>
-                                    <Button Height="23" Style="{DynamicResource RoundedButton}" HorizontalAlignment="Right" Name="btnTestService" VerticalAlignment="Center" Width="130" Click="btnTestService_Click">Test the Indigo Service</Button>
+                                    <Button Height="25" Style="{DynamicResource RoundedButton}" HorizontalAlignment="Right" Name="btnTestService" VerticalAlignment="Center" Width="130" Click="btnTestService_Click">Test the Indigo Service</Button>
                                 </StackPanel>
                             </StackPanel>
 
@@ -418,11 +441,11 @@
                     <Grid>
                         <StackPanel Orientation="Vertical" Margin="20">
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                                <Image Source="Resources/Images/failed.png" Width="100" Height="100"/>
+                                <Image Name="picSucess" Source="Resources/Images/failed.png" Width="100" Height="100"/>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" >
-                                <Label FontSize="42" FontWeight="Bold">
-                                    <TextBlock Text="Failed!"/>
+                                <Label FontSize="42" FontWeight="Bold" >
+                                    <TextBlock Name="lblSucess" Text="Failed!"/>
                                 </Label>
                             </StackPanel>
                             <StackPanel HorizontalAlignment="Center">
@@ -614,5 +637,4 @@
         </Popup>
 
     </Grid>
-
 </Window>

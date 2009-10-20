@@ -16,36 +16,66 @@ namespace BizTalk_Benchmark_Wizard.Helper
 {
     internal class LoadGenHelper
     {
-        public delegate void CompleteHandler();
+        public delegate void CompleteHandler(object sender, LoadGenStopEventArgs e);
         public event CompleteHandler OnComplete;
         public List<PerfCounter> PerfCounters = new List<PerfCounter>();
         List<LoadGen.LoadGen> _loadGenClients = new List<LoadGen.LoadGen>();
         int _numberOfLoadGenStopped = 0;
         int _numberOfLoadGenClients = 0;
+        List<LoadGenStopEventArgs> _allLoadGenStopEventArgs = new List<LoadGenStopEventArgs>();
         
         public LoadGenHelper()
         {
             
         }
         
-        public void RunTests(Environment environment, List<string> servers)
+        public void RunTests(Environment environment, List<HostMaping> hostmappings, List<string> servers)
         {
-            int n = _numberOfLoadGenClients;
             foreach (string server in servers)
             {
-                if (n++ == environment.NuberOfActiveBizTalkServers)
-                    break;
+                PerfCounter perfCounter = new PerfCounter();
+                perfCounter.Server = server;
 
-                CreateCounterCollectors(server);
+                foreach (HostMaping hostMapping in hostmappings.Where(h=>h.SelectedHost==server))
+                {
+                    switch (hostMapping.HostName)
+                    {
+                        case "BBW_RxHost":
+                            perfCounter.ReceivedCounters.Add(new PerformanceCounter("BizTalk:Messaging", "Documents received/Sec", "BBW_RxHost", server));
+                            perfCounter.HasReceiveCounter = true;
+                            break;
+                        case "BBW_PxHost":
+                            break;
+                        case "BBW_TxHost":
+                            perfCounter.ProcessedCounters.Add(new PerformanceCounter("BizTalk:Messaging", "Documents processed/Sec", "BBW_TxHost", server));
+                            perfCounter.HasProcessingCounter = true;
+                            break;
+                    }
+                }
+                perfCounter.CPUCounters.Add(new PerformanceCounter("Processor", "% Processor Time", "_Total", server));
+                PerfCounters.Add(perfCounter);
             }
 
-            foreach (string server in servers)
-            {
-                if (_numberOfLoadGenClients++ == environment.NuberOfActiveBizTalkServers)
-                    break;
+            string rcvHost = hostmappings.First(h => h.HostName == "BBW_RxHost").SelectedHost;
 
-                _loadGenClients.Add(CreateAndStartLoadGenClient(CreateLoadGenScript(environment.LoadGenScripfile, server),server));
-            }
+            _loadGenClients.Add(CreateAndStartLoadGenClient(CreateLoadGenScript(environment.LoadGenScripfile, rcvHost), rcvHost));
+
+            //int n = _numberOfLoadGenClients;
+            //foreach (string server in servers)
+            //{
+            //    if (n++ == environment.NuberOfActiveBizTalkServers)
+            //        break;
+
+            //    CreateCounterCollectors(server);
+            //}
+
+            //foreach (string server in servers)
+            //{
+            //    if (_numberOfLoadGenClients++ == environment.NuberOfActiveBizTalkServers)
+            //        break;
+
+            //    _loadGenClients.Add(CreateAndStartLoadGenClient(CreateLoadGenScript(environment.LoadGenScripfile, server),server));
+            //}
         }
         public void StopAllTests()
         {
@@ -147,23 +177,23 @@ namespace BizTalk_Benchmark_Wizard.Helper
             PerfCounter perfCounter = new PerfCounter();
             perfCounter.Server = server;
 
-            perfCounter.ProcessedCounters.Add(new PerformanceCounter("BizTalk:Messaging", "Documents processed/Sec", "BBW_PxHost", server));
-            perfCounter.ProcessedCounters.Add(new PerformanceCounter("BizTalk:Messaging", "Documents processed/Sec", "BBW_RxHost", server));
+            //perfCounter.ProcessedCounters.Add(new PerformanceCounter("BizTalk:Messaging", "Documents processed/Sec", "BBW_PxHost", server));
+            //perfCounter.ProcessedCounters.Add(new PerformanceCounter("BizTalk:Messaging", "Documents processed/Sec", "BBW_RxHost", server));
             perfCounter.ProcessedCounters.Add(new PerformanceCounter("BizTalk:Messaging", "Documents processed/Sec", "BBW_TxHost", server));
 
-            perfCounter.ReceivedCounters.Add(new PerformanceCounter("BizTalk:Messaging", "Documents received/Sec", "BBW_PxHost", server));
+            //perfCounter.ReceivedCounters.Add(new PerformanceCounter("BizTalk:Messaging", "Documents received/Sec", "BBW_PxHost", server));
             perfCounter.ReceivedCounters.Add(new PerformanceCounter("BizTalk:Messaging", "Documents received/Sec", "BBW_RxHost", server));
-            perfCounter.ReceivedCounters.Add(new PerformanceCounter("BizTalk:Messaging", "Documents received/Sec", "BBW_TxHost", server));
+            //perfCounter.ReceivedCounters.Add(new PerformanceCounter("BizTalk:Messaging", "Documents received/Sec", "BBW_TxHost", server));
 
             perfCounter.CPUCounters.Add(new PerformanceCounter("Processor", "% Processor Time", "_Total", server));
             
             PerfCounters.Add(perfCounter);
         }
-        protected void RaiseCompleteEvent()
+        protected void RaiseCompleteEvent(object sender, LoadGenStopEventArgs e)
         {
             if (OnComplete != null)
             {
-                OnComplete();
+                OnComplete(sender, e);
             }
         }
         private void LoadGen_Stopped(object sender, LoadGenStopEventArgs e)
@@ -176,10 +206,18 @@ namespace BizTalk_Benchmark_Wizard.Helper
             //this._ctx.LogInfo("Rate:      " + ((e.NumFilesSent) / span1.TotalSeconds));
 
             //bExitApp = true;
-            
+            _allLoadGenStopEventArgs.Add(e);
             _numberOfLoadGenStopped++;
             if (_numberOfLoadGenClients == _numberOfLoadGenStopped)
-                RaiseCompleteEvent();
+            {
+                long numberOfMsgsSent = _allLoadGenStopEventArgs.Sum(l => l.NumFilesSent);
+                DateTime startTime = _allLoadGenStopEventArgs.Min(l => l.LoadGenStartTime);
+                DateTime stopTime = e.LoadGenStopTime;
+
+                LoadGenStopEventArgs ea = new LoadGenStopEventArgs(numberOfMsgsSent, startTime, stopTime);
+                RaiseCompleteEvent(sender, ea);
+
+            }
         }
         private void UpdateServiceAddress(string address, string endpointName)
         {
@@ -197,7 +235,13 @@ namespace BizTalk_Benchmark_Wizard.Helper
             }
             if (endpointElement != null)
             {
-                endpointElement.Address = new Uri(endpointElement.Address.ToString().ToLower().Replace("servername",address));
+                endpointElement.Address = new Uri(string.Format("{0}://{1}:{2}{3}",
+                            endpointElement.Address.Scheme,
+                            address,
+                            endpointElement.Address.Port.ToString(),
+                            endpointElement.Address.AbsolutePath));
+
+
                 config.Save();
                 ConfigurationManager.RefreshSection("system.serviceModel/client");
 
@@ -214,7 +258,9 @@ namespace BizTalk_Benchmark_Wizard.Helper
     }
     public class PerfCounter
     {
-
+        public bool HasProcessingCounter = false;
+        public bool HasReceiveCounter = false;
+        
         public List<PerformanceCounter> ProcessedCounters = new List<PerformanceCounter>();
         public List<PerformanceCounter> ReceivedCounters = new List<PerformanceCounter>();
         public List<PerformanceCounter> CPUCounters = new List<PerformanceCounter>();

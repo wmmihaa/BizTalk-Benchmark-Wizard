@@ -78,7 +78,8 @@ namespace BizTalk_Benchmark_Wizard.Helper
             else if (ProcessHelper.OutPutMessage.Contains("The command completed successfully."))
                 return true;
             else
-                throw new Exception("An unexpected error occured while checking for PerfMon Collector Set");
+                return false;
+//                throw new Exception("An unexpected error occured while checking for PerfMon Collector Set");
 
         }
         /// <summary>

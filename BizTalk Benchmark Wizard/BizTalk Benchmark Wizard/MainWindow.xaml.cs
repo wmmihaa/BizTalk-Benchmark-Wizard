@@ -25,7 +25,7 @@ namespace BizTalk_Benchmark_Wizard
     public partial class MainWindow : Window
     {
         #region Constants
-        const int TIMERTICKS = 10000;
+        const int TIMERTICKS = 5000;
         const int TESTRUNFORNUMBEROFMINUTES = 2;
         #endregion
         #region Private Members
@@ -35,12 +35,14 @@ namespace BizTalk_Benchmark_Wizard
         PerflogHelper _perflogHelper = null;
         LoadGenHelper _loadGenHelper = null;
         System.Timers.Timer _timer = null;
-        List<string> _btsServers = new List<string>();
         DateTime _testStartTime;
         long _avgCpuValue = 0;
         long _avgProcessedValue = 0;
         long _avgRreceivedValue = 0;
-        float _timerCount = 0;
+        long _totalCpuValue = 0;
+        long _totalProcessedValue = 0;
+        long _totalRreceivedValue = 0;
+        long _timerCount = 0;
         
         #endregion
         #region Public Members
@@ -95,19 +97,39 @@ namespace BizTalk_Benchmark_Wizard
                         return;
                     }
                    break;
-                case 1: 
+                case 1:
+                    //Auto selecting environment
+                    int numberOfBizTalkServers = 0;
+                    int numberOfSQLServers = 0;
+                    foreach (Server server in _bizTalkHelper.GetServers(txtServer1.Text, txtMgmtDb1.Text).Where(s => s.Type == ServerType.BIZTALK))
+                    {
+                        if (server.Type == ServerType.BIZTALK)
+                            numberOfBizTalkServers++;
+                        else
+                            numberOfSQLServers++;
+                    }
+
+                    if (numberOfBizTalkServers + numberOfSQLServers == 1)
+                        environments.SelectedIndex = 0;
+                    else if (numberOfBizTalkServers == 1 && numberOfSQLServers == 1)
+                        environments.SelectedIndex = 1;
+                    else
+                        environments.SelectedIndex = 2;
+                   btnNext.IsEnabled = false;
                     break;
                 case 2:
                     break;
                 case 3:
                     break;
                 case 4:
-                    PrepareTest();
                     break;
                 case 5:
+                    PrepareTest();
+                    break;
+                case 6:
                     ShowResult();
                     break;
-                case 6: 
+                case 7: 
                     this.Close();
                     break;
             }
@@ -143,8 +165,11 @@ namespace BizTalk_Benchmark_Wizard
             foreach (Server server in _bizTalkHelper.GetServers(txtServer1.Text, txtMgmtDb1.Text).Where(s => s.Type == ServerType.BIZTALK))
             {
                 _bizTalkHelper.CreateBizTalkHosts(server.Name, txtWindowsGroup.Text, txtServiceAccount.Text, txtPasswrod.Password);
-                _btsServers.Add(server.Name);
             }
+
+            picInstallHost.Source = new System.Windows.Media.Imaging.BitmapImage(new Uri("pack://application:,,,/BizTalk Benchmark Wizard;component/Resources/Images/passed.png"));
+            if (_bizTalkHelper.IsBizTalkScenariosInstalled)
+                btnNext.IsEnabled = true;
         }
         private void btnExceptionOk_Click(object sender, RoutedEventArgs e)
         {
@@ -223,21 +248,23 @@ namespace BizTalk_Benchmark_Wizard
                     btnNext.IsEnabled = true;
                     break;
                 case 4:
+                    break;
+                case 5:
                     // Prepare
                     btnNext.Content = "Run Test";
                     btnNext.IsEnabled = false;
                     break;
-                case 5:
+                case 6:
                     //Run test
                     btnNext.Content = "Next";
-                    btnBack.Visibility = Visibility.Visible;
-                    btnNext.Visibility = Visibility.Visible;
+                    btnBack.IsEnabled = false;
+                    btnNext.IsEnabled = true;
                     break;
-                case 6:
+                case 7:
                     //Show result
                     btnNext.Content = "Close";
-                    btnBack.Visibility = Visibility.Visible;
-                    btnNext.Visibility = Visibility.Visible;
+                    btnBack.IsEnabled = true;
+                    btnNext.IsEnabled = true;
                     break;
             }
         }
@@ -247,11 +274,46 @@ namespace BizTalk_Benchmark_Wizard
         {
             Results.Clear();
 
-            // Hard coded for demo purpose. This information should be collected from the test result
-            Results.Add(new Result() { CouterName = "Avg Processor time (SQL)", TestValue = "50", KPI = "< 60", Status = "Succeeded" });
-            Results.Add(new Result() { CouterName = "Avg Processor time (BizTalk)", TestValue = "89", KPI = "< 90", Status = "Succeeded" });
-            Results.Add(new Result() { CouterName = "Avg Processed msgs / sec (*)", TestValue = "344", KPI = "> 500", Status = "Failed" });
+            Environment environment = (Environment)environments.SelectedItem;
+
+            bool cpuSuccess = _avgCpuValue < (long)environment.MaxExpectedCpuUtilizationBizTalk ? true : false;
+            bool processedSuccess = _avgProcessedValue > (long)environment.MinExpectedDocsProcessed ? true : false;
+            bool receivedSuccess = _avgRreceivedValue > (long)environment.MinExpectedDocsReceived ? true : false;
+
+            // CPU
+            Results.Add(new Result()
+            {
+                CouterName = "Avg Processor time (BizTalk)",
+                TestValue = _avgCpuValue.ToString(),
+                KPI = "<" + environment.MaxExpectedCpuUtilizationBizTalk.ToString(),
+                Status = cpuSuccess ? "Succeeded" : "Failed"
+            });
+            
+            //Processed
+            Results.Add(new Result()
+            {
+                CouterName = "Avg Processed msgs / sec (*)",
+                TestValue = _avgProcessedValue.ToString(),
+                KPI = ">" + environment.MinExpectedDocsProcessed.ToString(),
+                Status = processedSuccess ? "Succeeded" : "Failed"
+            });
+
+            //Processed
+            Results.Add(new Result()
+            {
+                CouterName = "Avg Received msgs / sec (*)",
+                TestValue = _avgRreceivedValue.ToString(),
+                KPI = ">" + environment.MinExpectedDocsReceived.ToString(),
+                Status = receivedSuccess ? "Succeeded" : "Failed"
+            });
+            
             ResultGrid.DataContext = Results;
+
+            if (cpuSuccess && processedSuccess && receivedSuccess)
+            {
+                lblSucess.Text = "Succeeded";
+                picSucess.Source = new System.Windows.Media.Imaging.BitmapImage(new Uri("pack://application:,,,/BizTalk Benchmark Wizard;component/Resources/Images/passed.png"));
+            }
         }
         void RefreshPreRequsites()
         {
@@ -275,8 +337,8 @@ namespace BizTalk_Benchmark_Wizard
                     new System.Windows.Media.Imaging.BitmapImage(new Uri("pack://application:,,,/BizTalk Benchmark Wizard;component/Resources/Images/passed.png")) :
                     new System.Windows.Media.Imaging.BitmapImage(new Uri("pack://application:,,,/BizTalk Benchmark Wizard;component/Resources/Images/checklist.png"));
 
-                btnCreateHosts.Visibility = isBizTalkHostsInstalled ? Visibility.Hidden : Visibility.Visible;
-                btnCreateHosts.IsEnabled = isBizTalkHostsInstalled ? true : false;
+                //btnCreateHosts.Visibility = isBizTalkHostsInstalled ? Visibility.Hidden : Visibility.Visible;
+                btnCreateHosts.IsEnabled = isBizTalkHostsInstalled ? false : true;
 
                 bool isBizTalkScenariosInstalled = _bizTalkHelper.IsBizTalkScenariosInstalled;
 
@@ -284,15 +346,16 @@ namespace BizTalk_Benchmark_Wizard
                     new System.Windows.Media.Imaging.BitmapImage(new Uri("pack://application:,,,/BizTalk Benchmark Wizard;component/Resources/Images/passed.png")) :
                     new System.Windows.Media.Imaging.BitmapImage(new Uri("pack://application:,,,/BizTalk Benchmark Wizard;component/Resources/Images/checklist.png"));
 
-                if (_btsServers.Count == 0)
-                    foreach (Server server in _bizTalkHelper.GetServers(txtServer1.Text, txtMgmtDb1.Text).Where(s => s.Type == ServerType.BIZTALK))
-                        _btsServers.Add(server.Name);
-                
+                List<string> btsServers = new List<string>();
+                foreach (Server s in _bizTalkHelper.GetServers(txtServer1.Text, txtMgmtDb1.Text).Where(s => s.Type == ServerType.BIZTALK))
+                    btsServers.Add(s.Name);
+
+
                 HostMappings = new List<HostMaping>()
                 {
-                    new HostMaping(){HostName="BBW_RxHost", BizTalkServers=_btsServers},
-                    new HostMaping(){HostName="BBW_PxHost", BizTalkServers=_btsServers},
-                    new HostMaping(){HostName="BBW_TxHost", BizTalkServers=_btsServers}
+                    new HostMaping(){HostDescription="Receive host (BBW_RxHost)", HostName="BBW_RxHost", BizTalkServers= btsServers},
+                    new HostMaping(){HostDescription="Processing host (BBW_PxHost)", HostName="BBW_PxHost", BizTalkServers= btsServers},
+                    new HostMaping(){HostDescription="Send host (BBW_TxHost)", HostName="BBW_TxHost", BizTalkServers= btsServers}
                 };
                 
                 this.lstHosts.DataContext = (IEnumerable<HostMaping>) HostMappings;
@@ -303,6 +366,7 @@ namespace BizTalk_Benchmark_Wizard
                     lblInstalledScenarioManual.Visibility = Visibility.Hidden;
                 }
                 btnBack.IsEnabled = true;
+
             }
             catch (Exception ex)
             {
@@ -342,10 +406,20 @@ namespace BizTalk_Benchmark_Wizard
         #region Run Tests
         void PrepareTest() 
         {
-            // Configure tests...
+            btnBack.IsEnabled = false;
+            btnNext.IsEnabled = false;
 
-            btnBack.Visibility = Visibility.Hidden;
-            btnNext.Visibility = Visibility.Hidden;
+            string sendHost = HostMappings.First(h => h.HostName.Contains("BBW_TxHost")).SelectedHost;
+            _bizTalkHelper.UpdateSendPortUri("IndigoService", sendHost);
+
+            if(chbStopAllHosts.IsChecked==true)
+                _bizTalkHelper.StopAllHostInstances();
+
+            foreach (HostMaping hostMapping in HostMappings)
+            {
+                _bizTalkHelper.StartBizTalkHostsInstance(hostMapping.HostName, hostMapping.SelectedHost);
+            }
+            
             _testStartTime = DateTime.Now;
             _avgCpuValue = 0;
             _avgProcessedValue = 0;
@@ -356,12 +430,11 @@ namespace BizTalk_Benchmark_Wizard
             ReceivedGauge.MaxValue = 450;
             ProcessValue = 0;
             Progress.DataContext = this;
-            
             RunTest();
         }
         void RunTest()
         {
-            _loadGenHelper.RunTests((Environment)environments.SelectedItem, _bizTalkHelper.GetApplicationServerNames());
+            _loadGenHelper.RunTests((Environment)environments.SelectedItem, (List<HostMaping>)lstHosts.DataContext, _bizTalkHelper.GetApplicationServerNames());
             _loadGenHelper.OnComplete += new LoadGenHelper.CompleteHandler(_loadGenHelper_OnComplete);
             _timer = new System.Timers.Timer(TIMERTICKS);
             _timer.Elapsed += new ElapsedEventHandler(_timer_CollectData);
@@ -369,11 +442,13 @@ namespace BizTalk_Benchmark_Wizard
             
         }
 
-        void _loadGenHelper_OnComplete()
+        void _loadGenHelper_OnComplete(object sender, LoadGen.LoadGenStopEventArgs e)
         {
-            _timer.Stop();
-            //btnNext.Visibility = Visibility.Visible;
+
+            this.Dispatcher.BeginInvoke(DispatcherPriority.ApplicationIdle, new Action(delegate() { btnNext.IsEnabled = true; }));
+            //btnNext.IsEnabled = true;
         }
+
         void _timer_CollectData(object sender, ElapsedEventArgs e)
         {
             _timer.Enabled = false;
@@ -384,14 +459,22 @@ namespace BizTalk_Benchmark_Wizard
             
             foreach (PerfCounter c in _loadGenHelper.PerfCounters)
             {
-                cpuValue += c.CPUCounterValue;
-                processedValue += c.ProcessedCounterValue;
-                receivedValue += c.ReceivedCounterValue;
+                cpuValue += (long)c.CPUCounterValue;
+
+                if(c.HasProcessingCounter)
+                    processedValue += (long)c.ProcessedCounterValue;
+
+                if(c.HasReceiveCounter)
+                    receivedValue += (long)c.ReceivedCounterValue;
             }
 
-            _avgCpuValue = (long)((_avgCpuValue + cpuValue) * _timerCount);
-            _avgProcessedValue = (long)((_avgProcessedValue + processedValue) * _timerCount);
-            _avgRreceivedValue = (long)((_avgRreceivedValue + receivedValue) * _timerCount);
+            _totalCpuValue += (long)cpuValue / _loadGenHelper.PerfCounters.Count;
+            _totalProcessedValue += (long)processedValue;
+            _totalRreceivedValue += (long)receivedValue;
+
+            _avgCpuValue = _totalCpuValue / _timerCount; //(long)((_avgCpuValue + cpuValue) * _timerCount);
+            _avgProcessedValue = _totalProcessedValue / _timerCount; //(long)((_avgProcessedValue + processedValue) * _timerCount);
+            _avgRreceivedValue = _totalRreceivedValue / _timerCount; //(long)((_avgRreceivedValue + receivedValue) * _timerCount);
 
             // Set gauge values
             CPUGauge.SetCounter((int)cpuValue, (int)(_avgCpuValue / _timerCount));
@@ -402,6 +485,18 @@ namespace BizTalk_Benchmark_Wizard
         }
         
         #endregion 
+
+        private void environments_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (environments.SelectedItems.Count == 1)
+                btnNext.IsEnabled = true;
+        }
+
+        private void environments_MouseUp(object sender, MouseButtonEventArgs e)
+        {
+            if (environments.SelectedItems.Count == 1)
+                btnNext.IsEnabled = true;
+        }
     }
     /// <summary>
     /// Used for presenting the test result
@@ -427,8 +522,14 @@ namespace BizTalk_Benchmark_Wizard
     }
     public class HostMaping
     {
-        public string HostName;
+        public string HostName { get; set; }
+        public string HostDescription { get; set; }
+        public string SelectedHost { get; set; }
         public List<string> BizTalkServers = new List<string>();
+        public IEnumerable<string> Servers
+        {
+            get { return (IEnumerable<string>)BizTalkServers; }
+        }
     }
     
 }
