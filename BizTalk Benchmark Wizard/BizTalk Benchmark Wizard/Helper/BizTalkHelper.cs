@@ -464,11 +464,11 @@ namespace BizTalk_Benchmark_Wizard.Helper
         {
             get
             {
-                bool RxExist = BizTalkHostsInstalled(RECEIVEHOST, _mainBizTalkServer);
-                bool TxExist = BizTalkHostsInstalled(TRANSMITHOST, _mainBizTalkServer);
-                bool PxExist = BizTalkHostsInstalled(PROCESSINGHOST, _mainBizTalkServer);
-                if (!RxExist || !TxExist || !PxExist)
-                    return false;
+                //bool RxExist = BizTalkHostsInstalled(RECEIVEHOST, _mainBizTalkServer);
+                //bool TxExist = BizTalkHostsInstalled(TRANSMITHOST, _mainBizTalkServer);
+                //bool PxExist = BizTalkHostsInstalled(PROCESSINGHOST, _mainBizTalkServer);
+                //if (!RxExist || !TxExist || !PxExist)
+                //    return false;
 
                 return true;
             }
@@ -577,6 +577,7 @@ namespace BizTalk_Benchmark_Wizard.Helper
         }
         public void StartBizTalkHostsInstance(string hostName, string serverName)
         {
+            return; //Can't be done
             try
             {
                 //Create EnumerationOptions and run wql query
@@ -602,6 +603,7 @@ namespace BizTalk_Benchmark_Wizard.Helper
         }
         public void StopAllHostInstances()
         {
+            return; //Can't be done
             try
             {
                 //Create EnumerationOptions and run wql query

@@ -427,9 +427,9 @@
                                 <StackPanel Width="20"/>
                                 <my1:GaugeControl Name="CPUGauge" Caption="Avg CPU"></my1:GaugeControl>
                                 <StackPanel Width="30"/>
-                                <my1:GaugeControl Name="ProcessedGauge" Caption="Avg Received msgs/sec" ></my1:GaugeControl>
+                                <my1:GaugeControl Name="ReceivedGauge" Caption="Avg Received msgs/sec" ></my1:GaugeControl>
                                 <StackPanel Width="30"/>
-                                <my1:GaugeControl Name="ReceivedGauge" Caption="Avg Processed msgs/sec"></my1:GaugeControl>
+                                <my1:GaugeControl Name="ProcessedGauge" Caption="Avg Processed msgs/sec"></my1:GaugeControl>
                             </StackPanel>
                             <ProgressBar Name="Progress" Width="580" Foreground="Green"  Value="{Binding ProcessValue}" Height="20" Minimum="0" Maximum="100" Margin="10" Canvas.Left="70" Canvas.Top="266.224"/>
 

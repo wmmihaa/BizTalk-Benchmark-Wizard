@@ -18,6 +18,7 @@ namespace BizTalk_Benchmark_Wizard.Helper
     {
         public delegate void CompleteHandler(object sender, LoadGenStopEventArgs e);
         public event CompleteHandler OnComplete;
+        public double TestDuration = 120;
         public List<PerfCounter> PerfCounters = new List<PerfCounter>();
         List<LoadGen.LoadGen> _loadGenClients = new List<LoadGen.LoadGen>();
         int _numberOfLoadGenStopped = 0;
@@ -35,7 +36,7 @@ namespace BizTalk_Benchmark_Wizard.Helper
             {
                 PerfCounter perfCounter = new PerfCounter();
                 perfCounter.Server = server;
-
+                _numberOfLoadGenClients++;
                 foreach (HostMaping hostMapping in hostmappings.Where(h=>h.SelectedHost==server))
                 {
                     switch (hostMapping.HostName)
@@ -59,23 +60,6 @@ namespace BizTalk_Benchmark_Wizard.Helper
             string rcvHost = hostmappings.First(h => h.HostName == "BBW_RxHost").SelectedHost;
 
             _loadGenClients.Add(CreateAndStartLoadGenClient(CreateLoadGenScript(environment.LoadGenScripfile, rcvHost), rcvHost));
-
-            //int n = _numberOfLoadGenClients;
-            //foreach (string server in servers)
-            //{
-            //    if (n++ == environment.NuberOfActiveBizTalkServers)
-            //        break;
-
-            //    CreateCounterCollectors(server);
-            //}
-
-            //foreach (string server in servers)
-            //{
-            //    if (_numberOfLoadGenClients++ == environment.NuberOfActiveBizTalkServers)
-            //        break;
-
-            //    _loadGenClients.Add(CreateAndStartLoadGenClient(CreateLoadGenScript(environment.LoadGenScripfile, server),server));
-            //}
         }
         public void StopAllTests()
         {
@@ -150,15 +134,16 @@ namespace BizTalk_Benchmark_Wizard.Helper
 
                 XmlDocument doc = new XmlDocument();
                 doc.Load(scriptFile);
+                TestDuration = long.Parse( doc.SelectSingleNode("LoadGenFramework/CommonSection/StopMode/TotalTime").InnerText);
 
                 if (string.Compare(doc.FirstChild.Name, "LoadGenFramework", true, new CultureInfo("en-US")) != 0)
                 {
                     throw new ConfigException("LoadGen Configuration File Schema Invalid!");
                 }
 
+                _numberOfLoadGenClients++;
                 loadGen = new LoadGen.LoadGen(doc.FirstChild);
                 loadGen.LoadGenStopped += new LoadGenEventHandler(LoadGen_Stopped);
-                
                 loadGen.Start();
             }
             catch (ConfigException cex)
@@ -208,15 +193,22 @@ namespace BizTalk_Benchmark_Wizard.Helper
             //bExitApp = true;
             _allLoadGenStopEventArgs.Add(e);
             _numberOfLoadGenStopped++;
+        
             if (_numberOfLoadGenClients == _numberOfLoadGenStopped)
             {
-                long numberOfMsgsSent = _allLoadGenStopEventArgs.Sum(l => l.NumFilesSent);
-                DateTime startTime = _allLoadGenStopEventArgs.Min(l => l.LoadGenStartTime);
-                DateTime stopTime = e.LoadGenStopTime;
+                try
+                {
+                    long numberOfMsgsSent = _allLoadGenStopEventArgs.Sum(l => l.NumFilesSent);
+                    DateTime startTime = _allLoadGenStopEventArgs.Min(l => l.LoadGenStartTime);
+                    DateTime stopTime = e.LoadGenStopTime;
 
-                LoadGenStopEventArgs ea = new LoadGenStopEventArgs(numberOfMsgsSent, startTime, stopTime);
-                RaiseCompleteEvent(sender, ea);
-
+                    LoadGenStopEventArgs ea = new LoadGenStopEventArgs(numberOfMsgsSent, startTime, stopTime);
+                    RaiseCompleteEvent(sender, ea);
+                }
+                catch (Exception ex)
+                {
+                    RaiseCompleteEvent(this, new LoadGenStopEventArgs(1, DateTime.Now, DateTime.Now));
+                }
             }
         }
         private void UpdateServiceAddress(string address, string endpointName)
@@ -269,7 +261,7 @@ namespace BizTalk_Benchmark_Wizard.Helper
         {
             get 
             {
-                float ret = 0;
+                float ret = 1;
                 foreach (PerformanceCounter c in this.ProcessedCounters)
                     ret += c.NextValue();
                 return ret;
@@ -279,7 +271,7 @@ namespace BizTalk_Benchmark_Wizard.Helper
         {
             get
             {
-                float ret = 0;
+                float ret = 1;
                 foreach (PerformanceCounter c in this.ReceivedCounters)
                     ret += c.NextValue();
                 return ret;
@@ -289,7 +281,7 @@ namespace BizTalk_Benchmark_Wizard.Helper
         {
             get
             {
-                float ret = 0;
+                float ret = 1;
                 foreach (PerformanceCounter c in this.CPUCounters)
                     ret += c.NextValue();
                 return ret;

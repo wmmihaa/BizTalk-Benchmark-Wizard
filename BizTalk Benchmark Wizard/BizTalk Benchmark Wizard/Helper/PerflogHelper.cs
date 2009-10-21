@@ -20,7 +20,7 @@ namespace BizTalk_Benchmark_Wizard.Helper
         {
             _servers = servers;
         }
-
+        List<string> _existingCollectoSets = new List<string>();
         /// <summary>
         /// Checks if collector sets are installed from all servers
         /// </summary>
@@ -72,11 +72,15 @@ namespace BizTalk_Benchmark_Wizard.Helper
                 string format = string.Format(@"query ""{0}""", collectorsetName);
                 p.Execute("logman", format, 1);
             }
-
+            
             if (ProcessHelper.OutPutMessage.Contains("Data Collector Set was not found."))
                 return false;
             else if (ProcessHelper.OutPutMessage.Contains("The command completed successfully."))
+            {
+                if (!_existingCollectoSets.Contains(collectorsetName))
+                    _existingCollectoSets.Add(collectorsetName);
                 return true;
+            }
             else
                 return false;
 //                throw new Exception("An unexpected error occured while checking for PerfMon Collector Set");
@@ -92,11 +96,17 @@ namespace BizTalk_Benchmark_Wizard.Helper
             if (string.IsNullOrEmpty(serverName))
                 return;
 
+            string filename = serverName + "_" + Path.GetFileName(template);
             string rootPath = Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location), string.Format("COUNTERLOGS\\{0}", serverName));
+            string fileSaveName = Path.Combine(Path.Combine(rootPath, "Templates"), filename);
+            
+            if (!_existingCollectoSets.Contains(Path.GetFileNameWithoutExtension(filename)))
+                _existingCollectoSets.Add(Path.GetFileNameWithoutExtension(filename));
+            
             if (!Directory.Exists(rootPath))
                 Directory.CreateDirectory(rootPath);
 
-            string logPath = Path.Combine(rootPath, "000001");
+            string logPath = Path.Combine(rootPath, Path.GetFileNameWithoutExtension(filename)+"\\000001");
             if (!Directory.Exists(logPath))
                 Directory.CreateDirectory(logPath);
 
@@ -119,11 +129,9 @@ namespace BizTalk_Benchmark_Wizard.Helper
                 counterNode.InnerText = counterNode.InnerText.Replace("@SERVERNAME", serverName);
 
 
-            string filename = serverName + "_" + Path.GetFileName(template);
             if (!Directory.Exists(Path.Combine(rootPath, "Templates")))
                 Directory.CreateDirectory(Path.Combine(rootPath, "Templates"));
 
-            string fileSaveName = Path.Combine(Path.Combine(rootPath, "Templates"), filename);
             serverColectorDocument.Save(fileSaveName);
 
             using (ProcessHelper p = new ProcessHelper())
@@ -135,7 +143,27 @@ namespace BizTalk_Benchmark_Wizard.Helper
             if (!string.IsNullOrEmpty(ProcessHelper.ErrorMessage) || !string.IsNullOrEmpty(ProcessHelper.OutPutMessage))
                 throw new ApplicationException("Unable to create Data Collector Set");
         }
-        
-
+        public void StartCollectorSet()
+        {
+            foreach (string collectorSet in _existingCollectoSets)
+            {
+                using (ProcessHelper p = new ProcessHelper())
+                {
+                    string format = string.Format(@"start -n ""{0}""", collectorSet);
+                    p.Execute("logman", format, 60000);
+                }
+            }
+        }
+        public void StopCollectorSet()
+        {
+            foreach (string collectorSet in _existingCollectoSets)
+            {
+                using (ProcessHelper p = new ProcessHelper())
+                {
+                    string format = string.Format(@"stop -n ""{0}""", collectorSet);
+                    p.Execute("logman", format, 60000);
+                }
+            }
+        }
     }
 }

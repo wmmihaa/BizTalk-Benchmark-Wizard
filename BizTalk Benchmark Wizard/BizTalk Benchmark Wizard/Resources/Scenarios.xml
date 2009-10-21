@@ -21,8 +21,8 @@
         <SQLServerConfiguration>1*CPU, 4GB RAM</SQLServerConfiguration>
         <MaxExpectedCpuUtilizationBizTalk>95</MaxExpectedCpuUtilizationBizTalk>
         <MaxExpectedCpuUtilizationSql>45</MaxExpectedCpuUtilizationSql>
-        <MinExpectedDocsProcessed>1000</MinExpectedDocsProcessed>
-        <MinExpectedDocsReceived>1000</MinExpectedDocsReceived>
+        <MinExpectedDocsProcessed>100</MinExpectedDocsProcessed>
+        <MinExpectedDocsReceived>40</MinExpectedDocsReceived>
       </Environment>
       <Environment>
         <Name>1 BTS + 1 SQL</Name>
