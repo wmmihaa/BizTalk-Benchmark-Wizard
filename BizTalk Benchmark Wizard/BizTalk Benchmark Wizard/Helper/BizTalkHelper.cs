@@ -442,6 +442,55 @@ namespace BizTalk_Benchmark_Wizard.Helper
             return servers;
         }
         /// <summary>
+        /// Returns all Host to Server mappings
+        /// </summary>
+        /// <returns></returns>
+        public List<HostMaping> GetHostMappings()
+        {
+            List<HostMaping> hostMappings = new List<HostMaping>();
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(string.Format(CONNECTIONSTRINGFORMAT, _database, _server)))
+                {
+                    connection.Open();
+
+                    SqlCommand command = new SqlCommand(ConfigurationManager.AppSettings["GetHostMappings"], connection);
+
+                    SqlDataReader reader = command.ExecuteReader();
+
+                    while (reader.Read())
+                    {
+                        if (hostMappings.Exists(h => h.HostName == reader["Host"].ToString()))
+                            hostMappings.First(h => h.HostName == reader["Host"].ToString()).BizTalkServers.Add(reader["Server"].ToString());
+                        else
+                        {
+                            HostMaping h = new HostMaping() { HostName = reader["Host"].ToString(), SelectedHost = reader["Server"].ToString() };
+                            h.BizTalkServers.Add(reader["Server"].ToString());
+                            switch (reader["Host"].ToString())
+                            { 
+                                case "BBW_RxHost":
+                                    h.HostDescription = "Receive host (BBW_RxHost)";
+                                    break;
+                                case "BBW_TxHost":
+                                    h.HostDescription = "Send host (BBW_TxHost)";
+                                    break;
+                                case "BBW_PxHost":
+                                    h.HostDescription = "Processing host (BBW_PxHost)";
+                                    break;
+                            }
+                            hostMappings.Add(h);
+                        }
+                    }
+                    connection.Close();
+                }
+                return hostMappings;
+            }
+            catch (Exception ex)
+            {
+                throw new ApplicationException("Unable to get Host mappings", ex);
+            }
+        }
+        /// <summary>
         /// Checks if the "BizTalk Benchmark Wizard" application is installed, using ExplorerOM
         /// </summary>
         public bool IsBizTalkScenariosInstalled
@@ -638,7 +687,7 @@ namespace BizTalk_Benchmark_Wizard.Helper
         public string Name{get;set;}
         public ServerType Type {get;set;}
     }
-    internal class BizTalkDBs
+    public class BizTalkDBs
     {
         public string BizTalkAdminGroup { get; set; }
         public string Default { get; set; }
@@ -652,4 +701,6 @@ namespace BizTalk_Benchmark_Wizard.Helper
         public string RuleEngineDBServerName { get; set; }
         public string RuleEngineDBServerName_ComputerName { get; set; }
     }
+
+
 }

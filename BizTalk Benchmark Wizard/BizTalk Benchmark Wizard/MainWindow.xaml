@@ -250,17 +250,7 @@
                                     <Button Height="23" Style="{DynamicResource RoundedButton}" IsEnabled="False" HorizontalAlignment="Right" Name="btnCreateCollectors" VerticalAlignment="Center" Width="75" Click="btnCreateCollectors_Click">Create</Button>
                                 </StackPanel>
                             </StackPanel>
-                            <StackPanel Height="15"/>
-                            <StackPanel Orientation="Horizontal">
-                                <Image Name="picInstallHost" Height="40" Source="Resources/Images/unknown.png"/>
-                                <StackPanel Orientation="Horizontal">
-                                    <Label FontFamily="Calibri" MaxWidth="550" Width="500">
-                                        <TextBlock TextWrapping="Wrap"><Bold>Mandatory</Bold> - Create Hosts, Host Instances and Adapter handlers</TextBlock>
-                                    </Label>
-                                    <Button Height="23" Style="{DynamicResource RoundedButton}" IsEnabled="False" HorizontalAlignment="Right" Name="btnCreateHosts" VerticalAlignment="Center" Width="75" Click="btnCreateHosts_Click">Create</Button>
-                                </StackPanel>
-                            </StackPanel>
-                            <StackPanel Height="15"/>
+                            <StackPanel Height="10"/>
                             <StackPanel Orientation="Horizontal">
                                 <Image Name="picInstalledScenario" Height="40" Source="Resources/Images/unknown.png"/>
                                 <StackPanel Orientation="Horizontal">
@@ -271,6 +261,24 @@
                                         <TextBlock TextWrapping="Wrap"><Bold>This is a manual step.</Bold></TextBlock>
                                     </Label>
                                 </StackPanel>
+                            </StackPanel>
+                            <StackPanel Height="10"/>
+                            <StackPanel Orientation="Vertical" Name="WaitPanel">
+                                <Label Name="lblWait" FontSize="20" HorizontalAlignment="Center" FontWeight="Bold">Please wait while checking for installed comonents...</Label>
+                            </StackPanel>
+                            <StackPanel Orientation="Vertical" Name="InstallInstructions" Visibility="Collapsed">
+                                <Label Name="lblInstallInstructionsTitle" FontWeight="Bold">Installation instructions:</Label> 
+                                <Label Name="lblInstallInstructions">
+                                    <TextBlock >1. Copy the BizTalk folder located in the [InstallDir]\Artefacts folder to your BizTalk servers<LineBreak/>
+                                                                    2. Run the InstallHosts.vbs script on ONE of the BizTalk servers, to create hosts, host instances and handlers.<LineBreak/>
+                                                                    3. Import the BizTalk Benchmark Wizard.msi on ONE of the BizTalk Servers<LineBreak/>
+                                                                    4. Install the BizTalk Benchmark Wizard.msi on ALL BizTalk servers in order to add the assemblies to GAC.<LineBreak/>
+                                                                    5. Restart the BBW* hosts and stop all other host instances<LineBreak/>
+                                                                    6. Run this wizard again<LineBreak/>
+                                    </TextBlock>
+                                               
+                                               
+                                </Label>
                             </StackPanel>
 
                         </StackPanel>
@@ -379,10 +387,7 @@
                             </Border>
                         </GroupBox>
                         <StackPanel Height="60" Orientation="Horizontal"/>
-                        <StackPanel Orientation="Horizontal" Margin="68,0,91,67.771" Height="17.776" VerticalAlignment="Bottom">
-                            <CheckBox Name="chbStopAllHosts" IsChecked="False" HorizontalAlignment="Left" />
-                            <TextBlock Text="Stop all unused BizTalk host instances before running the tests."/>
-                        </StackPanel>
+                        
                     </Grid>
                 </TabItem>
                 <TabItem Header="" Name="tabPrepare">
@@ -399,8 +404,8 @@
                                 <LineBreak/>the BizTalk scenario, and would benefit being started on a separate server.<LineBreak/>    
                                 <LineBreak/>1. Copy the IndigoService folder located in the BizTalk Benchmark Wizard install folder to a separate server. 
                                 <LineBreak/>2. Start the Indigo Service by double-click the  <Bold>StartIndigoService.bat</Bold> file.
-                                <LineBreak/>3. Enter the name of the server where you have started the Indigo Service below.
-                                <LineBreak/>4. Test the Indigo Service by clicking the "Test Indigo service" button bellow.
+                                <LineBreak/>3. Enter the name of the server where you have started the Indigo Service in the text box below.
+                                <LineBreak/>4. Test the Indigo Service by clicking the "Test Indigo service" button.
                                 </TextBlock>
                             </Label>
                             <StackPanel Height="15"/>
@@ -569,72 +574,6 @@
                 </Grid>
             </Grid>
         </Popup>
-        <Popup x:Name="PopupServiceAccountAndGroups" 
-               AllowsTransparency="True"
-               IsOpen="false"
-               Width="450"
-               Height="230"
-               Placement="Center" PopupAnimation="Fade">
-            <Grid>
-                <dropShadow:SystemDropShadowChrome CornerRadius="3,13,3,13" Color="#71000000">
-                    <Grid x:Name="MyElement3" />
-                </dropShadow:SystemDropShadowChrome>
-                <Grid>
-                    <Border Margin="0,0,5,5"
-			                BorderBrush="Gainsboro"
-			                CornerRadius="5,5,5,5"
-			                BorderThickness="1,1,1,1"
-			                Background="{StaticResource BrushedMetalBackground}"/>
-                    <StackPanel Orientation="Vertical" Margin="10" Width="400">
-                        <Label FontFamily="Calibri" FontSize="17" MaxWidth="400" Width="400">
-                            <TextBlock TextWrapping="Wrap"><Bold>Servers, Windows accounts and Groups</Bold></TextBlock>
-                        </Label>
-                        <!--<Label FontFamily="Calibri" MaxWidth="400" Width="400">
-                            <TextBlock TextWrapping="Wrap">The following servers where found:</TextBlock>
-                        </Label>
-                        <my:DataGrid Name="servers" 
-                                     ItemsSource="{Binding}" 
-                                     AutoGenerateColumns="False" 
-                                     Height="100" 
-                                     Width="400">
-                            <my:DataGrid.Columns>
-                                <my:DataGridTextColumn Header="Server Name"  Binding="{Binding Name}" Width="200"/>
-                                <my:DataGridTextColumn Header="Server Type"  Binding="{Binding NuberOfActiveBizTalkServers}" Width="70"/>
-                            </my:DataGrid.Columns>
-                        </my:DataGrid>
-                        <StackPanel Height="10"/>-->
-                        <Label FontFamily="Calibri" MaxWidth="400" Width="400">
-                            <TextBlock TextWrapping="Wrap">This wizard will create Hosts, Host Instances and Adapter handlers. Please provide the name of Windows group which will be used to control
-                                <LineBreak/> the access to the Hosts. You also need to provide the name of the user to run the Host Instances.</TextBlock>
-                        </Label>
-                        <StackPanel Height="5"/>
-                        <StackPanel Orientation="Horizontal">
-                            <Label FontFamily="Calibri" MaxWidth="400" Width="95">
-                                <TextBlock TextWrapping="Wrap"><Bold>Windows group:</Bold></TextBlock>
-                            </Label>
-                            <TextBox Name="txtWindowsGroup" Width="300" Height="12" Text="BizTalk Application Users"/>
-                        </StackPanel>
-                        <StackPanel Orientation="Horizontal">
-
-                            <Label FontFamily="Calibri" MaxWidth="400" Width="95">
-                                <TextBlock TextWrapping="Wrap"><Bold>Service account:</Bold></TextBlock>
-                            </Label>
-                            <TextBox Name="txtServiceAccount" Width="110" Height="12"/>
-                            <StackPanel Width="10"/>
-                            <Label FontFamily="Calibri" MaxWidth="400" Width="70">
-                                <TextBlock TextWrapping="Wrap"><Bold>Password:</Bold></TextBlock>
-                            </Label>
-                            <PasswordBox Name="txtPasswrod" Width="110" Height="12" Style="{DynamicResource RoundedPasswordBox}"></PasswordBox>
-
-                        </StackPanel>
-                        <StackPanel Height="15"/>
-                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,10,0">
-                            <Button Height="23" Style="{DynamicResource RoundedButton}" Name="btnOk2" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="75.263" Click="btnOk2_Click">Ok</Button>
-                        </StackPanel>
-                    </StackPanel>
-                </Grid>
-            </Grid>
-        </Popup>
-
+        
     </Grid>
 </Window>

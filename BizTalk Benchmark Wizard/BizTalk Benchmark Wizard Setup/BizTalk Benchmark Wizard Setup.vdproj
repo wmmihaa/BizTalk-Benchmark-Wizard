@@ -1453,6 +1453,17 @@
             "Property" = "8:ProgramMenuFolder"
                 "Folders"
                 {
+                    "{9EF0B969-E518-4E46-987F-47570745A589}:_E911E292E0C14C71B14C4FBE92C990AB"
+                    {
+                    "Name" = "8:BizTalk Benchmark Wizard"
+                    "AlwaysCreate" = "11:FALSE"
+                    "Condition" = "8:"
+                    "Transitive" = "11:FALSE"
+                    "Property" = "8:_622A9240C1E74775B768E77A482CB13D"
+                        "Folders"
+                        {
+                        }
+                    }
                 }
             }
             "{3C67513D-01DD-4637-8A68-80971EB9504F}:_FD5F5EF316CD468DADC2E67EB9FC006C"
@@ -1495,7 +1506,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:BizTalk Benchmark Wizard"
         "ProductCode" = "8:{617F4FF3-1B6C-4968-BDD7-2BC2E11BE1F4}"
-        "PackageCode" = "8:{38A6CAD9-DF33-4F64-A2D8-117206F4EC29}"
+        "PackageCode" = "8:{8DAE2478-5560-434F-B74E-05B3D0110EB7}"
         "UpgradeCode" = "8:{F2E6EF88-D906-45EA-9DD1-CCE7751B604B}"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:FALSE"
@@ -1614,6 +1625,20 @@
         }
         "Shortcut"
         {
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_1670F3E190F442FCB4AB4D3B5430D9D0"
+            {
+            "Name" = "8:BizTalk Benchmark Wizard"
+            "Arguments" = "8:"
+            "Description" = "8:"
+            "ShowCmd" = "3:1"
+            "IconIndex" = "3:0"
+            "Transitive" = "11:FALSE"
+            "Target" = "8:_5DC36017F2B4415089AB3556E182CC49"
+            "Folder" = "8:_E911E292E0C14C71B14C4FBE92C990AB"
+            "WorkingFolder" = "8:_FD5F5EF316CD468DADC2E67EB9FC006C"
+            "Icon" = "8:"
+            "Feature" = "8:"
+            }
         }
         "UserInterface"
         {
@@ -2063,6 +2088,62 @@
             "ProjectOutputGroupRegister" = "3:1"
             "OutputConfiguration" = "8:"
             "OutputGroupCanonicalName" = "8:Built"
+            "OutputProjectGuid" = "8:{56A5B68A-B031-42CC-A897-5D128BB8B20E}"
+            "ShowKeyOutput" = "11:TRUE"
+                "ExcludeFilters"
+                {
+                }
+            }
+            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_C79A585921CE44A0AC558CC36A930052"
+            {
+            "SourcePath" = "8:"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_FD5F5EF316CD468DADC2E67EB9FC006C"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            "ProjectOutputGroupRegister" = "3:1"
+            "OutputConfiguration" = "8:"
+            "OutputGroupCanonicalName" = "8:ContentFiles"
+            "OutputProjectGuid" = "8:{56A5B68A-B031-42CC-A897-5D128BB8B20E}"
+            "ShowKeyOutput" = "11:TRUE"
+                "ExcludeFilters"
+                {
+                }
+            }
+            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_F9C36D6232374D68923B55C2F0081847"
+            {
+            "SourcePath" = "8:"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_FD5F5EF316CD468DADC2E67EB9FC006C"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            "ProjectOutputGroupRegister" = "3:1"
+            "OutputConfiguration" = "8:"
+            "OutputGroupCanonicalName" = "8:ContentFiles"
             "OutputProjectGuid" = "8:{56A5B68A-B031-42CC-A897-5D128BB8B20E}"
             "ShowKeyOutput" = "11:TRUE"
                 "ExcludeFilters"

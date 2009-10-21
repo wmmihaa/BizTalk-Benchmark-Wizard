@@ -30,6 +30,7 @@ namespace BizTalk_Benchmark_Wizard
         #endregion
         #region Private Members
         bool _isLogedIn = false;
+        bool _hasRefreshed = false;
         List<Scenario> _scenarios;
         BizTalkHelper _bizTalkHelper = null;
         PerflogHelper _perflogHelper = null;
@@ -158,18 +159,6 @@ namespace BizTalk_Benchmark_Wizard
         {
             PopupLogin.IsOpen = false;
         }
-        private void btnOk2_Click(object sender, RoutedEventArgs e)
-        {
-            PopupServiceAccountAndGroups.IsOpen = false;
-            foreach (Server server in _bizTalkHelper.GetServers(txtServer1.Text, txtMgmtDb1.Text).Where(s => s.Type == ServerType.BIZTALK))
-            {
-                _bizTalkHelper.CreateBizTalkHosts(server.Name, txtWindowsGroup.Text, txtServiceAccount.Text, txtPasswrod.Password);
-            }
-
-            picInstallHost.Source = new System.Windows.Media.Imaging.BitmapImage(new Uri("pack://application:,,,/BizTalk Benchmark Wizard;component/Resources/Images/passed.png"));
-            if (_bizTalkHelper.IsBizTalkScenariosInstalled)
-                btnNext.IsEnabled = true;
-        }
         private void btnExceptionOk_Click(object sender, RoutedEventArgs e)
         {
             PopupException.IsOpen = false;
@@ -190,10 +179,6 @@ namespace BizTalk_Benchmark_Wizard
 
             btnNext.IsEnabled = testPass;
             btnTestService.IsEnabled = true;
-        }
-        private void btnCreateHosts_Click(object sender, RoutedEventArgs e)
-        {
-            PopupServiceAccountAndGroups.IsOpen = true;                    
         }
         private void btnCreateCollectors_Click(object sender, RoutedEventArgs e)
         {
@@ -228,6 +213,16 @@ namespace BizTalk_Benchmark_Wizard
             btnBack.IsEnabled = false;
             btnNext.IsEnabled = false;
             tabControl1.SelectedIndex++;
+        }
+        private void environments_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (environments.SelectedItems.Count == 1)
+                btnNext.IsEnabled = true;
+        }
+        private void environments_MouseUp(object sender, MouseButtonEventArgs e)
+        {
+            if (environments.SelectedItems.Count == 1)
+                btnNext.IsEnabled = true;
         }
         private void tabControl1_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -315,6 +310,8 @@ namespace BizTalk_Benchmark_Wizard
         }
         void RefreshPreRequsites()
         {
+            if (_hasRefreshed)
+                return;
             try
             {
                 _bizTalkHelper = new BizTalkHelper(txtServer1.Text, txtMgmtDb1.Text);
@@ -329,15 +326,6 @@ namespace BizTalk_Benchmark_Wizard
                 btnCreateCollectors.Visibility = isDataCollectorSetsCreated ? Visibility.Hidden : Visibility.Visible;
                 btnCreateCollectors.IsEnabled = isDataCollectorSetsCreated ? false : true;
 
-                bool isBizTalkHostsInstalled = _bizTalkHelper.IsBizTalkHostsInstalled;
-
-                picInstallHost.Source = isBizTalkHostsInstalled ?
-                    new System.Windows.Media.Imaging.BitmapImage(new Uri("pack://application:,,,/BizTalk Benchmark Wizard;component/Resources/Images/passed.png")) :
-                    new System.Windows.Media.Imaging.BitmapImage(new Uri("pack://application:,,,/BizTalk Benchmark Wizard;component/Resources/Images/checklist.png"));
-
-                //btnCreateHosts.Visibility = isBizTalkHostsInstalled ? Visibility.Hidden : Visibility.Visible;
-                btnCreateHosts.IsEnabled = isBizTalkHostsInstalled ? false : true;
-
                 bool isBizTalkScenariosInstalled = _bizTalkHelper.IsBizTalkScenariosInstalled;
 
                 picInstalledScenario.Source = isBizTalkScenariosInstalled ?
@@ -349,22 +337,22 @@ namespace BizTalk_Benchmark_Wizard
                     btsServers.Add(s.Name);
 
 
-                HostMappings = new List<HostMaping>()
-                {
-                    new HostMaping(){HostDescription="Receive host (BBW_RxHost)", HostName="BBW_RxHost", BizTalkServers= btsServers},
-                    new HostMaping(){HostDescription="Processing host (BBW_PxHost)", HostName="BBW_PxHost", BizTalkServers= btsServers},
-                    new HostMaping(){HostDescription="Send host (BBW_TxHost)", HostName="BBW_TxHost", BizTalkServers= btsServers}
-                };
+                HostMappings = _bizTalkHelper.GetHostMappings();
                 
                 this.lstHosts.DataContext = (IEnumerable<HostMaping>) HostMappings;
-                
-                if (isBizTalkHostsInstalled && isBizTalkScenariosInstalled)
+
+                WaitPanel.Visibility = Visibility.Collapsed;
+
+                if (isBizTalkScenariosInstalled)
                 {
                     btnNext.IsEnabled = true;
                     lblInstalledScenarioManual.Visibility = Visibility.Hidden;
                 }
-                btnBack.IsEnabled = true;
+                else
+                    InstallInstructions.Visibility = Visibility.Visible;
 
+                btnBack.IsEnabled = true;
+                _hasRefreshed = true;
             }
             catch (Exception ex)
             {
@@ -407,17 +395,8 @@ namespace BizTalk_Benchmark_Wizard
             btnBack.IsEnabled = false;
             btnNext.IsEnabled = false;
 
-            //string sendHost = HostMappings.First(h => h.HostName.Contains("BBW_TxHost")).SelectedHost;
             _bizTalkHelper.UpdateSendPortUri("IndigoService", txtIndigoServiceServer.Text);
 
-            if(chbStopAllHosts.IsChecked==true)
-                _bizTalkHelper.StopAllHostInstances();
-
-            foreach (HostMaping hostMapping in HostMappings)
-            {
-                _bizTalkHelper.StartBizTalkHostsInstance(hostMapping.HostName, hostMapping.SelectedHost);
-            }
-            
             _testStartTime = DateTime.Now;
             _avgCpuValue = 0;
             _avgProcessedValue = 0;
@@ -501,17 +480,6 @@ namespace BizTalk_Benchmark_Wizard
         
         #endregion 
 
-        private void environments_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (environments.SelectedItems.Count == 1)
-                btnNext.IsEnabled = true;
-        }
-
-        private void environments_MouseUp(object sender, MouseButtonEventArgs e)
-        {
-            if (environments.SelectedItems.Count == 1)
-                btnNext.IsEnabled = true;
-        }
     }
     /// <summary>
     /// Used for presenting the test result
