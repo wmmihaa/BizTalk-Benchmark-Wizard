@@ -8,7 +8,7 @@
     <RetryInterval>10000</RetryInterval>
     <RetryNumber>1000</RetryNumber>
     <StopMode Mode="Time">
-      <TotalTime>20</TotalTime>
+      <TotalTime>600</TotalTime>
     </StopMode>
     <Transport Name="WCF">
       <Assembly>WcfTransport.dll/WcfTransport.WcfTransport</Assembly>

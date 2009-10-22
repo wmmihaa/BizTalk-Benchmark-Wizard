@@ -16,41 +16,40 @@ using System.Timers;
 using System.Windows.Threading;
 using System.Threading;
 using System.Diagnostics;
+using System.Globalization;
 
 namespace BizTalk_Benchmark_Wizard
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow : Window ,IDisposable
     {
         #region Constants
         const int TIMERTICKS = 5000;
         const int TESTRUNFORNUMBEROFMINUTES = 2;
         #endregion
         #region Private Members
-        bool _isLogedIn = false;
-        bool _hasRefreshed = false;
+        bool _hasRefreshed;
+        bool _isLogedIn;
         List<Scenario> _scenarios;
-        BizTalkHelper _bizTalkHelper = null;
-        PerflogHelper _perflogHelper = null;
-        LoadGenHelper _loadGenHelper = null;
-        System.Timers.Timer _timer = null;
+        BizTalkHelper _bizTalkHelper;
+        PerflogHelper _perflogHelper;
+        LoadGenHelper _loadGenHelper;
+        System.Timers.Timer _timer;
         DateTime _testStartTime;
-        long _avgCpuValue = 0;
-        long _avgProcessedValue = 0;
-        long _avgRreceivedValue = 0;
-        long _totalCpuValue = 0;
-        long _totalProcessedValue = 0;
-        long _totalRreceivedValue = 0;
-        long _timerCount = 0;
+        long _avgCpuValue;
+        long _avgProcessedValue;
+        long _avgRreceivedValue;
+        long _totalCpuValue;
+        long _totalProcessedValue;
+        long _totalRreceivedValue;
+        long _timerCount;
         
-        #endregion
-        #region Public Members
-        public IEnumerable<Environment> Environments;
-        public List<HostMaping> HostMappings;
-        public List<Result> Results = new List<Result>();
-        public int ProcessValue
+        IEnumerable<Environment> Environments;
+        List<HostMaping> HostMappings;
+        List<Result> Results = new List<Result>();
+        int ProcessValue
         {
             set
             {
@@ -69,7 +68,7 @@ namespace BizTalk_Benchmark_Wizard
             }
         }
         
-        public static readonly DependencyProperty ProcessValueProperty = DependencyProperty.Register(
+        static readonly DependencyProperty ProcessValueProperty = DependencyProperty.Register(
                                                                             "ProcessValue",
                                                                             typeof(int),
                                                                             typeof(MainWindow),
@@ -95,6 +94,7 @@ namespace BizTalk_Benchmark_Wizard
                     {
                         btnNext.IsEnabled = false;
                         PopupLogin.IsOpen = true;
+                        _isLogedIn = true;
                         return;
                     }
                    break;
@@ -194,7 +194,7 @@ namespace BizTalk_Benchmark_Wizard
             ScenarioDescription.Text = _scenarios.First(s => s.Name == item).Description;
             ScenarioName.Text = _scenarios.First(s => s.Name == item).Name;
 
-            if (item.StartsWith("Messaging"))
+            if (item.StartsWith("Messaging",StringComparison.CurrentCulture))
             {
                 ScenairoPicture1.Visibility = Visibility.Visible;
                 ScenairoPicture2.Visibility = Visibility.Hidden;
@@ -278,25 +278,25 @@ namespace BizTalk_Benchmark_Wizard
             // CPU
             Results.Add(new Result()
             {
-                CouterName = "Avg Processor time (BizTalk)",
-                TestValue = _avgCpuValue.ToString(),
-                KPI = "<" + environment.MaxExpectedCpuUtilizationBizTalk.ToString(),
+                CounterName = "Avg Processor time (BizTalk)",
+                TestValue = _avgCpuValue.ToString(CultureInfo.InvariantCulture),
+                Kpi = "<" + environment.MaxExpectedCpuUtilizationBizTalk.ToString(),
                 Status = cpuSuccess ? "Succeeded" : "Failed"
             });
             //Processed
             Results.Add(new Result()
             {
-                CouterName = "Avg Processed msgs / sec (*)",
-                TestValue = _avgProcessedValue.ToString(),
-                KPI = ">" + environment.MinExpectedDocsProcessed.ToString(),
+                CounterName = "Avg Processed msgs / sec (*)",
+                TestValue = _avgProcessedValue.ToString(CultureInfo.InvariantCulture),
+                Kpi = ">" + environment.MinExpectedDocsProcessed.ToString(),
                 Status = processedSuccess ? "Succeeded" : "Failed"
             });
             //Processed
             Results.Add(new Result()
             {
-                CouterName = "Avg Received msgs / sec (*)",
-                TestValue = _avgRreceivedValue.ToString(),
-                KPI = ">" + environment.MinExpectedDocsReceived.ToString(),
+                CounterName = "Avg Received msgs / sec (*)",
+                TestValue = _avgRreceivedValue.ToString(CultureInfo.InvariantCulture),
+                Kpi = ">" + environment.MinExpectedDocsReceived.ToString(),
                 Status = receivedSuccess ? "Succeeded" : "Failed"
             });
             ResultGrid.DataContext = Results;
@@ -390,7 +390,7 @@ namespace BizTalk_Benchmark_Wizard
         
         #endregion
         #region Run Tests
-        void PrepareTest() 
+        private void PrepareTest() 
         {
             btnBack.IsEnabled = false;
             btnNext.IsEnabled = false;
@@ -409,7 +409,7 @@ namespace BizTalk_Benchmark_Wizard
             Progress.DataContext = this;
             RunTest();
         }
-        void RunTest()
+        private void RunTest()
         {
             //_perflogHelper.StartCollectorSet();
             _loadGenHelper.RunTests((Environment)environments.SelectedItem, (List<HostMaping>)lstHosts.DataContext, _bizTalkHelper.GetApplicationServerNames());
@@ -419,8 +419,7 @@ namespace BizTalk_Benchmark_Wizard
             _timer_CollectData(null, null);
             _timer.Start();
         }
-
-        void _loadGenHelper_OnComplete(object sender, LoadGen.LoadGenStopEventArgs e)
+        private void _loadGenHelper_OnComplete(object sender, LoadGen.LoadGenStopEventArgs e)
         {
             //_perflogHelper.StopCollectorSet();
             this.Dispatcher.BeginInvoke(DispatcherPriority.ApplicationIdle, new Action(delegate() { tabControl1.SelectedIndex++; }));
@@ -428,8 +427,7 @@ namespace BizTalk_Benchmark_Wizard
             this.Dispatcher.BeginInvoke(DispatcherPriority.ApplicationIdle, new Action(delegate() { _timer.Stop(); }));
             //btnNext.IsEnabled = true;
         }
-
-        void _timer_CollectData(object sender, ElapsedEventArgs e)
+        private void _timer_CollectData(object sender, ElapsedEventArgs e)
         {
             _timer.Enabled = false;
             _timerCount++;
@@ -469,17 +467,30 @@ namespace BizTalk_Benchmark_Wizard
                     this.Dispatcher.BeginInvoke(DispatcherPriority.DataBind , new Action(delegate(){ ProcessValue = (int)percentCompleted; }));
                 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 
-                throw ex;
+                throw;
             }
 
             _timer.Enabled = true;
         }
-        
         #endregion 
 
+    
+        #region IDisposable Members
+        public void Dispose()
+        {
+            if (this._timer != null)
+                this._timer.Dispose();
+
+            if (this._bizTalkHelper != null)
+                this._bizTalkHelper.Dispose();
+
+            GC.SuppressFinalize(this);
+        }
+
+        #endregion
     }
     /// <summary>
     /// Used for presenting the test result
@@ -489,7 +500,7 @@ namespace BizTalk_Benchmark_Wizard
         /// <summary>
         /// Eg "Avg Processed msgs / sec (*)
         /// </summary>
-        public string CouterName { get; set; }
+        public string CounterName { get; set; }
         /// <summary>
         /// Test result
         /// </summary>
@@ -497,22 +508,12 @@ namespace BizTalk_Benchmark_Wizard
         /// <summary>
         /// Value collected from the Scenarios 
         /// </summary>
-        public string KPI { get; set; }
+        public string Kpi { get; set; }
         /// <summary>
         /// Sucess / Failed
         /// </summary>
         public string Status { get; set; }
     }
-    public class HostMaping
-    {
-        public string HostName { get; set; }
-        public string HostDescription { get; set; }
-        public string SelectedHost { get; set; }
-        public List<string> BizTalkServers = new List<string>();
-        public IEnumerable<string> Servers
-        {
-            get { return (IEnumerable<string>)BizTalkServers; }
-        }
-    }
+    
     
 }

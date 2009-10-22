@@ -16,18 +16,24 @@ namespace BizTalk_Benchmark_Wizard.Helper
 {
     internal class LoadGenHelper
     {
+        #region Delegats and events
         public delegate void CompleteHandler(object sender, LoadGenStopEventArgs e);
         public event CompleteHandler OnComplete;
+        #endregion
+        #region Public members
         public double TestDuration = 120;
         public List<PerfCounter> PerfCounters = new List<PerfCounter>();
+        #endregion
+        #region Privare members
         List<LoadGen.LoadGen> _loadGenClients = new List<LoadGen.LoadGen>();
         int _numberOfLoadGenStopped = 0;
         int _numberOfLoadGenClients = 0;
         List<LoadGenStopEventArgs> _allLoadGenStopEventArgs = new List<LoadGenStopEventArgs>();
-        
+        #endregion
+        #region Public methods and constructor
         public LoadGenHelper()
         {
-            
+
         }
         
         public void RunTests(Environment environment, List<HostMaping> hostmappings, List<string> servers)
@@ -59,7 +65,7 @@ namespace BizTalk_Benchmark_Wizard.Helper
 
             string rcvHost = hostmappings.First(h => h.HostName == "BBW_RxHost").SelectedHost;
 
-            _loadGenClients.Add(CreateAndStartLoadGenClient(CreateLoadGenScript(environment.LoadGenScripfile, rcvHost), rcvHost));
+            _loadGenClients.Add(CreateAndStartLoadGenClient(CreateLoadGenScript(environment.LoadGenScriptFile, rcvHost), rcvHost));
         }
         public void StopAllTests()
         {
@@ -95,13 +101,14 @@ namespace BizTalk_Benchmark_Wizard.Helper
                     proxy.ConsumeMessage(request);
                 }
             }
-            catch(Exception ex)
+            catch(Exception)
             {
                 return false;
             }
             return true;
         }
-        
+        #endregion
+        #region Private methods
         private string CreateLoadGenScript(string template, string server)
         {
             string rootPath = Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location), "Resources\\LoadGenScripts");
@@ -146,11 +153,11 @@ namespace BizTalk_Benchmark_Wizard.Helper
                 loadGen.LoadGenStopped += new LoadGenEventHandler(LoadGen_Stopped);
                 loadGen.Start();
             }
-            catch (ConfigException cex)
+            catch (ConfigException)
             {
                 throw;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 throw;
             }
@@ -205,7 +212,7 @@ namespace BizTalk_Benchmark_Wizard.Helper
                     LoadGenStopEventArgs ea = new LoadGenStopEventArgs(numberOfMsgsSent, startTime, stopTime);
                     RaiseCompleteEvent(sender, ea);
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     RaiseCompleteEvent(this, new LoadGenStopEventArgs(1, DateTime.Now, DateTime.Now));
                 }
@@ -244,10 +251,11 @@ namespace BizTalk_Benchmark_Wizard.Helper
                 throw new ApplicationException(string.Format("Could not find {0} endpoint configuration section", endpointName));
             }
         }
-        
-
-
+        #endregion
     }
+    /// <summary>
+    /// Used for collecting counter data
+    /// </summary>
     public class PerfCounter
     {
         public bool HasProcessingCounter = false;
@@ -262,8 +270,15 @@ namespace BizTalk_Benchmark_Wizard.Helper
             get 
             {
                 float ret = 1;
-                foreach (PerformanceCounter c in this.ProcessedCounters)
-                    ret += c.NextValue();
+                try
+                {
+                    foreach (PerformanceCounter c in this.ProcessedCounters)
+                        ret += c.NextValue();
+                }
+                catch (Exception ex)
+                {
+                    throw new ApplicationException("Unable to collect perfcounter. Make sure you run the application with elevated rights",ex);
+                }
                 return ret;
             }
         }
@@ -272,8 +287,15 @@ namespace BizTalk_Benchmark_Wizard.Helper
             get
             {
                 float ret = 1;
-                foreach (PerformanceCounter c in this.ReceivedCounters)
-                    ret += c.NextValue();
+                try
+                {
+                    foreach (PerformanceCounter c in this.ReceivedCounters)
+                        ret += c.NextValue();
+                }
+                catch (Exception ex)
+                {
+                    throw new ApplicationException("Unable to collect perfcounter. Make sure you run the application with elevated rights",ex);
+                }
                 return ret;
             }
         }
@@ -282,8 +304,15 @@ namespace BizTalk_Benchmark_Wizard.Helper
             get
             {
                 float ret = 1;
-                foreach (PerformanceCounter c in this.CPUCounters)
-                    ret += c.NextValue();
+                try
+                {
+                    foreach (PerformanceCounter c in this.CPUCounters)
+                        ret += c.NextValue();
+                }
+                catch (Exception ex)
+                {
+                    throw new ApplicationException("Unable to collect perfcounter. Make sure you run the application with elevated rights", ex);
+                }
                 return ret;
             }
         }

@@ -13,7 +13,7 @@ using System.Configuration;
 
 namespace BizTalk_Benchmark_Wizard.Helper
 {
-    internal class BizTalkHelper
+    internal class BizTalkHelper : IDisposable  
     {
         #region Constants
         const string CONNECTIONSTRINGFORMAT = "Integrated Security=SSPI;database={0};server={1}";
@@ -32,9 +32,9 @@ namespace BizTalk_Benchmark_Wizard.Helper
         #endregion
         #region Private Members
         private BtsCatalogExplorer _explorer = new BtsCatalogExplorer();
-        private string _server = null;
-        private string _database = null;
-        private string _btsAdmGroup = null;
+        private string _server;
+        private string _database;
+        private string _btsAdmGroup;
         private string _mainBizTalkServer = string.Empty; //Used for WMI
         #endregion
         #region Private Methods
@@ -56,22 +56,22 @@ namespace BizTalk_Benchmark_Wizard.Helper
                         if (!string.IsNullOrEmpty(reader["TrackingDBServerName"].ToString()))
                         {
                             bizTalkDBs.TrackingDBServerName = reader["TrackingDBServerName"].ToString();
-                            bizTalkDBs.TrackingDBServerName_ComputerName = GetComputerName(bizTalkDBs.TrackingDBServerName);
+                            bizTalkDBs.TrackingDBServerNameComputerName = GetComputerName(bizTalkDBs.TrackingDBServerName);
                         }
                         if (!string.IsNullOrEmpty(reader["SubscriptionDBServerName"].ToString()))
                         {
                             bizTalkDBs.SubscriptionDBServerName = reader["SubscriptionDBServerName"].ToString();
-                            bizTalkDBs.SubscriptionDBServerName_ComputerName = GetComputerName(bizTalkDBs.SubscriptionDBServerName);
+                            bizTalkDBs.SubscriptionDBServerNameComputerName = GetComputerName(bizTalkDBs.SubscriptionDBServerName);
                         }
                         if (!string.IsNullOrEmpty(reader["BamDBServerName"].ToString()))
                         {
                             bizTalkDBs.BamDBServerName = reader["BamDBServerName"].ToString();
-                            bizTalkDBs.BamDBServerName_ComputerName = GetComputerName(bizTalkDBs.BamDBServerName);
+                            bizTalkDBs.BamDBServerNameComputerName = GetComputerName(bizTalkDBs.BamDBServerName);
                         }
                         if (!string.IsNullOrEmpty(reader["RuleEngineDBServerName"].ToString()))
                         {
                             bizTalkDBs.RuleEngineDBServerName = reader["RuleEngineDBServerName"].ToString();
-                            bizTalkDBs.RuleEngineDBServerName_ComputerName = GetComputerName(bizTalkDBs.RuleEngineDBServerName);
+                            bizTalkDBs.RuleEngineDBServerNameComputerName = GetComputerName(bizTalkDBs.RuleEngineDBServerName);
                         }
                         if (!string.IsNullOrEmpty(reader["BizTalkAdminGroup"].ToString()))
                         {
@@ -168,7 +168,315 @@ namespace BizTalk_Benchmark_Wizard.Helper
         }
         private enum HandlerType { Receive, Send }
         private enum HostType { InProcess = 1, Isolated = 2 }
-        private void CreateHost(string serverName, string hostName, HostType hostType, string ntGroupName, bool authTrusted, bool HostTracking, bool isHost32BitOnly)
+        #endregion
+        #region public Methods
+        /// <summary>
+        /// Queries the management database for all servers
+        /// </summary>
+        /// <param name="server"></param>
+        /// <param name="mgmtDatabase"></param>
+        /// <returns></returns>
+        public List<Server> GetServers(string server, string mgmtDatabase)
+        {
+            List<Server> servers = new List<Server>();
+            BizTalkDBs bizTalkDBs = GetSqlServerNames();
+            this._btsAdmGroup = bizTalkDBs.BizTalkAdminGroup;
+
+            servers.Add(new Server() { Name = bizTalkDBs.BamDBServerNameComputerName, Type = ServerType.SQL });
+
+            if (servers.Count(s => s.Name == bizTalkDBs.RuleEngineDBServerNameComputerName) == 0)
+                servers.Add(new Server() { Name = bizTalkDBs.RuleEngineDBServerNameComputerName, Type = ServerType.SQL });
+
+            if (servers.Count(s => s.Name == bizTalkDBs.SubscriptionDBServerNameComputerName) == 0)
+                servers.Add(new Server() { Name = bizTalkDBs.SubscriptionDBServerNameComputerName, Type = ServerType.SQL });
+
+            if (servers.Count(s => s.Name == bizTalkDBs.TrackingDBServerNameComputerName) == 0)
+                servers.Add(new Server() { Name = bizTalkDBs.TrackingDBServerNameComputerName, Type = ServerType.SQL });
+
+            
+            foreach (string btsServer in GetApplicationServerNames())
+            {
+                if (servers.Count(s => s.Name == btsServer && s.Type == ServerType.BIZTALK) == 0)
+                    servers.Add(new Server() { Name = btsServer, Type = ServerType.BIZTALK });
+            }
+
+            return servers;
+        }
+        /// <summary>
+        /// Returns all Host to Server mappings
+        /// </summary>
+        /// <returns></returns>
+        public List<HostMaping> GetHostMappings()
+        {
+            List<HostMaping> hostMappings = new List<HostMaping>();
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(string.Format(CONNECTIONSTRINGFORMAT, _database, _server)))
+                {
+                    connection.Open();
+
+                    SqlCommand command = new SqlCommand(ConfigurationManager.AppSettings["GetHostMappings"], connection);
+
+                    SqlDataReader reader = command.ExecuteReader();
+
+                    while (reader.Read())
+                    {
+                        if (hostMappings.Exists(h => h.HostName == reader["Host"].ToString()))
+                            hostMappings.First(h => h.HostName == reader["Host"].ToString()).BizTalkServers.Add(reader["Server"].ToString());
+                        else
+                        {
+                            HostMaping h = new HostMaping() { HostName = reader["Host"].ToString(), SelectedHost = reader["Server"].ToString() };
+                            h.BizTalkServers.Add(reader["Server"].ToString());
+                            switch (reader["Host"].ToString())
+                            { 
+                                case "BBW_RxHost":
+                                    h.HostDescription = "Receive host (BBW_RxHost)";
+                                    break;
+                                case "BBW_TxHost":
+                                    h.HostDescription = "Send host (BBW_TxHost)";
+                                    break;
+                                case "BBW_PxHost":
+                                    h.HostDescription = "Processing host (BBW_PxHost)";
+                                    break;
+                            }
+                            hostMappings.Add(h);
+                        }
+                    }
+                    connection.Close();
+                }
+                return hostMappings;
+            }
+            catch (Exception ex)
+            {
+                throw new ApplicationException("Unable to get Host mappings", ex);
+            }
+        }
+        /// <summary>
+        /// Checks if the "BizTalk Benchmark Wizard" application is installed, using ExplorerOM
+        /// </summary>
+        public bool IsBizTalkScenariosInstalled
+        {
+            get
+            {
+                try
+                {
+                    _explorer.ConnectionString = string.Format(ConfigurationManager.ConnectionStrings["BizTalkMgmtDatabase"].ConnectionString, this._server, this._database);
+                    string s = _explorer.Applications[BIZTALKAPPLICATIONNAME].Name;
+                }
+                catch { return false; }
+                return true;
+            }
+        }
+        /// <summary>
+        /// Returns a list of application servers
+        /// </summary>
+        /// <returns></returns>
+        public List<string> GetApplicationServerNames()
+        {
+            List<string> applicationServers = new List<string>();
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(string.Format(CONNECTIONSTRINGFORMAT, _database, _server)))
+                {
+                    connection.Open();
+                    SqlCommand command = new SqlCommand(ConfigurationManager.AppSettings["GetBizTalkServersQuery"], connection);
+
+                    SqlDataReader reader = command.ExecuteReader();
+
+                    while (reader.Read())
+                    {
+                        if (!string.IsNullOrEmpty(reader["Name"].ToString()))
+                        {
+                            if (!applicationServers.Contains(reader["Name"].ToString()))
+                                applicationServers.Add(reader["Name"].ToString());
+                        }
+                    }
+                    reader.Close();
+                }
+
+                ////Create EnumerationOptions and run wql query
+                //EnumerationOptions enumOptions = new EnumerationOptions();
+                //enumOptions.ReturnImmediately = false;
+
+                ////Search for all HostInstances of 'InProcess' type in the Biztalk namespace scope
+                //ManagementObjectSearcher searchObject =
+                //    new ManagementObjectSearcher(string.Format(BIZTALKSCOPE, serverName), "Select * from MSBTS_ServerHost", enumOptions);
+
+                ////Enumerate through the result set and start each HostInstance if it is already stopped
+                //foreach (ManagementObject inst in searchObject.Get())
+                //{
+                //    string serverName = inst["servername"] as string;
+                //    if (!applicationServers.Contains(serverName))
+                //        applicationServers.Add(serverName);
+                //}
+                if (applicationServers.Count == 0)
+                    throw new ApplicationException("No BizTalk Servers found");
+
+                _mainBizTalkServer = applicationServers[0];
+                return applicationServers;
+            }
+            catch (Exception ex)
+            {
+                throw new ApplicationException("Unable to find running hosts", ex);
+            }
+        }
+        public void UpdateSendPortUri(string portName, string sendHost)
+        {
+            try
+            {
+                string sendPortAddress = _explorer.SendPorts[portName].PrimaryTransport.Address;
+                Uri oldAddress = new Uri(sendPortAddress);
+                Uri newAddress = new Uri(string.Format("{0}://{1}:{2}{3}",
+                            oldAddress.Scheme,
+                            sendHost,
+                            oldAddress.Port.ToString(),
+                            oldAddress.AbsolutePath));
+                
+                _explorer.SendPorts[portName].PrimaryTransport.Address = newAddress.ToString();
+                _explorer.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                throw new ApplicationException("Unable to update the Uri of the IndigoService send port", ex);
+            }
+
+        }
+        #endregion
+
+        #region IDisposable Members
+
+        public void Dispose()
+        {
+            if (this._explorer != null)
+                _explorer.Dispose();
+            GC.SuppressFinalize(this);
+        }
+
+        #endregion
+    }
+    public enum ServerType{BIZTALK, SQL};
+    public class Server
+    {
+        public string Name{get;set;}
+        public ServerType Type {get;set;}
+    }
+    public class BizTalkDBs
+    {
+        public string BizTalkAdminGroup { get; set; }
+        public string Default { get; set; }
+        public string DefaultComputerName { get; set; }
+        public string TrackingDBServerName { get; set; }
+        public string TrackingDBServerNameComputerName { get; set; }
+        public string SubscriptionDBServerName { get; set; }
+        public string SubscriptionDBServerNameComputerName { get; set; }
+        public string BamDBServerName { get; set; }
+        public string BamDBServerNameComputerName { get; set; }
+        public string RuleEngineDBServerName { get; set; }
+        public string RuleEngineDBServerNameComputerName { get; set; }
+    }
+    public class HostMaping
+    {
+        public string HostName { get; set; }
+        public string HostDescription { get; set; }
+        public string SelectedHost { get; set; }
+        public List<string> BizTalkServers = new List<string>();
+        public IEnumerable<string> Servers
+        {
+            get { return (IEnumerable<string>)BizTalkServers; }
+        }
+    }
+
+}
+
+
+#region OLD WM Stuff
+/*
+ * public void StartBizTalkHostsInstance(string hostName, string serverName)
+        {
+            return; //Can't be done
+            try
+            {
+                //Create EnumerationOptions and run wql query
+                EnumerationOptions enumOptions = new EnumerationOptions();
+                enumOptions.ReturnImmediately = false;
+                //Search for all HostInstances of 'InProcess' type in the Biztalk namespace scope
+                ManagementObjectSearcher searchObject =
+                    new ManagementObjectSearcher(string.Format(BIZTALKSCOPE, serverName), 
+                        string.Format("Select * from MSBTS_HostInstance where HostType=1 and HostName='{0}' and RunningServer='{1}'",hostName,serverName), enumOptions);
+
+                //Enumerate through the result set and start each HostInstance if it is already stopped
+                foreach (ManagementObject inst in searchObject.Get())
+                {
+                    inst.InvokeMethod("Start", null);
+                }
+
+                return;
+            }
+            catch (Exception excep)
+            {
+                throw new ApplicationException(string.Format("Failed while start Host{0} at {1}.",hostName, serverName) + excep.Message);
+            }
+        }
+        public void StopAllHostInstances()
+        {
+            return; //Can't be done
+            try
+            {
+                //Create EnumerationOptions and run wql query
+                EnumerationOptions enumOptions = new EnumerationOptions();
+                enumOptions.ReturnImmediately = false;
+                //Search for all HostInstances of 'InProcess' type in the Biztalk namespace scope
+                ManagementObjectSearcher searchObject = new ManagementObjectSearcher(string.Format(BIZTALKSCOPE, _mainBizTalkServer), "Select * from MSBTS_HostInstance where HostType=1", enumOptions);
+
+                //Enumerate through the result set and start each HostInstance if it is already stopped
+                foreach (ManagementObject inst in searchObject.Get())
+                {
+                    //Check if ServiceState is 'Stopped'
+                    if (inst["ServiceState"].ToString() == "4")
+                    {
+                        inst.InvokeMethod("Stop", null);
+                    }
+                }
+
+                return;
+            }
+            catch (Exception excep)
+            {
+                throw new ApplicationException("Failure while stopping HostInstances - ", excep);
+            }
+
+        }
+        
+ /// <summary>
+        /// Creates all hosts, instances and handlers
+        /// Not used anymore
+        /// </summary>
+        /// <param name="servername"></param>
+        /// <param name="username"></param>
+        /// <param name="password"></param>
+        public void CreateBizTalkHosts(string servername, string windowsGroup, string username, string password)
+        {
+            //this.StopAllHostInstances();
+
+            string hostName = "BBW_RxHost";
+            this.UnInstallAndUnMap(hostName, servername);
+            this.CreateHost(servername, hostName, HostType.InProcess, windowsGroup, false, false, false);
+            this.CreateHostInstance(hostName, servername, username, password);
+            this.CreateHandler(hostName, servername, "WCF-NetTcp", HandlerType.Receive);
+            
+            hostName = "BBW_TxHost";
+            this.UnInstallAndUnMap(hostName, servername);
+            this.CreateHost(servername, hostName, HostType.InProcess, windowsGroup, false, false, false);
+            this.CreateHostInstance(hostName, servername, username, password);
+            this.CreateHandler(hostName, servername, "WCF-NetTcp", HandlerType.Send);
+            
+            hostName = "BBW_PxHost";
+            this.UnInstallAndUnMap(hostName, servername);
+            this.CreateHost(servername, hostName, HostType.InProcess, windowsGroup, false, true, false);
+            this.CreateHostInstance(hostName, servername, username, password);
+            
+        }
+private void CreateHost(string serverName, string hostName, HostType hostType, string ntGroupName, bool authTrusted, bool HostTracking, bool isHost32BitOnly)
         {
             try
             {
@@ -407,300 +715,6 @@ namespace BizTalk_Benchmark_Wizard.Helper
                 bool ret = enumerator.MoveNext();
                 return ret;
         }
-        #endregion
-        #region public Methods
-        /// <summary>
-        /// Queries the management database for all servers
-        /// </summary>
-        /// <param name="server"></param>
-        /// <param name="mgmtDatabase"></param>
-        /// <returns></returns>
-        public List<Server> GetServers(string server, string mgmtDatabase)
-        {
-            List<Server> servers = new List<Server>();
-            BizTalkDBs bizTalkDBs = GetSqlServerNames();
-            this._btsAdmGroup = bizTalkDBs.BizTalkAdminGroup;
-
-            servers.Add(new Server() { Name = bizTalkDBs.BamDBServerName_ComputerName, Type = ServerType.SQL });
-
-            if (servers.Count(s => s.Name == bizTalkDBs.RuleEngineDBServerName_ComputerName) == 0)
-                servers.Add(new Server() { Name = bizTalkDBs.RuleEngineDBServerName_ComputerName, Type = ServerType.SQL });
-
-            if (servers.Count(s => s.Name == bizTalkDBs.SubscriptionDBServerName_ComputerName) == 0)
-                servers.Add(new Server() { Name = bizTalkDBs.SubscriptionDBServerName_ComputerName, Type = ServerType.SQL });
-
-            if (servers.Count(s => s.Name == bizTalkDBs.TrackingDBServerName_ComputerName) == 0)
-                servers.Add(new Server() { Name = bizTalkDBs.TrackingDBServerName_ComputerName, Type = ServerType.SQL });
-
-            
-            foreach (string btsServer in GetApplicationServerNames())
-            {
-                if (servers.Count(s => s.Name == btsServer && s.Type == ServerType.BIZTALK) == 0)
-                    servers.Add(new Server() { Name = btsServer, Type = ServerType.BIZTALK });
-            }
-
-            return servers;
-        }
-        /// <summary>
-        /// Returns all Host to Server mappings
-        /// </summary>
-        /// <returns></returns>
-        public List<HostMaping> GetHostMappings()
-        {
-            List<HostMaping> hostMappings = new List<HostMaping>();
-            try
-            {
-                using (SqlConnection connection = new SqlConnection(string.Format(CONNECTIONSTRINGFORMAT, _database, _server)))
-                {
-                    connection.Open();
-
-                    SqlCommand command = new SqlCommand(ConfigurationManager.AppSettings["GetHostMappings"], connection);
-
-                    SqlDataReader reader = command.ExecuteReader();
-
-                    while (reader.Read())
-                    {
-                        if (hostMappings.Exists(h => h.HostName == reader["Host"].ToString()))
-                            hostMappings.First(h => h.HostName == reader["Host"].ToString()).BizTalkServers.Add(reader["Server"].ToString());
-                        else
-                        {
-                            HostMaping h = new HostMaping() { HostName = reader["Host"].ToString(), SelectedHost = reader["Server"].ToString() };
-                            h.BizTalkServers.Add(reader["Server"].ToString());
-                            switch (reader["Host"].ToString())
-                            { 
-                                case "BBW_RxHost":
-                                    h.HostDescription = "Receive host (BBW_RxHost)";
-                                    break;
-                                case "BBW_TxHost":
-                                    h.HostDescription = "Send host (BBW_TxHost)";
-                                    break;
-                                case "BBW_PxHost":
-                                    h.HostDescription = "Processing host (BBW_PxHost)";
-                                    break;
-                            }
-                            hostMappings.Add(h);
-                        }
-                    }
-                    connection.Close();
-                }
-                return hostMappings;
-            }
-            catch (Exception ex)
-            {
-                throw new ApplicationException("Unable to get Host mappings", ex);
-            }
-        }
-        /// <summary>
-        /// Checks if the "BizTalk Benchmark Wizard" application is installed, using ExplorerOM
-        /// </summary>
-        public bool IsBizTalkScenariosInstalled
-        {
-            get
-            {
-                try
-                {
-                    _explorer.ConnectionString = string.Format(ConfigurationManager.ConnectionStrings["BizTalkMgmtDatabase"].ConnectionString, this._server, this._database);
-                    string s = _explorer.Applications[BIZTALKAPPLICATIONNAME].Name;
-                }
-                catch { return false; }
-                return true;
-            }
-        }
-        /// <summary>
-        /// Checks if all Hosts, instances and handlers are installed
-        /// </summary>
-        public bool IsBizTalkHostsInstalled
-        {
-            get
-            {
-                //bool RxExist = BizTalkHostsInstalled(RECEIVEHOST, _mainBizTalkServer);
-                //bool TxExist = BizTalkHostsInstalled(TRANSMITHOST, _mainBizTalkServer);
-                //bool PxExist = BizTalkHostsInstalled(PROCESSINGHOST, _mainBizTalkServer);
-                //if (!RxExist || !TxExist || !PxExist)
-                //    return false;
-
-                return true;
-            }
-        }
-        /// <summary>
-        /// Creates all hosts, instances and handlers
-        /// </summary>
-        /// <param name="servername"></param>
-        /// <param name="username"></param>
-        /// <param name="password"></param>
-        public void CreateBizTalkHosts(string servername, string windowsGroup, string username, string password)
-        {
-            //this.StopAllHostInstances();
-
-            string hostName = "BBW_RxHost";
-            this.UnInstallAndUnMap(hostName, servername);
-            this.CreateHost(servername, hostName, HostType.InProcess, windowsGroup, false, false, false);
-            this.CreateHostInstance(hostName, servername, username, password);
-            this.CreateHandler(hostName, servername, "WCF-NetTcp", HandlerType.Receive);
-            
-            hostName = "BBW_TxHost";
-            this.UnInstallAndUnMap(hostName, servername);
-            this.CreateHost(servername, hostName, HostType.InProcess, windowsGroup, false, false, false);
-            this.CreateHostInstance(hostName, servername, username, password);
-            this.CreateHandler(hostName, servername, "WCF-NetTcp", HandlerType.Send);
-            
-            hostName = "BBW_PxHost";
-            this.UnInstallAndUnMap(hostName, servername);
-            this.CreateHost(servername, hostName, HostType.InProcess, windowsGroup, false, true, false);
-            this.CreateHostInstance(hostName, servername, username, password);
-            
-        }
-        /// <summary>
-        /// Returns a list of application servers
-        /// </summary>
-        /// <returns></returns>
-        public List<string> GetApplicationServerNames()
-        {
-            List<string> applicationServers = new List<string>();
-            try
-            {
-                using (SqlConnection connection = new SqlConnection(string.Format(CONNECTIONSTRINGFORMAT, _database, _server)))
-                {
-                    connection.Open();
-                    SqlCommand command = new SqlCommand(ConfigurationManager.AppSettings["GetBizTalkServersQuery"], connection);
-
-                    SqlDataReader reader = command.ExecuteReader();
-
-                    while (reader.Read())
-                    {
-                        if (!string.IsNullOrEmpty(reader["Name"].ToString()))
-                        {
-                            if (!applicationServers.Contains(reader["Name"].ToString()))
-                                applicationServers.Add(reader["Name"].ToString());
-                        }
-                    }
-                    reader.Close();
-                }
-
-                ////Create EnumerationOptions and run wql query
-                //EnumerationOptions enumOptions = new EnumerationOptions();
-                //enumOptions.ReturnImmediately = false;
-
-                ////Search for all HostInstances of 'InProcess' type in the Biztalk namespace scope
-                //ManagementObjectSearcher searchObject =
-                //    new ManagementObjectSearcher(string.Format(BIZTALKSCOPE, serverName), "Select * from MSBTS_ServerHost", enumOptions);
-
-                ////Enumerate through the result set and start each HostInstance if it is already stopped
-                //foreach (ManagementObject inst in searchObject.Get())
-                //{
-                //    string serverName = inst["servername"] as string;
-                //    if (!applicationServers.Contains(serverName))
-                //        applicationServers.Add(serverName);
-                //}
-                if (applicationServers.Count == 0)
-                    throw new ApplicationException("No BizTalk Servers found");
-
-                _mainBizTalkServer = applicationServers[0];
-                return applicationServers;
-            }
-            catch (Exception ex)
-            {
-                throw new ApplicationException("Unable to find running hosts", ex);
-            }
-        }
-        public void UpdateSendPortUri(string portName, string sendHost)
-        {
-            try
-            {
-                string sendPortAddress = _explorer.SendPorts[portName].PrimaryTransport.Address;
-                Uri oldAddress = new Uri(sendPortAddress);
-                Uri newAddress = new Uri(string.Format("{0}://{1}:{2}{3}",
-                            oldAddress.Scheme,
-                            sendHost,
-                            oldAddress.Port.ToString(),
-                            oldAddress.AbsolutePath));
-                
-                _explorer.SendPorts[portName].PrimaryTransport.Address = newAddress.ToString();
-                _explorer.SaveChanges();
-            }
-            catch (Exception ex)
-            {
-                throw new ApplicationException("Unable to update the Uri of the IndigoService send port", ex);
-            }
-
-        }
-        public void StartBizTalkHostsInstance(string hostName, string serverName)
-        {
-            return; //Can't be done
-            try
-            {
-                //Create EnumerationOptions and run wql query
-                EnumerationOptions enumOptions = new EnumerationOptions();
-                enumOptions.ReturnImmediately = false;
-                //Search for all HostInstances of 'InProcess' type in the Biztalk namespace scope
-                ManagementObjectSearcher searchObject =
-                    new ManagementObjectSearcher(string.Format(BIZTALKSCOPE, serverName), 
-                        string.Format("Select * from MSBTS_HostInstance where HostType=1 and HostName='{0}' and RunningServer='{1}'",hostName,serverName), enumOptions);
-
-                //Enumerate through the result set and start each HostInstance if it is already stopped
-                foreach (ManagementObject inst in searchObject.Get())
-                {
-                    inst.InvokeMethod("Start", null);
-                }
-
-                return;
-            }
-            catch (Exception excep)
-            {
-                throw new ApplicationException(string.Format("Failed while start Host{0} at {1}.",hostName, serverName) + excep.Message);
-            }
-        }
-        public void StopAllHostInstances()
-        {
-            return; //Can't be done
-            try
-            {
-                //Create EnumerationOptions and run wql query
-                EnumerationOptions enumOptions = new EnumerationOptions();
-                enumOptions.ReturnImmediately = false;
-                //Search for all HostInstances of 'InProcess' type in the Biztalk namespace scope
-                ManagementObjectSearcher searchObject = new ManagementObjectSearcher(string.Format(BIZTALKSCOPE, _mainBizTalkServer), "Select * from MSBTS_HostInstance where HostType=1", enumOptions);
-
-                //Enumerate through the result set and start each HostInstance if it is already stopped
-                foreach (ManagementObject inst in searchObject.Get())
-                {
-                    //Check if ServiceState is 'Stopped'
-                    if (inst["ServiceState"].ToString() == "4")
-                    {
-                        inst.InvokeMethod("Stop", null);
-                    }
-                }
-
-                return;
-            }
-            catch (Exception excep)
-            {
-                throw new ApplicationException("Failure while stopping HostInstances - ", excep);
-            }
-
-        }
-        #endregion
-    }
-    public enum ServerType{BIZTALK, SQL};
-    public class Server
-    {
-        public string Name{get;set;}
-        public ServerType Type {get;set;}
-    }
-    public class BizTalkDBs
-    {
-        public string BizTalkAdminGroup { get; set; }
-        public string Default { get; set; }
-        public string Default_ComputerName { get; set; }
-        public string TrackingDBServerName { get; set; }
-        public string TrackingDBServerName_ComputerName { get; set; }
-        public string SubscriptionDBServerName { get; set; }
-        public string SubscriptionDBServerName_ComputerName { get; set; }
-        public string BamDBServerName { get; set; }
-        public string BamDBServerName_ComputerName { get; set; }
-        public string RuleEngineDBServerName { get; set; }
-        public string RuleEngineDBServerName_ComputerName { get; set; }
-    }
-
-
-}
+         
+*/
+#endregion

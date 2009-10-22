@@ -45,10 +45,10 @@
         <BizTalkServerConfiguration>1*CPU, 4GB RAM</BizTalkServerConfiguration>
         <NuberOfActiveSQLServers>1</NuberOfActiveSQLServers>
         <SQLServerConfiguration>1*CPU, 4GB RAM</SQLServerConfiguration>
-        <MaxExpectedCpuUtilizationBizTalk>70</MaxExpectedCpuUtilizationBizTalk>
+        <MaxExpectedCpuUtilizationBizTalk>80</MaxExpectedCpuUtilizationBizTalk>
         <MaxExpectedCpuUtilizationSql>40</MaxExpectedCpuUtilizationSql>
-        <MinExpectedDocsProcessed>2000</MinExpectedDocsProcessed>
-        <MinExpectedDocsReceived>2000</MinExpectedDocsReceived>
+        <MinExpectedDocsProcessed>150</MinExpectedDocsProcessed>
+        <MinExpectedDocsReceived>100</MinExpectedDocsReceived>
       </Environment>
     </Environments>
   </Scenario>

@@ -54,7 +54,7 @@ namespace BizTalk_Benchmark_Wizard.Helper
                     else
                         CreateDataCollectorSetForServer(server.Name, Path.Combine(basePath, @"Resources\Collector Set Templates\SQL Server.xml"));
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
 
                 }

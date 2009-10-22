@@ -14,6 +14,10 @@ namespace BizTalk_Benchmark_Wizard
     /// </summary>
     internal class ScenariosFactory
     {
+        public ScenariosFactory()
+        {
+
+        }
         /// <summary>
         /// Loads the Scenarios.xml file and returns the scenarios.
         /// </summary>
@@ -33,7 +37,7 @@ namespace BizTalk_Benchmark_Wizard
                 XmlReader reader = XmlReader.Create(filePath);
                 return (List<Scenario>)ser.Deserialize(reader);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
 
                 throw;
@@ -74,11 +78,11 @@ namespace BizTalk_Benchmark_Wizard
         /// <summary>
         /// The file path to the script file
         /// </summary>
-        public string LoadGenScripfile { get; set; }
+        public string LoadGenScriptFile { get; set; }
         /// <summary>
         /// Number of BizTalk Servrs
         /// </summary>
-        public int NuberOfActiveBizTalkServers { get; set; }
+        public int NumberOfActiveBizTalkServers { get; set; }
         /// <summary>
         /// BizTalk Server Configuration. Eg. 1*CPU, 4GB RAM
         /// </summary>
@@ -86,11 +90,11 @@ namespace BizTalk_Benchmark_Wizard
         /// <summary>
         /// Nuber Of Active SQLServers
         /// </summary>
-        public int NuberOfActiveSQLServers { get; set; }
+        public int NumberOfActiveSqlServers { get; set; }
         /// <summary>
         /// SQL Server Configuration. Eg. 1*CPU, 4GB RAM
         /// </summary>
-        public string SQLServerConfiguration { get; set; }
+        public string SqlServerConfiguration { get; set; }
         /// <summary>
         /// Maximum Expected Cpu Utilization BizTalk
         /// </summary>
