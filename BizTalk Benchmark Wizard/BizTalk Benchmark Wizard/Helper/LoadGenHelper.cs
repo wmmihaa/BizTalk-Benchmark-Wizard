@@ -48,6 +48,7 @@ namespace BizTalk_Benchmark_Wizard.Helper
                     switch (hostMapping.HostName)
                     {
                         case "BBW_RxHost":
+                            UpdateServiceAddress(server, "ClientEndPoint1");
                             perfCounter.ReceivedCounters.Add(new PerformanceCounter("BizTalk:Messaging", "Documents received/Sec", "BBW_RxHost", server));
                             perfCounter.HasReceiveCounter = true;
                             break;
@@ -137,8 +138,6 @@ namespace BizTalk_Benchmark_Wizard.Helper
             LoadGen.LoadGen loadGen = null;
             try
             {
-                UpdateServiceAddress(server, "ClientEndPoint1");
-
                 XmlDocument doc = new XmlDocument();
                 doc.Load(scriptFile);
                 TestDuration = long.Parse( doc.SelectSingleNode("LoadGenFramework/CommonSection/StopMode/TotalTime").InnerText);
@@ -190,19 +189,11 @@ namespace BizTalk_Benchmark_Wizard.Helper
         }
         private void LoadGen_Stopped(object sender, LoadGenStopEventArgs e)
         {
-            //TimeSpan span1 = e.LoadGenStopTime.Subtract(e.LoadGenStartTime);
-            //this._ctx.LogInfo("FilesSent: " + e.NumFilesSent);
-            //this._ctx.LogInfo("StartTime: " + e.LoadGenStartTime);
-            //this._ctx.LogInfo("StopTime:  " + e.LoadGenStopTime);
-            //this._ctx.LogInfo("DeltaTime: " + span1.TotalSeconds + "Secs.");
-            //this._ctx.LogInfo("Rate:      " + ((e.NumFilesSent) / span1.TotalSeconds));
-
-            //bExitApp = true;
             _allLoadGenStopEventArgs.Add(e);
             _numberOfLoadGenStopped++;
         
-            if (_numberOfLoadGenClients == _numberOfLoadGenStopped)
-            {
+            //if (_numberOfLoadGenClients == _numberOfLoadGenStopped)
+            //{
                 try
                 {
                     long numberOfMsgsSent = _allLoadGenStopEventArgs.Sum(l => l.NumFilesSent);
@@ -216,7 +207,7 @@ namespace BizTalk_Benchmark_Wizard.Helper
                 {
                     RaiseCompleteEvent(this, new LoadGenStopEventArgs(1, DateTime.Now, DateTime.Now));
                 }
-            }
+            //}
         }
         private void UpdateServiceAddress(string address, string endpointName)
         {

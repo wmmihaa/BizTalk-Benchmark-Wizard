@@ -14,11 +14,11 @@
       <Environment>
         <Name>1 BTS with SQL</Name>
         <Description>Single server installation</Description>
-        <LoadGenScripfile>LoadGenSettings_001.xml</LoadGenScripfile>
+        <LoadGenScriptFile>LoadGenSettings_001.xml</LoadGenScriptFile>
         <NuberOfActiveBizTalkServers>1</NuberOfActiveBizTalkServers>
         <BizTalkServerConfiguration>1*CPU, 4GB RAM</BizTalkServerConfiguration>
         <NuberOfActiveSQLServers>0</NuberOfActiveSQLServers>
-        <SQLServerConfiguration>1*CPU, 4GB RAM</SQLServerConfiguration>
+        <SqlServerConfiguration>1*CPU, 4GB RAM</SqlServerConfiguration>
         <MaxExpectedCpuUtilizationBizTalk>95</MaxExpectedCpuUtilizationBizTalk>
         <MaxExpectedCpuUtilizationSql>45</MaxExpectedCpuUtilizationSql>
         <MinExpectedDocsProcessed>100</MinExpectedDocsProcessed>
@@ -27,11 +27,11 @@
       <Environment>
         <Name>1 BTS + 1 SQL</Name>
         <Description>All host running on 1 server</Description>
-        <LoadGenScripfile>LoadGenSettings_001.xml</LoadGenScripfile>
+        <LoadGenScriptFile>LoadGenSettings_001.xml</LoadGenScriptFile>
         <NuberOfActiveBizTalkServers>1</NuberOfActiveBizTalkServers>
         <BizTalkServerConfiguration>1*CPU, 4GB RAM</BizTalkServerConfiguration>
         <NuberOfActiveSQLServers>1</NuberOfActiveSQLServers>
-        <SQLServerConfiguration>1*CPU, 4GB RAM</SQLServerConfiguration>
+        <SqlServerConfiguration>1*CPU, 4GB RAM</SqlServerConfiguration>
         <MaxExpectedCpuUtilizationBizTalk>100</MaxExpectedCpuUtilizationBizTalk>
         <MaxExpectedCpuUtilizationSql>30</MaxExpectedCpuUtilizationSql>
         <MinExpectedDocsProcessed>10</MinExpectedDocsProcessed>
@@ -40,11 +40,11 @@
       <Environment>
         <Name>2 BTS + 1 SQL</Name>
         <Description>R/S host running on separate servers</Description>
-        <LoadGenScripfile>LoadGenSettings_001.xml</LoadGenScripfile>
+        <LoadGenScriptFile>LoadGenSettings_001.xml</LoadGenScriptFile>
         <NuberOfActiveBizTalkServers>2</NuberOfActiveBizTalkServers>
         <BizTalkServerConfiguration>1*CPU, 4GB RAM</BizTalkServerConfiguration>
         <NuberOfActiveSQLServers>1</NuberOfActiveSQLServers>
-        <SQLServerConfiguration>1*CPU, 4GB RAM</SQLServerConfiguration>
+        <SqlServerConfiguration>1*CPU, 4GB RAM</SqlServerConfiguration>
         <MaxExpectedCpuUtilizationBizTalk>80</MaxExpectedCpuUtilizationBizTalk>
         <MaxExpectedCpuUtilizationSql>40</MaxExpectedCpuUtilizationSql>
         <MinExpectedDocsProcessed>150</MinExpectedDocsProcessed>
@@ -67,11 +67,11 @@
       <Environment>
         <Name>1 BTS with SQL</Name>
         <Description>Single server installation</Description>
-        <LoadGenScripfile>LoadGenSettings_001.xml</LoadGenScripfile>
+        <LoadGenScriptFile>LoadGenSettings_001.xml</LoadGenScriptFile>
         <NuberOfActiveBizTalkServers>1</NuberOfActiveBizTalkServers>
         <BizTalkServerConfiguration>1*CPU, 4GB RAM</BizTalkServerConfiguration>
         <NuberOfActiveSQLServers>0</NuberOfActiveSQLServers>
-        <SQLServerConfiguration>1*CPU, 4GB RAM</SQLServerConfiguration>
+        <SqlServerConfiguration>1*CPU, 4GB RAM</SqlServerConfiguration>
         <MaxExpectedCpuUtilizationBizTalk>95</MaxExpectedCpuUtilizationBizTalk>
         <MaxExpectedCpuUtilizationSql>45</MaxExpectedCpuUtilizationSql>
         <MinExpectedDocsProcessed>1000</MinExpectedDocsProcessed>
@@ -80,11 +80,11 @@
       <Environment>
         <Name>1 BTS + 1 SQL</Name>
         <Description>All host running on 1 server</Description>
-        <LoadGenScripfile>LoadGenSettings_001.xml</LoadGenScripfile>
+        <LoadGenScriptFile>LoadGenSettings_001.xml</LoadGenScriptFile>
         <NuberOfActiveBizTalkServers>1</NuberOfActiveBizTalkServers>
         <BizTalkServerConfiguration>1*CPU, 4GB RAM</BizTalkServerConfiguration>
         <NuberOfActiveSQLServers>1</NuberOfActiveSQLServers>
-        <SQLServerConfiguration>1*CPU, 4GB RAM</SQLServerConfiguration>
+        <SqlServerConfiguration>1*CPU, 4GB RAM</SqlServerConfiguration>
         <MaxExpectedCpuUtilizationBizTalk>80</MaxExpectedCpuUtilizationBizTalk>
         <MaxExpectedCpuUtilizationSql>30</MaxExpectedCpuUtilizationSql>
         <MinExpectedDocsProcessed>1300</MinExpectedDocsProcessed>
@@ -93,11 +93,11 @@
       <Environment>
         <Name>2 BTS + 1 SQL</Name>
         <Description>R/S host running on separate servers</Description>
-        <LoadGenScripfile>LoadGenSettings_001.xml</LoadGenScripfile>
+        <LoadGenScriptFile>LoadGenSettings_001.xml</LoadGenScriptFile>
         <NuberOfActiveBizTalkServers>2</NuberOfActiveBizTalkServers>
         <BizTalkServerConfiguration>1*CPU, 4GB RAM</BizTalkServerConfiguration>
         <NuberOfActiveSQLServers>1</NuberOfActiveSQLServers>
-        <SQLServerConfiguration>1*CPU, 4GB RAM</SQLServerConfiguration>
+        <SqlServerConfiguration>1*CPU, 4GB RAM</SqlServerConfiguration>
         <MaxExpectedCpuUtilizationBizTalk>70</MaxExpectedCpuUtilizationBizTalk>
         <MaxExpectedCpuUtilizationSql>40</MaxExpectedCpuUtilizationSql>
         <MinExpectedDocsProcessed>2000</MinExpectedDocsProcessed>
