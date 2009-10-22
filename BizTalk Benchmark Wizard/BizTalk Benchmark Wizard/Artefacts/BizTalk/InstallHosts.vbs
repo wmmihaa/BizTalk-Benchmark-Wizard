@@ -12,45 +12,61 @@ Const HostInstConfigState_NotInstalled = 5
 '   4 : Send Host
 '   5 : Processing Host
 
-wscript.echo "**********************************************************"
-wscript.echo "NTGroupName = " & WScript.Arguments(0)
-wscript.echo "UserName = " & WScript.Arguments(1)
-wscript.echo "Password = " & WScript.Arguments(2)
-wscript.echo "Receive Host = " & WScript.Arguments(3)
-wscript.echo "Send Host = " & WScript.Arguments(4)
-wscript.echo "Processing Host = " & WScript.Arguments(5)
-wscript.echo "**********************************************************"
-wscript.echo""
 
-wscript.echo "**********************************************************"
-wscript.echo "Create BBW_RxHost"
-wscript.echo "**********************************************************"
-CreateHost "BBW_RxHost",1,WScript.Arguments(0),false, false
-MapInstallHostInstance "BBW_RxHost", WScript.Arguments(3), WScript.Arguments(1), WScript.Arguments(2)
-CreateReceiveHandler "BBW_RxHost", "WCF-NetTcp", "MSBTS_ReceiveHandler"
-CreateReceiveHandler "BBW_RxHost", "WCF-NetTcp", "MSBTS_SendHandler2"
-wscript.echo""
+If WScript.Arguments.Count = 5 Then
+    wscript.echo "NTGroupName = " & WScript.Arguments(0)
+    wscript.echo "UserName = " & WScript.Arguments(1)
+    wscript.echo "Password = " & WScript.Arguments(2)
+    wscript.echo "Receive Host = " & WScript.Arguments(3)
+    wscript.echo "Send Host = " & WScript.Arguments(4)
+    wscript.echo "Processing Host = " & WScript.Arguments(5)
 
-wscript.echo "**********************************************************"
-wscript.echo "Create BBW_TxHost"
-wscript.echo "**********************************************************"
-CreateHost "BBW_TxHost",1,WScript.Arguments(0),false, false
-MapInstallHostInstance "BBW_TxHost", WScript.Arguments(4), WScript.Arguments(1), WScript.Arguments(2)
-CreateReceiveHandler "BBW_TxHost", "WCF-NetTcp", "MSBTS_ReceiveHandler"
-CreateReceiveHandler "BBW_TxHost", "WCF-NetTcp", "MSBTS_SendHandler2"
-wscript.echo""
+    wscript.echo "**********************************************************"
+    wscript.echo "Create BBW_RxHost"
+    wscript.echo "**********************************************************"
+    CreateHost "BBW_RxHost",1,WScript.Arguments(0),false, false
+    MapInstallHostInstance "BBW_RxHost", WScript.Arguments(3), WScript.Arguments(1), WScript.Arguments(2)
+    CreateReceiveHandler "BBW_RxHost", "WCF-NetTcp", "MSBTS_ReceiveHandler"
+    CreateReceiveHandler "BBW_RxHost", "WCF-NetTcp", "MSBTS_SendHandler2"
+    wscript.echo""
 
-wscript.echo "**********************************************************"
-wscript.echo "Create BBW_PxHost"
-wscript.echo "**********************************************************"
-'Create BBW_PxHost
-CreateHost "BBW_PxHost",1,WScript.Arguments(0),false, true
-MapInstallHostInstance "BBW_PxHost", WScript.Arguments(5), WScript.Arguments(1), WScript.Arguments(2)
+    wscript.echo "**********************************************************"
+    wscript.echo "Create BBW_TxHost"
+    wscript.echo "**********************************************************"
+    CreateHost "BBW_TxHost",1,WScript.Arguments(0),false, false
+    MapInstallHostInstance "BBW_TxHost", WScript.Arguments(4), WScript.Arguments(1), WScript.Arguments(2)
+    CreateReceiveHandler "BBW_TxHost", "WCF-NetTcp", "MSBTS_ReceiveHandler"
+    CreateReceiveHandler "BBW_TxHost", "WCF-NetTcp", "MSBTS_SendHandler2"
+    wscript.echo""
 
-wscript.echo "**********************************************************"
-wscript.echo "DONE!"
-wscript.echo "**********************************************************"
+    wscript.echo "**********************************************************"
+    wscript.echo "Create BBW_PxHost"
+    wscript.echo "**********************************************************"
+    'Create BBW_PxHost
+    CreateHost "BBW_PxHost",1,WScript.Arguments(0),false, true
+    MapInstallHostInstance "BBW_PxHost", WScript.Arguments(5), WScript.Arguments(1), WScript.Arguments(2)
 
+    wscript.echo "**********************************************************"
+    wscript.echo "DONE!"
+    wscript.echo "**********************************************************"
+Else
+    wscript.echo "**********************************************************"
+    wscript.echo "Use the InstallHosts.vbs to install Hosts, Host Instances and Adapter handlers"
+    wscript.echo ""
+    wscript.echo " Paramaters:"
+    wscript.echo "   0 : NTGroupName"
+    wscript.echo "   1 : UserName"
+    wscript.echo "   2 : Password"
+    wscript.echo "   3 : Receive Host"
+    wscript.echo "   4 : Send Host"
+    wscript.echo "   5 : Processing Host"
+    wscript.echo ""
+    wscript.echo "Usages: cscript InstallHosts.vbs [NTGroupName] [UserName] [Password] [Receive Host] [Send Host] [Processing Host]"
+    wscript.echo "Sample: cscript InstallHosts.vbs ""BizTalk Application Users"" \MyUser MyPassword BtsServer1 BtsServer2 BtsServer2"
+
+    wscript.echo "**********************************************************"
+    wscript.echo""
+End If
 Sub CreateHost (HostName, HostType, NTGroupName, AuthTrusted, HostTracking)
    On Error Resume Next
    Dim objLocator, objService, objHostSetting, objHS
