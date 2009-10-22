@@ -242,6 +242,9 @@
     <Content Include="Artefacts\IndigoService\IndigoService.exe" />
     <Content Include="Artefacts\IndigoService\IndigoService.new.exe" />
     <Content Include="Artefacts\IndigoService\versionwithlogging\IndigoService.exe" />
+    <Content Include="LoadGenHelper.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Resources\Collector Set Templates\BizTalk Server.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
