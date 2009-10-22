@@ -331,9 +331,11 @@ namespace BizTalk_Benchmark_Wizard.Helper
                             sendHost,
                             oldAddress.Port.ToString(),
                             oldAddress.AbsolutePath));
-                
-                _explorer.SendPorts[portName].PrimaryTransport.Address = newAddress.ToString();
-                _explorer.SaveChanges();
+                if (oldAddress != newAddress)
+                {
+                    _explorer.SendPorts[portName].PrimaryTransport.Address = newAddress.ToString();
+                    _explorer.SaveChanges();
+                }
             }
             catch (Exception ex)
             {

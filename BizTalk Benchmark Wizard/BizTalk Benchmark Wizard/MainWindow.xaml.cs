@@ -394,7 +394,6 @@ namespace BizTalk_Benchmark_Wizard
         {
             btnBack.IsEnabled = false;
             btnNext.IsEnabled = false;
-
             _bizTalkHelper.UpdateSendPortUri("IndigoService", txtIndigoServiceServer.Text);
 
             _testStartTime = DateTime.Now;
@@ -414,6 +413,8 @@ namespace BizTalk_Benchmark_Wizard
             //_perflogHelper.StartCollectorSet();
             _loadGenHelper.RunTests((Environment)environments.SelectedItem, (List<HostMaping>)lstHosts.DataContext, _bizTalkHelper.GetApplicationServerNames());
             _loadGenHelper.OnComplete += new LoadGenHelper.CompleteHandler(_loadGenHelper_OnComplete);
+            lblTestTime.Text = string.Format("Total test duration: {0} minutes", ((int)_loadGenHelper.TestDuration / 60).ToString());
+            
             _timer = new System.Timers.Timer(TIMERTICKS);
             _timer.Elapsed += new ElapsedEventHandler(_timer_CollectData);
             _timer_CollectData(null, null);

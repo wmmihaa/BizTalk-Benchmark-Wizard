@@ -42,7 +42,6 @@ namespace BizTalk_Benchmark_Wizard.Helper
             {
                 PerfCounter perfCounter = new PerfCounter();
                 perfCounter.Server = server;
-                _numberOfLoadGenClients++;
                 foreach (HostMaping hostMapping in hostmappings.Where(h=>h.SelectedHost==server))
                 {
                     switch (hostMapping.HostName)
@@ -191,9 +190,9 @@ namespace BizTalk_Benchmark_Wizard.Helper
         {
             _allLoadGenStopEventArgs.Add(e);
             _numberOfLoadGenStopped++;
-        
-            //if (_numberOfLoadGenClients == _numberOfLoadGenStopped)
-            //{
+
+            if (_numberOfLoadGenClients == _numberOfLoadGenStopped)
+            {
                 try
                 {
                     long numberOfMsgsSent = _allLoadGenStopEventArgs.Sum(l => l.NumFilesSent);
@@ -207,7 +206,7 @@ namespace BizTalk_Benchmark_Wizard.Helper
                 {
                     RaiseCompleteEvent(this, new LoadGenStopEventArgs(1, DateTime.Now, DateTime.Now));
                 }
-            //}
+            }
         }
         private void UpdateServiceAddress(string address, string endpointName)
         {
