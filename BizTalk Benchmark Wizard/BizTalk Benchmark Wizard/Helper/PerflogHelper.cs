@@ -16,6 +16,7 @@ namespace BizTalk_Benchmark_Wizard.Helper
     internal class PerflogHelper
     {
         List<Server> _servers = null;
+        bool _isStarted;
         public PerflogHelper(List<Server> servers)
         {
             _servers = servers;
@@ -56,7 +57,7 @@ namespace BizTalk_Benchmark_Wizard.Helper
                 }
                 catch (Exception)
                 {
-
+                    throw;
                 }
             }
         }
@@ -140,8 +141,11 @@ namespace BizTalk_Benchmark_Wizard.Helper
                 p.Execute("logman", format, 60000);
             }
             Thread.Sleep(100);
-            if (!string.IsNullOrEmpty(ProcessHelper.ErrorMessage) || !string.IsNullOrEmpty(ProcessHelper.OutPutMessage))
-                throw new ApplicationException("Unable to create Data Collector Set");
+            if (!string.IsNullOrEmpty(ProcessHelper.ErrorMessage) || 
+                !string.IsNullOrEmpty(ProcessHelper.OutPutMessage))
+                if(!ProcessHelper.OutPutMessage.Contains("The command completed successfully") &&
+                    !ProcessHelper.OutPutMessage.Contains("Data Collector Set already exists"))
+                        throw new ApplicationException("Unable to create Data Collector Set\nMake sure you are running the application with elevated rights.");
         }
         public void StartCollectorSet()
         {
@@ -153,15 +157,19 @@ namespace BizTalk_Benchmark_Wizard.Helper
                     p.Execute("logman", format, 60000);
                 }
             }
+            _isStarted = true;
         }
         public void StopCollectorSet()
         {
-            foreach (string collectorSet in _existingCollectoSets)
+            if (_isStarted)
             {
-                using (ProcessHelper p = new ProcessHelper())
+                foreach (string collectorSet in _existingCollectoSets)
                 {
-                    string format = string.Format(@"stop -n ""{0}""", collectorSet);
-                    p.Execute("logman", format, 60000);
+                    using (ProcessHelper p = new ProcessHelper())
+                    {
+                        string format = string.Format(@"stop -n ""{0}""", collectorSet);
+                        p.Execute("logman", format, 60000);
+                    }
                 }
             }
         }

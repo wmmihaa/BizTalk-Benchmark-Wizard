@@ -264,7 +264,7 @@
                             </StackPanel>
                             <StackPanel Height="10"/>
                             <StackPanel Orientation="Vertical" Name="WaitPanel">
-                                <Label Name="lblWait" FontSize="20" HorizontalAlignment="Center" FontWeight="Bold">Please wait while checking for installed comonents...</Label>
+                                <TextBlock Name="lblWait" FontSize="20" HorizontalAlignment="Center" FontWeight="Bold" Text="Please wait while checking for installed comonents..."/>
                             </StackPanel>
                             <StackPanel Orientation="Vertical" Name="InstallInstructions" Visibility="Collapsed">
                                 <Label Name="lblInstallInstructionsTitle" FontWeight="Bold">Installation instructions:</Label> 
@@ -397,7 +397,7 @@
                             <Label FontFamily="Calibri">
                                 <TextBlock Name="TESTLABEL" TextWrapping="Wrap">In order to create a comparable result, please terminate all suspended instances, and stop all Host Instances <LineBreak/>not running the WCF-NetTcp adapter. Make sure to have at least one Host Instance with tracking enabled.</TextBlock>
                             </Label>
-                            <Label VerticalAlignment="Top" FontSize="30" FontWeight="Bold" FontFamily="Calibri">Start the Indigo Service</Label>
+                            <Label VerticalAlignment="Top" FontSize="25" FontWeight="Bold" FontFamily="Calibri">Start the Indigo Service</Label>
 
                             <Label FontFamily="Calibri">
                                 <TextBlock TextWrapping="Wrap">Before starting the tests, The Indigo Service host console application need to be started. This service is used by 
@@ -408,7 +408,7 @@
                                 <LineBreak/>4. Test the Indigo Service by clicking the "Test Indigo service" button.
                                 </TextBlock>
                             </Label>
-                            <StackPanel Height="15"/>
+                            <StackPanel Height="5"/>
                             <StackPanel Orientation="Horizontal">
                                 <Image Name="picServiceIsRunning" Height="40" Source="Resources/Images/unknown.png"/>
                                 <StackPanel Orientation="Horizontal">
@@ -419,9 +419,12 @@
                                     <StackPanel Width="100"/>
                                     <Button Height="25" Style="{DynamicResource RoundedButton}" HorizontalAlignment="Right" Name="btnTestService" VerticalAlignment="Center" Width="130" Click="btnTestService_Click">Test the Indigo Service</Button>
                                 </StackPanel>
+                                
                             </StackPanel>
-
-
+                            <StackPanel Height="10"/>
+                            <StackPanel Orientation="Horizontal">
+                                <CheckBox Name="chbStartCollectorSets" IsChecked="False" >Start Perfmon collector sets</CheckBox>
+                            </StackPanel>
                         </StackPanel>
                     </Grid>
                 </TabItem>
@@ -436,7 +439,7 @@
                                 <StackPanel Width="30"/>
                                 <my1:GaugeControl Name="ProcessedGauge" Caption="Avg Processed msgs/sec"></my1:GaugeControl>
                             </StackPanel>
-                            <ProgressBar Name="Progress" Width="580" Foreground="Green"  Value="{Binding ProcessValue}" Height="20" Minimum="0" Maximum="100" Margin="10" Canvas.Left="70" Canvas.Top="266.224"/>
+                            <ProgressBar Name="Progress" Width="580" Foreground="Blue"  Value="{Binding ProcessValue}" Height="20" Minimum="0" Maximum="100" Margin="10" Canvas.Left="70" Canvas.Top="266.224"/>
 
                             <Label Canvas.Left="22" Canvas.Top="274" Height="28" Name="label3" Width="120">Progress:</Label>
                             <TextBlock Name="lblTestTime" FontWeight="Bold" Text="Total test duration: 10 minutes" Height="19" Canvas.Left="80" Canvas.Top="304" Width="259" /> 

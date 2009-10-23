@@ -25,6 +25,7 @@ namespace BizTalk_Benchmark_Wizard.Helper
         public List<PerfCounter> PerfCounters = new List<PerfCounter>();
         #endregion
         #region Privare members
+        LoadGen.LoadGen _loadGen = null;
         List<LoadGen.LoadGen> _loadGenClients = new List<LoadGen.LoadGen>();
         int _numberOfLoadGenStopped = 0;
         int _numberOfLoadGenClients = 0;
@@ -134,7 +135,7 @@ namespace BizTalk_Benchmark_Wizard.Helper
         }
         private LoadGen.LoadGen CreateAndStartLoadGenClient(string scriptFile, string server)
         {
-            LoadGen.LoadGen loadGen = null;
+            
             try
             {
                 XmlDocument doc = new XmlDocument();
@@ -147,9 +148,9 @@ namespace BizTalk_Benchmark_Wizard.Helper
                 }
 
                 _numberOfLoadGenClients++;
-                loadGen = new LoadGen.LoadGen(doc.FirstChild);
-                loadGen.LoadGenStopped += new LoadGenEventHandler(LoadGen_Stopped);
-                loadGen.Start();
+                _loadGen = new LoadGen.LoadGen(doc.FirstChild);
+                _loadGen.LoadGenStopped += new LoadGenEventHandler(LoadGen_Stopped);
+                _loadGen.Start();
             }
             catch (ConfigException)
             {
@@ -160,7 +161,7 @@ namespace BizTalk_Benchmark_Wizard.Helper
                 throw;
             }
 
-            return loadGen;
+            return _loadGen;
         }
         private void CreateCounterCollectors(string server)
         {
@@ -195,6 +196,8 @@ namespace BizTalk_Benchmark_Wizard.Helper
             {
                 try
                 {
+                    _loadGen.Stop();
+                    _loadGen = null;
                     long numberOfMsgsSent = _allLoadGenStopEventArgs.Sum(l => l.NumFilesSent);
                     DateTime startTime = _allLoadGenStopEventArgs.Min(l => l.LoadGenStartTime);
                     DateTime stopTime = e.LoadGenStopTime;

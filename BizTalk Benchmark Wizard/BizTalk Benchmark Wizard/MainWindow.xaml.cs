@@ -10,6 +10,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 using System.Collections.ObjectModel;
 using BizTalk_Benchmark_Wizard.Helper;
 using System.Timers;
@@ -17,6 +18,7 @@ using System.Windows.Threading;
 using System.Threading;
 using System.Diagnostics;
 using System.Globalization;
+using System.Configuration;
 
 namespace BizTalk_Benchmark_Wizard
 {
@@ -45,7 +47,7 @@ namespace BizTalk_Benchmark_Wizard
         long _totalProcessedValue;
         long _totalRreceivedValue;
         long _timerCount;
-        
+        bool _isWarmingUp = true;
         IEnumerable<Environment> Environments;
         List<HostMaping> HostMappings;
         List<Result> Results = new List<Result>();
@@ -78,6 +80,7 @@ namespace BizTalk_Benchmark_Wizard
         public MainWindow()
         {
             InitializeComponent();
+            
         }
         #endregion
         #region Events
@@ -92,6 +95,8 @@ namespace BizTalk_Benchmark_Wizard
                 case 0:
                     if (!_isLogedIn)
                     {
+                        txtServer1.Text = Properties.Settings.Default.DefaultServer;
+                        txtIndigoServiceServer.Text = Properties.Settings.Default.DefaultIndigoServiceUri;
                         btnNext.IsEnabled = false;
                         PopupLogin.IsOpen = true;
                         _isLogedIn = true;
@@ -170,6 +175,8 @@ namespace BizTalk_Benchmark_Wizard
         private void btnTestService_Click(object sender, RoutedEventArgs e)
         {
             btnTestService.IsEnabled = false;
+            Properties.Settings.Default.DefaultIndigoServiceUri = txtIndigoServiceServer.Text;
+            Properties.Settings.Default.Save();
 
             _loadGenHelper = new LoadGenHelper();
             bool testPass = _loadGenHelper.TestIndigoService(txtIndigoServiceServer.Text);
@@ -182,7 +189,26 @@ namespace BizTalk_Benchmark_Wizard
         }
         private void btnCreateCollectors_Click(object sender, RoutedEventArgs e)
         {
-            _perflogHelper.CreateDataCollectorSets();
+            try
+            {
+                //lblWait.Text = "Please wait while creating Perfmon collector sets...";
+                //WaitPanel.Visibility = Visibility.Visible;
+                //btnBack.IsEnabled = false;
+                //btnNext.IsEnabled = false;
+                //btnCreateCollectors.IsEnabled = false;
+                //this._hasRefreshed = false;
+                this.Dispatcher.BeginInvoke(DispatcherPriority.ApplicationIdle, new Action(delegate() { SetCreatingCollectorSetStatus(); }));
+                this.Dispatcher.BeginInvoke(DispatcherPriority.ApplicationIdle, new Action(delegate() { _perflogHelper.CreateDataCollectorSets(); }));
+                this.Dispatcher.BeginInvoke(DispatcherPriority.ApplicationIdle, new Action(delegate() { RefreshPreRequsites(); }));
+            }
+            catch { throw; }
+            finally
+            {
+                WaitPanel.Visibility = Visibility.Hidden;
+                btnBack.IsEnabled = true;
+                btnNext.IsEnabled = true;
+                btnCreateCollectors.IsEnabled = true;
+            }
         }
         private void cbScenario_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -212,6 +238,8 @@ namespace BizTalk_Benchmark_Wizard
             this.Cursor = Cursors.Wait;
             btnBack.IsEnabled = false;
             btnNext.IsEnabled = false;
+            Properties.Settings.Default.DefaultServer = txtServer1.Text;
+            Properties.Settings.Default.Save();
             tabControl1.SelectedIndex++;
         }
         private void environments_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -325,6 +353,7 @@ namespace BizTalk_Benchmark_Wizard
 
                 btnCreateCollectors.Visibility = isDataCollectorSetsCreated ? Visibility.Hidden : Visibility.Visible;
                 btnCreateCollectors.IsEnabled = isDataCollectorSetsCreated ? false : true;
+                chbStartCollectorSets.IsEnabled = isDataCollectorSetsCreated ? true : false;
 
                 bool isBizTalkScenariosInstalled = _bizTalkHelper.IsBizTalkScenariosInstalled;
 
@@ -387,7 +416,15 @@ namespace BizTalk_Benchmark_Wizard
                 throw new ApplicationException("Unable to load Senarios configuration", ex);
             }
         }
-        
+        void SetCreatingCollectorSetStatus()
+        {
+            lblWait.Text = "Please wait while creating Perfmon collector sets...";
+            WaitPanel.Visibility = Visibility.Visible;
+            btnBack.IsEnabled = false;
+            btnNext.IsEnabled = false;
+            btnCreateCollectors.IsEnabled = false;
+            this._hasRefreshed = false;
+        }
         #endregion
         #region Run Tests
         private void PrepareTest() 
@@ -410,7 +447,9 @@ namespace BizTalk_Benchmark_Wizard
         }
         private void RunTest()
         {
-            //_perflogHelper.StartCollectorSet();
+            if(chbStartCollectorSets.IsChecked==true)
+                this.Dispatcher.BeginInvoke(DispatcherPriority.ApplicationIdle, new Action(delegate() { _perflogHelper.StartCollectorSet(); }));
+
             _loadGenHelper.RunTests((Environment)environments.SelectedItem, (List<HostMaping>)lstHosts.DataContext, _bizTalkHelper.GetApplicationServerNames());
             _loadGenHelper.OnComplete += new LoadGenHelper.CompleteHandler(_loadGenHelper_OnComplete);
             lblTestTime.Text = string.Format("Total test duration: {0} minutes", ((int)_loadGenHelper.TestDuration / 60).ToString());
@@ -422,7 +461,8 @@ namespace BizTalk_Benchmark_Wizard
         }
         private void _loadGenHelper_OnComplete(object sender, LoadGen.LoadGenStopEventArgs e)
         {
-            //_perflogHelper.StopCollectorSet();
+            _perflogHelper.StopCollectorSet();
+            
             this.Dispatcher.BeginInvoke(DispatcherPriority.ApplicationIdle, new Action(delegate() { tabControl1.SelectedIndex++; }));
             this.Dispatcher.BeginInvoke(DispatcherPriority.ApplicationIdle, new Action(delegate() { btnNext.IsEnabled = true; }));
             this.Dispatcher.BeginInvoke(DispatcherPriority.ApplicationIdle, new Action(delegate() { _timer.Stop(); }));
@@ -431,7 +471,7 @@ namespace BizTalk_Benchmark_Wizard
         private void _timer_CollectData(object sender, ElapsedEventArgs e)
         {
             _timer.Enabled = false;
-            _timerCount++;
+            
             float cpuValue=0;
             float processedValue=0;
             float receivedValue=0;
@@ -448,21 +488,33 @@ namespace BizTalk_Benchmark_Wizard
                     if (c.HasReceiveCounter)
                         receivedValue += (long)c.ReceivedCounterValue;
                 }
+                double duration = DateTime.Now.Subtract(_testStartTime).TotalSeconds;
 
-                _totalCpuValue += (long)cpuValue / _loadGenHelper.PerfCounters.Count;
-                _totalProcessedValue += (long)processedValue;
-                _totalRreceivedValue += (long)receivedValue;
+                
+                if (duration > 120)
+                {
+                    if (_isWarmingUp)
+                    {
+                        _isWarmingUp = false;
+                        this.Dispatcher.BeginInvoke(DispatcherPriority.ApplicationIdle, new Action(delegate() { Progress.Foreground = Brushes.Green; }));
+                    }
+                    
+                    _timerCount++;
+                    _totalCpuValue += (long)cpuValue / _loadGenHelper.PerfCounters.Count;
+                    _totalProcessedValue += (long)processedValue;
+                    _totalRreceivedValue += (long)receivedValue;
 
-                _avgCpuValue = _totalCpuValue / _timerCount; //(long)((_avgCpuValue + cpuValue) * _timerCount);
-                _avgProcessedValue = _totalProcessedValue / _timerCount; //(long)((_avgProcessedValue + processedValue) * _timerCount);
-                _avgRreceivedValue = _totalRreceivedValue / _timerCount; //(long)((_avgRreceivedValue + receivedValue) * _timerCount);
+                    _avgCpuValue = _totalCpuValue / _timerCount; //(long)((_avgCpuValue + cpuValue) * _timerCount);
+                    _avgProcessedValue = _totalProcessedValue / _timerCount; //(long)((_avgProcessedValue + processedValue) * _timerCount);
+                    _avgRreceivedValue = _totalRreceivedValue / _timerCount; //(long)((_avgRreceivedValue + receivedValue) * _timerCount);
+                }
 
                 // Set gauge values
                 CPUGauge.SetCounter((int)cpuValue, (int)_avgCpuValue);
                 ProcessedGauge.SetCounter((int)processedValue, (int)_avgProcessedValue);
                 ReceivedGauge.SetCounter((int)receivedValue, (int)_avgRreceivedValue);
 
-                double duration = DateTime.Now.Subtract(_testStartTime).TotalSeconds;
+                
                 long percentCompleted = (long)((duration / _loadGenHelper.TestDuration) * 100);
                 if(percentCompleted<=100)
                     this.Dispatcher.BeginInvoke(DispatcherPriority.DataBind , new Action(delegate(){ ProcessValue = (int)percentCompleted; }));
