@@ -13,7 +13,7 @@ Const HostInstConfigState_NotInstalled = 5
 '   5 : Processing Host
 
 
-If WScript.Arguments.Count = 5 Then
+If WScript.Arguments.Count = 6 Then
     wscript.echo "NTGroupName = " & WScript.Arguments(0)
     wscript.echo "UserName = " & WScript.Arguments(1)
     wscript.echo "Password = " & WScript.Arguments(2)

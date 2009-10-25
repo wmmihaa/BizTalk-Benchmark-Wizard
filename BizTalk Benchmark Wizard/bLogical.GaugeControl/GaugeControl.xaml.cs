@@ -43,6 +43,7 @@ namespace bLogical.GaugeControl
                     l10.Text = (stepVal * 9).ToString();
                 }
                 _maxValue = value;
+                DoEvents();
             }
         }
         public string Caption { get; set; }
@@ -128,6 +129,9 @@ namespace bLogical.GaugeControl
         }
         public void SetCounter(int newCounterValue, int newAvgCounterValue)
         {
+            if (newCounterValue > MaxValue)
+                this.Dispatcher.BeginInvoke(DispatcherPriority.ApplicationIdle, new Action(delegate() { DoubleMaxValue(); }));
+                
             newCounterValue = ConvertValue(newCounterValue);
             newAvgCounterValue = ConvertValue(newAvgCounterValue);
 
@@ -170,6 +174,14 @@ namespace bLogical.GaugeControl
             tst.Counter = n;
             Thread.Sleep(10);
 
+        }
+        private void DoubleMaxValue()
+        {
+            MaxValue = MaxValue * 2;
+        }
+        private static void DoEvents()
+        {
+            Application.Current.Dispatcher.Invoke(DispatcherPriority.Background, new ThreadStart(delegate { }));
         }
     }
 }

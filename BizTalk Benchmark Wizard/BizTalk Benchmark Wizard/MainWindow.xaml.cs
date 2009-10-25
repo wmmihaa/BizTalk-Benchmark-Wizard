@@ -436,9 +436,9 @@ namespace BizTalk_Benchmark_Wizard
             _avgProcessedValue = 0;
             _avgRreceivedValue = 0;
             _timerCount = 0;
-            CPUGauge.MaxValue = 180;
-            ProcessedGauge.MaxValue = 450;
-            ReceivedGauge.MaxValue = 450;
+            CPUGauge.MaxValue = 90;
+            ProcessedGauge.MaxValue = 180;
+            ReceivedGauge.MaxValue = 180;
             ProcessValue = 0;
             Progress.DataContext = this;
             RunTest();
@@ -508,7 +508,7 @@ namespace BizTalk_Benchmark_Wizard
                 }
 
                 // Set gauge values
-                CPUGauge.SetCounter((int)cpuValue, (int)_avgCpuValue);
+                CPUGauge.SetCounter((int)cpuValue / _loadGenHelper.PerfCounters.Count, (int)_avgCpuValue);
                 ProcessedGauge.SetCounter((int)processedValue, (int)_avgProcessedValue);
                 ReceivedGauge.SetCounter((int)receivedValue, (int)_avgRreceivedValue);
 
