@@ -59,6 +59,7 @@ namespace BizTalk_Benchmark_Wizard.Helper
                             perfCounter.HasProcessingCounter = true;
                             break;
                     }
+                    MainWindow.DoEvents();
                 }
                 perfCounter.CPUCounters.Add(new PerformanceCounter("Processor", "% Processor Time", "_Total", server));
                 PerfCounters.Add(perfCounter);
@@ -196,8 +197,6 @@ namespace BizTalk_Benchmark_Wizard.Helper
             {
                 try
                 {
-                    _loadGen.Stop();
-                    _loadGen = null;
                     long numberOfMsgsSent = _allLoadGenStopEventArgs.Sum(l => l.NumFilesSent);
                     DateTime startTime = _allLoadGenStopEventArgs.Min(l => l.LoadGenStartTime);
                     DateTime stopTime = e.LoadGenStopTime;

@@ -2,9 +2,9 @@
   <CommonSection>
     <LoadGenVersion>2</LoadGenVersion>
     <OptimizeLimitFileSize>2048000</OptimizeLimitFileSize>
-    <NumThreadsPerSection>40</NumThreadsPerSection>
+    <NumThreadsPerSection>20</NumThreadsPerSection>
     <SleepInterval>400</SleepInterval>
-    <LotSizePerInterval>100</LotSizePerInterval>
+    <LotSizePerInterval>10</LotSizePerInterval>
     <RetryInterval>10000</RetryInterval>
     <RetryNumber>1000</RetryNumber>
     <StopMode Mode="Time">

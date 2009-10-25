@@ -20,7 +20,8 @@
     <SccAuxPath>SAK</SccAuxPath>
     <SccProvider>SAK</SccProvider>
     <SignAssembly>false</SignAssembly>
-    <AssemblyOriginatorKeyFile>bLogical.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>
+    </AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -257,6 +258,9 @@
     <Content Include="Resources\LoadGenScripts\LoadGenSettings_001.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Resources\LoadGenScripts\Senario1.1.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Resources\LoadGenScripts\Size_2K.Xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -277,7 +281,6 @@
     <Content Include="Artefacts\IndigoService\IndigoService.exe.org" />
     <Content Include="Artefacts\IndigoService\StartIndigoService.bat" />
     <Content Include="Artefacts\BizTalk\BizTalk Benchmark Wizard.msi" />
-    <None Include="bLogical.snk" />
     <None Include="Service References\IndigoService\Reference.svcmap">
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>

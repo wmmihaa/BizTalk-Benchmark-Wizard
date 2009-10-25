@@ -231,8 +231,8 @@
                         <Label Margin="20,80,19,129" Name="label2"  FontFamily="Calibri">
                             <TextBlock TextWrapping="Wrap">The purpose of this tool is to verify your BizTalk environment performs as expected. The typical use case where you would <LineBreak/>use the BizTalk Benchmark Wizard would be after BizTalk Server is installed and before deploying any solutions to the environment.<LineBreak/>
                                 <LineBreak/>BizTalk Benchmark Wizard performs load to BizTalk Server in relation to a specific scenario. During the execution of the test, counter information is collected and benchmarked against collected statistics relevant to your BizTalk Server environment<LineBreak/>
-                                After completion of the test, a result is presented showing whether or not your BizTalk investment is performing as expected.<LineBreak/>
-                                <LineBreak/>The executed scenarios may or may not be relative to any realistic scenario, and is only intended for testing.</TextBlock>
+                                After completion of the test, a result is presented showing whether or not your BizTalk investment is performing as you could expect.<LineBreak/>
+                                <LineBreak/>The executed scenarios may or may not be relative to any realistic scenario, and is only intended for testing. The BizTalk Benchmark wizard has been developed in relation to the <Bold><Italic>BizTalk Server 2009 Scale Out Testing Study</Italic></Bold>. More information about the study can be found <Hyperlink NavigateUri="http://msdn.microsoft.com/en-us/library/ee377068(BTS.10).aspx">here</Hyperlink>.</TextBlock>
                         </Label>
 
                     </Grid>
@@ -264,17 +264,17 @@
                             </StackPanel>
                             <StackPanel Height="10"/>
                             <StackPanel Orientation="Vertical" Name="WaitPanel">
-                                <TextBlock Name="lblWait" FontSize="20" HorizontalAlignment="Center" FontWeight="Bold" Text="Please wait while checking for installed comonents..."/>
+                                <TextBlock Name="lblWait" FontSize="20" HorizontalAlignment="Center" FontWeight="Bold" Text="Please wait while checking for installed components..."/>
                             </StackPanel>
                             <StackPanel Orientation="Vertical" Name="InstallInstructions" Visibility="Collapsed">
                                 <Label Name="lblInstallInstructionsTitle" FontWeight="Bold">Installation instructions:</Label> 
                                 <Label Name="lblInstallInstructions">
                                     <TextBlock >1. Copy the BizTalk folder located in the [InstallDir]\Artefacts folder to your BizTalk servers<LineBreak/>
-                                                                    2. Run the InstallHosts.vbs script on ONE of the BizTalk servers, to create hosts, host instances and handlers.<LineBreak/>
+                                                                    2. Run the InstallHosts.vbs script on ONE of the BizTalk servers, to create hosts, host instances and adapter handlers.<LineBreak/>
                                                                     3. Import the BizTalk Benchmark Wizard.msi on ONE of the BizTalk Servers<LineBreak/>
                                                                     4. Install the BizTalk Benchmark Wizard.msi on ALL BizTalk servers in order to add the assemblies to GAC.<LineBreak/>
                                                                     5. Restart the BBW* hosts and stop all other host instances<LineBreak/>
-                                                                    6. Run this wizard again<LineBreak/>
+                                                                    6. Run this wizard again<LineBreak/><LineBreak/>It is strongly recommened not to run the wizard from any of the BizTalk servers. 
                                     </TextBlock>
                                                
                                                
@@ -490,7 +490,7 @@
 
             </TabControl>
             <TextBlock Canvas.Left="30" Canvas.Top="370">
-                 <Hyperlink NavigateUri="http://bbw.codeplex.com">http://bbw.codeplex.com</Hyperlink>.
+                 <Hyperlink NavigateUri="http://bbw.codeplex.com">http://bbw.codeplex.com</Hyperlink>
             </TextBlock>
             <Button Canvas.Left="501" Canvas.Top="365" Height="23" Name="btnBack" Width="74" Click="btnBack_Click" Style="{DynamicResource RoundedButton}" Visibility="Hidden">Back</Button>
             <Button Canvas.Left="581" Canvas.Top="365" Height="23" Name="btnNext" Width="74" Click="btnNext_Click" Style="{DynamicResource RoundedButton}" >Next</Button>

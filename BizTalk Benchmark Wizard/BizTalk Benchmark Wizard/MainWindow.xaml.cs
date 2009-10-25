@@ -130,6 +130,8 @@ namespace BizTalk_Benchmark_Wizard
                 case 4:
                     break;
                 case 5:
+                    PreRunTest();
+                    DoEvents();
                     PrepareTest();
                     break;
                 case 6:
@@ -144,16 +146,6 @@ namespace BizTalk_Benchmark_Wizard
         }
         private void btnBack_Click(object sender, RoutedEventArgs e)
         {
-            //if (tabControl1.SelectedIndex > 0)
-            //    btnBack.Visibility = Visibility.Visible;
-            //else
-            //    btnBack.Visibility = Visibility.Hidden;
-
-            //if (tabControl1.SelectedIndex > 5)
-            //    btnNext.Visibility = Visibility.Hidden;
-            //else
-            //    btnNext.Visibility = Visibility.Visible;
-
             tabControl1.SelectedIndex--;
         }
         private void btnCancel_Click(object sender, RoutedEventArgs e)
@@ -191,13 +183,7 @@ namespace BizTalk_Benchmark_Wizard
         {
             try
             {
-                //lblWait.Text = "Please wait while creating Perfmon collector sets...";
-                //WaitPanel.Visibility = Visibility.Visible;
-                //btnBack.IsEnabled = false;
-                //btnNext.IsEnabled = false;
-                //btnCreateCollectors.IsEnabled = false;
-                //this._hasRefreshed = false;
-                this.Dispatcher.BeginInvoke(DispatcherPriority.ApplicationIdle, new Action(delegate() { SetCreatingCollectorSetStatus(); }));
+                this.Dispatcher.BeginInvoke(DispatcherPriority.ApplicationIdle, new Action(delegate() { PreCreatingCollectorSet(); }));
                 this.Dispatcher.BeginInvoke(DispatcherPriority.ApplicationIdle, new Action(delegate() { _perflogHelper.CreateDataCollectorSets(); }));
                 this.Dispatcher.BeginInvoke(DispatcherPriority.ApplicationIdle, new Action(delegate() { RefreshPreRequsites(); }));
             }
@@ -287,7 +273,7 @@ namespace BizTalk_Benchmark_Wizard
                     ShowResult();
 
                     btnNext.Content = "Close";
-                    btnBack.IsEnabled = true;
+                    btnBack.IsEnabled = false;
                     btnNext.IsEnabled = true;
                     break;
             }
@@ -347,6 +333,7 @@ namespace BizTalk_Benchmark_Wizard
 
                 bool isDataCollectorSetsCreated = _perflogHelper.IsDataCollectorSetsCreated;
 
+                DoEvents();
                 picInstallCollectorSet.Source = isDataCollectorSetsCreated ?
                            new System.Windows.Media.Imaging.BitmapImage(new Uri("pack://application:,,,/BizTalk Benchmark Wizard;component/Resources/Images/passed.png")) :
                            new System.Windows.Media.Imaging.BitmapImage(new Uri("pack://application:,,,/BizTalk Benchmark Wizard;component/Resources/Images/checklist.png"));
@@ -356,7 +343,7 @@ namespace BizTalk_Benchmark_Wizard
                 chbStartCollectorSets.IsEnabled = isDataCollectorSetsCreated ? true : false;
 
                 bool isBizTalkScenariosInstalled = _bizTalkHelper.IsBizTalkScenariosInstalled;
-
+                DoEvents();
                 picInstalledScenario.Source = isBizTalkScenariosInstalled ?
                     new System.Windows.Media.Imaging.BitmapImage(new Uri("pack://application:,,,/BizTalk Benchmark Wizard;component/Resources/Images/passed.png")) :
                     new System.Windows.Media.Imaging.BitmapImage(new Uri("pack://application:,,,/BizTalk Benchmark Wizard;component/Resources/Images/checklist.png"));
@@ -367,7 +354,7 @@ namespace BizTalk_Benchmark_Wizard
 
 
                 HostMappings = _bizTalkHelper.GetHostMappings();
-                
+                DoEvents();
                 this.lstHosts.DataContext = (IEnumerable<HostMaping>) HostMappings;
 
                 WaitPanel.Visibility = Visibility.Collapsed;
@@ -416,7 +403,7 @@ namespace BizTalk_Benchmark_Wizard
                 throw new ApplicationException("Unable to load Senarios configuration", ex);
             }
         }
-        void SetCreatingCollectorSetStatus()
+        void PreCreatingCollectorSet()
         {
             lblWait.Text = "Please wait while creating Perfmon collector sets...";
             WaitPanel.Visibility = Visibility.Visible;
@@ -425,14 +412,25 @@ namespace BizTalk_Benchmark_Wizard
             btnCreateCollectors.IsEnabled = false;
             this._hasRefreshed = false;
         }
+        void PreRunTest()
+        {
+            btnBack.IsEnabled = false;
+            btnNext.IsEnabled = false;
+            btnCreateCollectors.IsEnabled = false;
+            btnTestService.IsEnabled = false;
+            txtIndigoServiceServer.IsEnabled = false;
+        }
+        public static void DoEvents()
+        {
+            Application.Current.Dispatcher.Invoke(DispatcherPriority.Background, new ThreadStart(delegate { }));
+        }
+
         #endregion
         #region Run Tests
         private void PrepareTest() 
         {
-            btnBack.IsEnabled = false;
-            btnNext.IsEnabled = false;
             _bizTalkHelper.UpdateSendPortUri("IndigoService", txtIndigoServiceServer.Text);
-
+            Thread.Sleep(10);
             _testStartTime = DateTime.Now;
             _avgCpuValue = 0;
             _avgProcessedValue = 0;
@@ -518,6 +516,7 @@ namespace BizTalk_Benchmark_Wizard
                 long percentCompleted = (long)((duration / _loadGenHelper.TestDuration) * 100);
                 if(percentCompleted<=100)
                     this.Dispatcher.BeginInvoke(DispatcherPriority.DataBind , new Action(delegate(){ ProcessValue = (int)percentCompleted; }));
+                DoEvents();
                 
             }
             catch (Exception)
@@ -529,8 +528,6 @@ namespace BizTalk_Benchmark_Wizard
             _timer.Enabled = true;
         }
         #endregion 
-
-    
         #region IDisposable Members
         public void Dispose()
         {
