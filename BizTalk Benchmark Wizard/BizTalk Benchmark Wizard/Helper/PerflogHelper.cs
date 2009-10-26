@@ -156,6 +156,8 @@ namespace BizTalk_Benchmark_Wizard.Helper
                     string format = string.Format(@"start -n ""{0}""", collectorSet);
                     p.Execute("logman", format, 60000);
                 }
+                if (!ProcessHelper.OutPutMessage.Contains("The command completed successfully."))
+                    throw new ArgumentException("Unable to start collector set [" + collectorSet + "]\n" + ProcessHelper.OutPutMessage);
             }
             _isStarted = true;
         }
@@ -170,6 +172,8 @@ namespace BizTalk_Benchmark_Wizard.Helper
                         string format = string.Format(@"stop -n ""{0}""", collectorSet);
                         p.Execute("logman", format, 60000);
                     }
+                    if (!ProcessHelper.OutPutMessage.Contains("The command completed successfully."))
+                        throw new ArgumentException("Unable to stop collector set [" + collectorSet + "]\n" + ProcessHelper.OutPutMessage);
                 }
             }
         }
