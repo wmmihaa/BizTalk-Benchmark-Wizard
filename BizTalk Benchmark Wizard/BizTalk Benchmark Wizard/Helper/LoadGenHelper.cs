@@ -39,35 +39,44 @@ namespace BizTalk_Benchmark_Wizard.Helper
         
         public void RunTests(Environment environment, List<HostMaping> hostmappings, List<string> servers)
         {
-            foreach (string server in servers)
+            try
             {
-                PerfCounter perfCounter = new PerfCounter();
-                perfCounter.Server = server;
-                foreach (HostMaping hostMapping in hostmappings.Where(h=>h.SelectedHost==server))
+                foreach (string server in servers)
                 {
-                    switch (hostMapping.HostName)
+                    PerfCounter perfCounter = new PerfCounter();
+                    perfCounter.Server = server;
+                    foreach (HostMaping hostMapping in hostmappings.Where(h => h.SelectedHost == server))
                     {
-                        case "BBW_RxHost":
-                            UpdateServiceAddress(server, "ClientEndPoint1");
-                            perfCounter.ReceivedCounters.Add(new PerformanceCounter("BizTalk:Messaging", "Documents received/Sec", "BBW_RxHost", server));
-                            perfCounter.HasReceiveCounter = true;
-                            break;
-                        case "BBW_PxHost":
-                            break;
-                        case "BBW_TxHost":
-                            perfCounter.ProcessedCounters.Add(new PerformanceCounter("BizTalk:Messaging", "Documents processed/Sec", "BBW_TxHost", server));
-                            perfCounter.HasProcessingCounter = true;
-                            break;
+                        switch (hostMapping.HostName)
+                        {
+                            case "BBW_RxHost":
+                                UpdateServiceAddress(server, "ClientEndPoint1");
+
+                                perfCounter.ReceivedCounters.Add(new PerformanceCounter("BizTalk:Messaging", "Documents received/Sec", "BBW_RxHost", server));
+                                perfCounter.HasReceiveCounter = true;
+                                break;
+                            case "BBW_PxHost":
+                                break;
+                            case "BBW_TxHost":
+                                perfCounter.ProcessedCounters.Add(new PerformanceCounter("BizTalk:Messaging", "Documents processed/Sec", "BBW_TxHost", server));
+                                perfCounter.HasProcessingCounter = true;
+                                break;
+                        }
+                        MainWindow.DoEvents();
                     }
-                    MainWindow.DoEvents();
+                    perfCounter.CPUCounters.Add(new PerformanceCounter("Processor", "% Processor Time", "_Total", server));
+                    PerfCounters.Add(perfCounter);
                 }
-                perfCounter.CPUCounters.Add(new PerformanceCounter("Processor", "% Processor Time", "_Total", server));
-                PerfCounters.Add(perfCounter);
+
+                string rcvHost = hostmappings.First(h => h.HostName == "BBW_RxHost").SelectedHost;
+
+                _loadGenClients.Add(CreateAndStartLoadGenClient(CreateLoadGenScript(environment.LoadGenScriptFile, rcvHost), rcvHost));
             }
-
-            string rcvHost = hostmappings.First(h => h.HostName == "BBW_RxHost").SelectedHost;
-
-            _loadGenClients.Add(CreateAndStartLoadGenClient(CreateLoadGenScript(environment.LoadGenScriptFile, rcvHost), rcvHost));
+            catch (Exception)
+            {
+                //InstallUtil /i /assemblyname "Microsoft.BizTalk.MsgBoxPerfCounters, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" 
+                throw new ApplicationException(@"Unable to find PerfMon Counter. Make sure all BBW* host instances are started. If you lost the counters, this post might help you recover counters:\n<""http://blogs.msdn.com/biztalkperformance/archive/2007/09/30/how-to-manually-recreate-missing-biztalk-performance-counters.aspx""") ;
+            }
         }
         public void StopAllTests()
         {
