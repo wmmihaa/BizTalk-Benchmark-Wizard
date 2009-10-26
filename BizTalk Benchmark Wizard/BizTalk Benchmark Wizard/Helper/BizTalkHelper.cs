@@ -343,6 +343,20 @@ namespace BizTalk_Benchmark_Wizard.Helper
             }
 
         }
+        public void CheckPortStatus(string receivePort, string receiveLocation, string sendPort, string orchestration)
+        {
+            try
+            {
+                _explorer.ReceivePorts[receivePort].ReceiveLocations[receiveLocation].Enable = true;
+                _explorer.SendPorts[sendPort].Status = PortStatus.Started;
+                _explorer.Applications["BizTalk Benchmark Wizard"].Orchestrations[orchestration].Status = OrchestrationStatus.Started;
+                _explorer.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                throw new ApplicationException("Unable to enable/start ports and orchestrations", ex);
+            }
+        }
         #endregion
 
         #region IDisposable Members

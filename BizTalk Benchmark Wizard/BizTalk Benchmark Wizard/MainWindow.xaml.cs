@@ -430,6 +430,7 @@ namespace BizTalk_Benchmark_Wizard
         private void PrepareTest() 
         {
             _bizTalkHelper.UpdateSendPortUri("IndigoService", txtIndigoServiceServer.Text);
+            _bizTalkHelper.CheckPortStatus("LoadGen_Receive", "LoadGen_Receive_NETTCP", "IndigoService", "EmptySchedule_Baseline1.SimpleSchedule");
             Thread.Sleep(10);
             _testStartTime = DateTime.Now;
             _avgCpuValue = 0;
