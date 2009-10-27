@@ -266,6 +266,7 @@
     <Resource Include="Resources\Images\gear_ok.png" />
     <Resource Include="Resources\Images\gear_pause.png" />
     <Resource Include="Resources\Images\gear_run.png" />
+    <Resource Include="Resources\Images\gear_information.png" />
     <Content Include="Resources\LoadGenScripts\LoadGenSettings_001.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

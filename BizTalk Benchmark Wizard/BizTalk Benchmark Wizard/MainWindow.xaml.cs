@@ -134,7 +134,7 @@ namespace BizTalk_Benchmark_Wizard
                     break;
                 case 6:
                     break;
-                case 7: 
+                case 8: 
                     this.Close();
                     break;
             }
@@ -268,8 +268,6 @@ namespace BizTalk_Benchmark_Wizard
                     break;
                 case 7:
                     //Show result
-                    ShowResult();
-
                     btnNext.Content = "Close";
                     btnBack.IsEnabled = false;
                     btnNext.IsEnabled = true;
@@ -438,24 +436,13 @@ namespace BizTalk_Benchmark_Wizard
             
             _bizTalkHelper.UpdateSendPortUri("IndigoService", txtIndigoServiceServer.Text);
             
-            _testStartTime = DateTime.Now;
-            _avgCpuValue = 0;
-            _avgProcessedValue = 0;
-            _avgRreceivedValue = 0;
-            _timerCount = 0;
-            CPUGauge.MaxValue = 90;
-            ProcessedGauge.MaxValue = 180;
-            ReceivedGauge.MaxValue = 180;
-            ProcessValue = 0;
-            Progress.DataContext = this;
-            //RunTest();
         }
         void OnStepComplete(object sender, StepEventArgs e)
         {
             switch (e.EventStep)
             { 
                 case "UpdateSendPortUri":
-                    picUpdateSendportUri.Source = new BitmapImage(new Uri("pack://application:,,,/BizTalk Benchmark Wizard;component/Resources/Images/gear_ok.png"));
+                    picUpdateSendportUri.Source = new BitmapImage(new Uri("pack://application:,,,/BizTalk Benchmark Wizard;component/Resources/Images/passed.png"));
                     picStartBizTalkArtefacts.Source = new BitmapImage(new Uri("pack://application:,,,/BizTalk Benchmark Wizard;component/Resources/Images/gear_run.png"));
                     DoEvents();
                     this.Dispatcher.BeginInvoke(DispatcherPriority.ApplicationIdle, new Action(delegate() 
@@ -464,7 +451,7 @@ namespace BizTalk_Benchmark_Wizard
                         }));
                     break;
                 case "CheckPortStatus":
-                    picStartBizTalkArtefacts.Source = new BitmapImage(new Uri("pack://application:,,,/BizTalk Benchmark Wizard;component/Resources/Images/gear_ok.png"));
+                    picStartBizTalkArtefacts.Source = new BitmapImage(new Uri("pack://application:,,,/BizTalk Benchmark Wizard;component/Resources/Images/passed.png"));
                     picStartCollectorSets.Source = new BitmapImage(new Uri("pack://application:,,,/BizTalk Benchmark Wizard;component/Resources/Images/gear_run.png"));
                     DoEvents();
                     if (chbStartCollectorSets.IsChecked == true)
@@ -478,8 +465,12 @@ namespace BizTalk_Benchmark_Wizard
                         OnStepComplete(null, new StepEventArgs() { EventStep = "StartCollectorSet" });
                     break;
                 case "StartCollectorSet":
-                    picStartCollectorSets.Source = new BitmapImage(new Uri("pack://application:,,,/BizTalk Benchmark Wizard;component/Resources/Images/gear_ok.png"));
-                    picInitPerfCounters.Source = new BitmapImage(new Uri("pack://application:,,,/BizTalk Benchmark Wizard;component/Resources/Images/gear_run.png"));
+                    if (chbStartCollectorSets.IsChecked == true)
+                        picStartCollectorSets.Source = new BitmapImage(new Uri("pack://application:,,,/BizTalk Benchmark Wizard;component/Resources/Images/passed.png"));
+                    else
+                        picStartCollectorSets.Source = new BitmapImage(new Uri("pack://application:,,,/BizTalk Benchmark Wizard;component/Resources/Images/gear_information.png"));
+
+                        picInitPerfCounters.Source = new BitmapImage(new Uri("pack://application:,,,/BizTalk Benchmark Wizard;component/Resources/Images/gear_run.png"));
                     DoEvents();
                     this.Dispatcher.BeginInvoke(DispatcherPriority.ApplicationIdle, new Action(delegate()
                     {
@@ -487,7 +478,7 @@ namespace BizTalk_Benchmark_Wizard
                     }));
                     break;
                 case "InitPerfCounters":
-                    picInitPerfCounters.Source = new BitmapImage(new Uri("pack://application:,,,/BizTalk Benchmark Wizard;component/Resources/Images/gear_ok.png"));
+                    picInitPerfCounters.Source = new BitmapImage(new Uri("pack://application:,,,/BizTalk Benchmark Wizard;component/Resources/Images/passed.png"));
                     picStartLoadgen.Source = new BitmapImage(new Uri("pack://application:,,,/BizTalk Benchmark Wizard;component/Resources/Images/gear_run.png"));
                     DoEvents();
                     this.Dispatcher.BeginInvoke(DispatcherPriority.ApplicationIdle, new Action(delegate()
@@ -497,6 +488,13 @@ namespace BizTalk_Benchmark_Wizard
                     break;
                 case "StartLoadGenClients":
                     lblTestTime.Text = string.Format("Total test duration: {0} minutes", ((int)_loadGenHelper.TestDuration / 60).ToString());
+
+                    _testStartTime = DateTime.Now;
+                    CPUGauge.MaxValue = 90;
+                    ProcessedGauge.MaxValue = 180;
+                    ReceivedGauge.MaxValue = 180;
+                    ProcessValue = 0;
+                    Progress.DataContext = this;
                     _timer = new System.Timers.Timer(TIMERTICKS);
                     _timer.Elapsed += new ElapsedEventHandler(OnCollectCounterData);
                     OnCollectCounterData(null, null);
@@ -510,11 +508,12 @@ namespace BizTalk_Benchmark_Wizard
         }
         private void OnTestComplete(object sender, LoadGen.LoadGenStopEventArgs e)
         {
-            _perflogHelper.StopCollectorSet();
-            
             this.Dispatcher.BeginInvoke(DispatcherPriority.ApplicationIdle, new Action(delegate() { tabControl1.SelectedIndex++; }));
             this.Dispatcher.BeginInvoke(DispatcherPriority.ApplicationIdle, new Action(delegate() { btnNext.IsEnabled = true; }));
             this.Dispatcher.BeginInvoke(DispatcherPriority.ApplicationIdle, new Action(delegate() { _timer.Stop(); }));
+            this.Dispatcher.BeginInvoke(DispatcherPriority.ApplicationIdle, new Action(delegate() { _perflogHelper.StopCollectorSet(); }));
+            this.Dispatcher.BeginInvoke(DispatcherPriority.ApplicationIdle, new Action(delegate() { ShowResult(); }));
+
         }
         private void OnCollectCounterData(object sender, ElapsedEventArgs e)
         {
@@ -545,6 +544,7 @@ namespace BizTalk_Benchmark_Wizard
                     {
                         _isWarmingUp = false;
                         this.Dispatcher.BeginInvoke(DispatcherPriority.ApplicationIdle, new Action(delegate() { Progress.Foreground = Brushes.Green; }));
+                        this.Dispatcher.BeginInvoke(DispatcherPriority.ApplicationIdle, new Action(delegate() { lblWarmUp.Visibility = Visibility.Hidden; }));
                     }
                     
                     _timerCount++;

@@ -40,7 +40,7 @@
       <Environment>
         <Name>2 BTS + 1 SQL</Name>
         <Description>R/S host running on separate servers</Description>
-        <LoadGenScriptFile>LoadGenSettings_001.xml</LoadGenScriptFile>
+        <LoadGenScriptFile>Senario1.1.xml</LoadGenScriptFile>
         <NuberOfActiveBizTalkServers>2</NuberOfActiveBizTalkServers>
         <BizTalkServerConfiguration>1*CPU, 4GB RAM</BizTalkServerConfiguration>
         <NuberOfActiveSQLServers>1</NuberOfActiveSQLServers>

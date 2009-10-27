@@ -423,6 +423,7 @@
                             </StackPanel>
                             <StackPanel Height="10"/>
                             <StackPanel Orientation="Horizontal">
+                                <StackPanel Orientation="Horizontal" Width="115"/>
                                 <CheckBox Name="chbStartCollectorSets" IsChecked="False" >Start Perfmon collector sets</CheckBox>
                             </StackPanel>
                         </StackPanel>
@@ -437,7 +438,7 @@
                                 <Image Name="picUpdateSendportUri" Height="40" Source="Resources/Images/gear_run.png"/>
                                 <StackPanel Orientation="Horizontal">
                                     <Label FontFamily="Calibri" MaxWidth="550" Width="500" VerticalAlignment="Center">
-                                        <TextBlock TextWrapping="Wrap"><Bold>Update Indigo Service Uri</Bold></TextBlock>
+                                        <TextBlock TextWrapping="Wrap"><Bold>Update Uri for BizTalk send port (Indigo Service Uri)</Bold></TextBlock>
                                     </Label>
                                 </StackPanel>
                             </StackPanel>
@@ -446,7 +447,7 @@
                                 <Image Name="picStartBizTalkArtefacts" Height="40" Source="Resources/Images/gear_pause.png"/>
                                 <StackPanel Orientation="Horizontal">
                                     <Label FontFamily="Calibri" MaxWidth="550" Width="500" VerticalAlignment="Center">
-                                        <TextBlock TextWrapping="Wrap"><Bold>Start BizTalk Ports and Orchestrations</Bold></TextBlock>
+                                        <TextBlock TextWrapping="Wrap"><Bold>Start BizTalk ports and orchestrations</Bold></TextBlock>
                                     </Label>
                                 </StackPanel>
                             </StackPanel>
@@ -455,7 +456,7 @@
                                 <Image Name="picStartCollectorSets" Height="40" Source="Resources/Images/gear_pause.png"/>
                                 <StackPanel Orientation="Horizontal">
                                     <Label FontFamily="Calibri" MaxWidth="550" Width="500" VerticalAlignment="Center">
-                                        <TextBlock TextWrapping="Wrap"><Bold>Start Perfmon Collector Sets</Bold></TextBlock>
+                                        <TextBlock TextWrapping="Wrap"><Bold>Start Perfmon collector sets </Bold> (this might take a while)</TextBlock>
                                     </Label>
                                 </StackPanel>
                             </StackPanel>
@@ -465,7 +466,7 @@
                                     <Image Name="picInitPerfCounters" Height="40" Source="Resources/Images/gear_pause.png"/>
                                     <StackPanel Orientation="Horizontal">
                                         <Label FontFamily="Calibri" MaxWidth="550" Width="500" VerticalAlignment="Center">
-                                            <TextBlock TextWrapping="Wrap"><Bold>Initiate Perf Counters</Bold></TextBlock>
+                                            <TextBlock TextWrapping="Wrap"><Bold>Initiate Perfmon counters</Bold></TextBlock>
                                         </Label>
                                     </StackPanel>
                                 </StackPanel>
@@ -476,7 +477,7 @@
                                     <Image Name="picStartLoadgen" Height="40" Source="Resources/Images/gear_pause.png"/>
                                     <StackPanel Orientation="Horizontal">
                                         <Label FontFamily="Calibri" MaxWidth="550" Width="500" VerticalAlignment="Center">
-                                            <TextBlock TextWrapping="Wrap"><Bold>Start LoadGen Client</Bold></TextBlock>
+                                            <TextBlock TextWrapping="Wrap"><Bold>Start LoadGen client</Bold></TextBlock>
                                         </Label>
                                     </StackPanel>
                                 </StackPanel>
@@ -499,10 +500,9 @@
                             </StackPanel>
                             <ProgressBar Name="Progress" Width="580" Foreground="Blue"  Value="{Binding ProcessValue}" Height="20" Minimum="0" Maximum="100" Margin="10" Canvas.Left="70" Canvas.Top="266.224"/>
         
-                            <ProgressBar Name="Progress1" Width="580" Foreground="Blue"  Value="50" Height="20" Minimum="0" Maximum="100" Margin="10" Canvas.Left="70" Canvas.Top="310.224"/>
-
                             <Label Canvas.Left="22" Canvas.Top="274" Height="28" Name="label3" Width="120">Progress:</Label>
-                            <TextBlock Name="lblTestTime" FontWeight="Bold" Text="Total test duration: 10 minutes" Height="19" Canvas.Left="80" Canvas.Top="304" Width="259" />
+                            <TextBlock Name="lblTestTime" FontWeight="Bold" Text="Total test duration: 10 minutes" TextAlignment="Center" Height="20.01" Canvas.Left="80" Canvas.Top="304" Width="579.768" />
+                            <TextBlock Name="lblWarmUp" FontWeight="Bold" Text="Currently warming up..." TextAlignment="Center" Height="20.01" Canvas.Left="80" Canvas.Top="320" Width="579.768" />
 
                         </Canvas>
                     </Grid>
