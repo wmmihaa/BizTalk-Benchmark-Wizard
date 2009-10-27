@@ -14,7 +14,7 @@
       <Environment>
         <Name>1 BTS with SQL</Name>
         <Description>Single server installation</Description>
-        <LoadGenScriptFile>LoadGenSettings_001.xml</LoadGenScriptFile>
+        <LoadGenScriptFile>Senario1.1.xml</LoadGenScriptFile>
         <NuberOfActiveBizTalkServers>1</NuberOfActiveBizTalkServers>
         <BizTalkServerConfiguration>1*CPU, 4GB RAM</BizTalkServerConfiguration>
         <NuberOfActiveSQLServers>0</NuberOfActiveSQLServers>

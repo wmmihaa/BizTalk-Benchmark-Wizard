@@ -18,7 +18,10 @@ namespace BizTalk_Benchmark_Wizard.Helper
     {
         #region Delegats and events
         public delegate void CompleteHandler(object sender, LoadGenStopEventArgs e);
+        public delegate void InitiateStepHandler(object sender, StepEventArgs e);
         public event CompleteHandler OnComplete;
+        public event InitiateStepHandler OnStepComplete;
+
         #endregion
         #region Public members
         public double TestDuration = 120;
@@ -36,8 +39,8 @@ namespace BizTalk_Benchmark_Wizard.Helper
         {
 
         }
-        
-        public void RunTests(Environment environment, List<HostMaping> hostmappings, List<string> servers)
+
+        public void InitPerfCounters(Environment environment, List<HostMaping> hostmappings, List<string> servers)
         {
             try
             {
@@ -70,13 +73,22 @@ namespace BizTalk_Benchmark_Wizard.Helper
 
                 string rcvHost = hostmappings.First(h => h.HostName == "BBW_RxHost").SelectedHost;
 
+                RaiseInitiateStepEvent("InitPerfCounters");
                 _loadGenClients.Add(CreateAndStartLoadGenClient(CreateLoadGenScript(environment.LoadGenScriptFile, rcvHost), rcvHost));
             }
             catch (Exception)
             {
                 //InstallUtil /i /assemblyname "Microsoft.BizTalk.MsgBoxPerfCounters, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" 
-                throw new ApplicationException(@"Unable to find PerfMon Counter. Make sure all BBW* host instances are started. If you lost the counters, this post might help you recover counters:\n<""http://blogs.msdn.com/biztalkperformance/archive/2007/09/30/how-to-manually-recreate-missing-biztalk-performance-counters.aspx""") ;
+                throw new ApplicationException(@"Unable to find PerfMon Counter. Make sure all BBW* host instances are started. If you lost the counters, this post might help you recover counters:\n<""http://blogs.msdn.com/biztalkperformance/archive/2007/09/30/how-to-manually-recreate-missing-biztalk-performance-counters.aspx""");
             }
+        }
+        public void StartLoadGenClients(Environment environment, List<HostMaping> hostmappings)
+        {
+            string rcvHost = hostmappings.First(h => h.HostName == "BBW_RxHost").SelectedHost;
+
+            RaiseInitiateStepEvent("StartLoadGenClients");
+            CreateAndStartLoadGenClient(CreateLoadGenScript(environment.LoadGenScriptFile, rcvHost), rcvHost);
+           
         }
         public void StopAllTests()
         {
@@ -97,7 +109,7 @@ namespace BizTalk_Benchmark_Wizard.Helper
                         proxy.Endpoint.Address.Uri.AbsolutePath));
 
                 proxy.Endpoint.Address = newAddress;
-                
+
                 string xml = "<Response><resp>This is a response</resp></Response>";
 
                 using (proxy as IDisposable)
@@ -107,12 +119,12 @@ namespace BizTalk_Benchmark_Wizard.Helper
                     stream.Seek(0L, SeekOrigin.Begin);
                     XmlTextReader reader = new XmlTextReader(stream);
                     System.ServiceModel.Channels.Message request = System.ServiceModel.Channels.Message.CreateMessage(version, "http://tempuri.org/IServiceTwoWaysVoidNonTransactional/ConsumeMessage", (XmlReader)reader);
-                    
+
 
                     proxy.ConsumeMessage(request);
                 }
             }
-            catch(Exception)
+            catch (Exception)
             {
                 return false;
             }
@@ -123,20 +135,20 @@ namespace BizTalk_Benchmark_Wizard.Helper
         private string CreateLoadGenScript(string template, string server)
         {
             string rootPath = Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location), "Resources\\LoadGenScripts");
-            
-            string newScriptFile=Path.Combine(rootPath, server+"_LoadGenScript.xml");
-            if(File.Exists(newScriptFile))
-                File.Delete(newScriptFile);
-            
-            StreamWriter writer =new StreamWriter(newScriptFile);
 
-            using (StreamReader reader = new StreamReader(Path.Combine(rootPath, template))) 
+            string newScriptFile = Path.Combine(rootPath, server + "_LoadGenScript.xml");
+            if (File.Exists(newScriptFile))
+                File.Delete(newScriptFile);
+
+            StreamWriter writer = new StreamWriter(newScriptFile);
+
+            using (StreamReader reader = new StreamReader(Path.Combine(rootPath, template)))
             {
-                while (reader.Peek() >= 0) 
+                while (reader.Peek() >= 0)
                 {
                     string newLine = reader.ReadLine();
-                    newLine=newLine.Replace("@ServerName", server);
-                    newLine=newLine.Replace("@FilePath", rootPath);
+                    newLine = newLine.Replace("@ServerName", server);
+                    newLine = newLine.Replace("@FilePath", rootPath);
                     writer.WriteLine(newLine);
                 }
             }
@@ -145,12 +157,12 @@ namespace BizTalk_Benchmark_Wizard.Helper
         }
         private LoadGen.LoadGen CreateAndStartLoadGenClient(string scriptFile, string server)
         {
-            
+
             try
             {
                 XmlDocument doc = new XmlDocument();
                 doc.Load(scriptFile);
-                TestDuration = long.Parse( doc.SelectSingleNode("LoadGenFramework/CommonSection/StopMode/TotalTime").InnerText);
+                TestDuration = long.Parse(doc.SelectSingleNode("LoadGenFramework/CommonSection/StopMode/TotalTime").InnerText);
 
                 if (string.Compare(doc.FirstChild.Name, "LoadGenFramework", true, new CultureInfo("en-US")) != 0)
                 {
@@ -173,21 +185,17 @@ namespace BizTalk_Benchmark_Wizard.Helper
 
             return _loadGen;
         }
-        private void CreateCounterCollectors(string server)
+        private void CreatePerfCounter(string server)
         {
             PerfCounter perfCounter = new PerfCounter();
             perfCounter.Server = server;
 
-            //perfCounter.ProcessedCounters.Add(new PerformanceCounter("BizTalk:Messaging", "Documents processed/Sec", "BBW_PxHost", server));
-            //perfCounter.ProcessedCounters.Add(new PerformanceCounter("BizTalk:Messaging", "Documents processed/Sec", "BBW_RxHost", server));
             perfCounter.ProcessedCounters.Add(new PerformanceCounter("BizTalk:Messaging", "Documents processed/Sec", "BBW_TxHost", server));
 
-            //perfCounter.ReceivedCounters.Add(new PerformanceCounter("BizTalk:Messaging", "Documents received/Sec", "BBW_PxHost", server));
             perfCounter.ReceivedCounters.Add(new PerformanceCounter("BizTalk:Messaging", "Documents received/Sec", "BBW_RxHost", server));
-            //perfCounter.ReceivedCounters.Add(new PerformanceCounter("BizTalk:Messaging", "Documents received/Sec", "BBW_TxHost", server));
 
             perfCounter.CPUCounters.Add(new PerformanceCounter("Processor", "% Processor Time", "_Total", server));
-            
+
             PerfCounters.Add(perfCounter);
         }
         protected void RaiseCompleteEvent(object sender, LoadGenStopEventArgs e)
@@ -195,6 +203,13 @@ namespace BizTalk_Benchmark_Wizard.Helper
             if (OnComplete != null)
             {
                 OnComplete(sender, e);
+            }
+        }
+        void RaiseInitiateStepEvent(string eventStep)
+        {
+            if (OnStepComplete != null)
+            {
+                OnStepComplete(null, new StepEventArgs() { EventStep = eventStep });
             }
         }
         private void LoadGen_Stopped(object sender, LoadGenStopEventArgs e)
@@ -261,14 +276,14 @@ namespace BizTalk_Benchmark_Wizard.Helper
     {
         public bool HasProcessingCounter = false;
         public bool HasReceiveCounter = false;
-        
+
         public List<PerformanceCounter> ProcessedCounters = new List<PerformanceCounter>();
         public List<PerformanceCounter> ReceivedCounters = new List<PerformanceCounter>();
         public List<PerformanceCounter> CPUCounters = new List<PerformanceCounter>();
 
         public float ProcessedCounterValue
         {
-            get 
+            get
             {
                 float ret = 1;
                 try
@@ -278,7 +293,7 @@ namespace BizTalk_Benchmark_Wizard.Helper
                 }
                 catch (Exception ex)
                 {
-                    throw new ApplicationException("Unable to collect perfcounter. Make sure you run the application with elevated rights",ex);
+                    throw new ApplicationException("Unable to collect perfcounter. Make sure you run the application with elevated rights", ex);
                 }
                 return ret;
             }
@@ -295,7 +310,7 @@ namespace BizTalk_Benchmark_Wizard.Helper
                 }
                 catch (Exception ex)
                 {
-                    throw new ApplicationException("Unable to collect perfcounter. Make sure you run the application with elevated rights",ex);
+                    throw new ApplicationException("Unable to collect perfcounter. Make sure you run the application with elevated rights", ex);
                 }
                 return ret;
             }
@@ -326,6 +341,8 @@ namespace BizTalk_Benchmark_Wizard.Helper
         [System.ServiceModel.OperationContract(Action = "*")]
         void ConsumeMessage(System.ServiceModel.Channels.Message msg);
     }
-
-
+    public class StepEventArgs : EventArgs
+    {
+        public string EventStep { get; set; }
+    }
 }

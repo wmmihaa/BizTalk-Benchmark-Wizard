@@ -13,8 +13,12 @@ using System.Configuration;
 
 namespace BizTalk_Benchmark_Wizard.Helper
 {
-    internal class BizTalkHelper : IDisposable  
+    internal class BizTalkHelper : IDisposable
     {
+        #region Delegates and Events
+        public delegate void InitiateStepHandler(object sender, StepEventArgs e);
+        public event InitiateStepHandler OnStepComplete;
+        #endregion
         #region Constants
         const string CONNECTIONSTRINGFORMAT = "Integrated Security=SSPI;database={0};server={1}";
         const string BIZTALKSCOPE = @"\\{0}\root\MicrosoftBizTalkServer";
@@ -38,6 +42,13 @@ namespace BizTalk_Benchmark_Wizard.Helper
         private string _mainBizTalkServer = string.Empty; //Used for WMI
         #endregion
         #region Private Methods
+        void RaiseInitiateStepEvent(string eventStep)
+        {
+            if (OnStepComplete != null)
+            {
+                OnStepComplete(null, new StepEventArgs() { EventStep = eventStep });
+            }
+        }
         private BizTalkDBs GetSqlServerNames()
         {
             BizTalkDBs bizTalkDBs = new BizTalkDBs();
@@ -336,6 +347,7 @@ namespace BizTalk_Benchmark_Wizard.Helper
                     _explorer.SendPorts[portName].PrimaryTransport.Address = newAddress.ToString();
                     _explorer.SaveChanges();
                 }
+                RaiseInitiateStepEvent("UpdateSendPortUri");
             }
             catch (Exception ex)
             {
@@ -351,6 +363,7 @@ namespace BizTalk_Benchmark_Wizard.Helper
                 _explorer.SendPorts[sendPort].Status = PortStatus.Started;
                 _explorer.Applications["BizTalk Benchmark Wizard"].Orchestrations[orchestration].Status = OrchestrationStatus.Started;
                 _explorer.SaveChanges();
+                RaiseInitiateStepEvent("CheckPortStatus");
             }
             catch (Exception ex)
             {
@@ -358,7 +371,6 @@ namespace BizTalk_Benchmark_Wizard.Helper
             }
         }
         #endregion
-
         #region IDisposable Members
 
         public void Dispose()

@@ -15,6 +15,10 @@ namespace BizTalk_Benchmark_Wizard.Helper
     /// </summary>
     internal class PerflogHelper
     {
+        #region Delegates and Events
+        public delegate void InitiateStepHandler(object sender, StepEventArgs e);
+        public event InitiateStepHandler OnStepComplete;
+        #endregion
         List<Server> _servers = null;
         bool _isStarted;
         public PerflogHelper(List<Server> servers)
@@ -147,6 +151,13 @@ namespace BizTalk_Benchmark_Wizard.Helper
                     !ProcessHelper.OutPutMessage.Contains("Data Collector Set already exists"))
                         throw new ApplicationException("Unable to create Data Collector Set\nMake sure you are running the application with elevated rights.");
         }
+        void RaiseInitiateStepEvent(string eventStep)
+        {
+            if (OnStepComplete != null)
+            {
+                OnStepComplete(null, new StepEventArgs() { EventStep = eventStep });
+            }
+        }
         public void StartCollectorSet()
         {
             foreach (string collectorSet in _existingCollectoSets)
@@ -159,7 +170,8 @@ namespace BizTalk_Benchmark_Wizard.Helper
                 if (!ProcessHelper.OutPutMessage.Contains("The command completed successfully."))
                     throw new ArgumentException("Unable to start collector set [" + collectorSet + "]\n" + ProcessHelper.OutPutMessage);
             }
-            _isStarted = true;
+           _isStarted = true;
+           RaiseInitiateStepEvent("StartCollectorSet");
         }
         public void StopCollectorSet()
         {

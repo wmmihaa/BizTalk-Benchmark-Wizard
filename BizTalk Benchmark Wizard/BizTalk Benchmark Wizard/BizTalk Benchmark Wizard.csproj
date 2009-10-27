@@ -123,6 +123,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Resources\Styles\Checkbox.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Resources\Styles\Expander.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -130,6 +134,10 @@
     <Page Include="Resources\Styles\GroupBox.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Resources\Styles\Progressbar.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Resources\Styles\ScrollBar.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -255,6 +263,9 @@
     <Content Include="Artefacts\IndigoService\Response.xml" />
     <None Include="Artefacts\BizTalk\BizTalk Benchmark Wizard.BindingInfo.xml" />
     <Resource Include="Resources\Images\unknown.png" />
+    <Resource Include="Resources\Images\gear_ok.png" />
+    <Resource Include="Resources\Images\gear_pause.png" />
+    <Resource Include="Resources\Images\gear_run.png" />
     <Content Include="Resources\LoadGenScripts\LoadGenSettings_001.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

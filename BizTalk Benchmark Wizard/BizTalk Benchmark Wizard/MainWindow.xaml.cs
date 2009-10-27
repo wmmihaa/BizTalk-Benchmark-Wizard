@@ -28,8 +28,7 @@ namespace BizTalk_Benchmark_Wizard
     public partial class MainWindow : Window ,IDisposable
     {
         #region Constants
-        const int TIMERTICKS = 5000;
-        const int TESTRUNFORNUMBEROFMINUTES = 2;
+        const int TIMERTICKS = 5000; // Refresh interval for gauges
         #endregion
         #region Private Members
         bool _hasRefreshed;
@@ -69,7 +68,6 @@ namespace BizTalk_Benchmark_Wizard
                 return processValue;
             }
         }
-        
         static readonly DependencyProperty ProcessValueProperty = DependencyProperty.Register(
                                                                             "ProcessValue",
                                                                             typeof(int),
@@ -403,6 +401,7 @@ namespace BizTalk_Benchmark_Wizard
                 throw new ApplicationException("Unable to load Senarios configuration", ex);
             }
         }
+
         void PreCreatingCollectorSet()
         {
             lblWait.Text = "Please wait while creating Perfmon collector sets...";
@@ -414,11 +413,14 @@ namespace BizTalk_Benchmark_Wizard
         }
         void PreRunTest()
         {
-            btnBack.IsEnabled = false;
-            btnNext.IsEnabled = false;
-            btnCreateCollectors.IsEnabled = false;
-            btnTestService.IsEnabled = false;
-            txtIndigoServiceServer.IsEnabled = false;
+            //btnBack.IsEnabled = false;
+            //btnNext.IsEnabled = false;
+            //btnCreateCollectors.IsEnabled = false;
+            //btnTestService.IsEnabled = false;
+            //txtIndigoServiceServer.IsEnabled = false;
+
+            btnNext.Visibility = Visibility.Hidden;
+            btnBack.Visibility = Visibility.Hidden;
         }
         public static void DoEvents()
         {
@@ -429,9 +431,13 @@ namespace BizTalk_Benchmark_Wizard
         #region Run Tests
         private void PrepareTest() 
         {
+            _bizTalkHelper.OnStepComplete += new BizTalkHelper.InitiateStepHandler(OnStepComplete);
+            _loadGenHelper.OnStepComplete+=new LoadGenHelper.InitiateStepHandler(OnStepComplete);
+            _perflogHelper.OnStepComplete+=new PerflogHelper.InitiateStepHandler(OnStepComplete);
+            _loadGenHelper.OnComplete += new LoadGenHelper.CompleteHandler(OnTestComplete);
+            
             _bizTalkHelper.UpdateSendPortUri("IndigoService", txtIndigoServiceServer.Text);
-            _bizTalkHelper.CheckPortStatus("LoadGen_Receive", "LoadGen_Receive_NETTCP", "IndigoService", "EmptySchedule_Baseline1.SimpleSchedule");
-            Thread.Sleep(10);
+            
             _testStartTime = DateTime.Now;
             _avgCpuValue = 0;
             _avgProcessedValue = 0;
@@ -442,32 +448,75 @@ namespace BizTalk_Benchmark_Wizard
             ReceivedGauge.MaxValue = 180;
             ProcessValue = 0;
             Progress.DataContext = this;
-            RunTest();
+            //RunTest();
         }
-        private void RunTest()
+        void OnStepComplete(object sender, StepEventArgs e)
         {
-            if(chbStartCollectorSets.IsChecked==true)
-                this.Dispatcher.BeginInvoke(DispatcherPriority.ApplicationIdle, new Action(delegate() { _perflogHelper.StartCollectorSet(); }));
-
-            _loadGenHelper.RunTests((Environment)environments.SelectedItem, (List<HostMaping>)lstHosts.DataContext, _bizTalkHelper.GetApplicationServerNames());
-            _loadGenHelper.OnComplete += new LoadGenHelper.CompleteHandler(_loadGenHelper_OnComplete);
-            lblTestTime.Text = string.Format("Total test duration: {0} minutes", ((int)_loadGenHelper.TestDuration / 60).ToString());
-            
-            _timer = new System.Timers.Timer(TIMERTICKS);
-            _timer.Elapsed += new ElapsedEventHandler(_timer_CollectData);
-            _timer_CollectData(null, null);
-            _timer.Start();
+            switch (e.EventStep)
+            { 
+                case "UpdateSendPortUri":
+                    picUpdateSendportUri.Source = new BitmapImage(new Uri("pack://application:,,,/BizTalk Benchmark Wizard;component/Resources/Images/gear_ok.png"));
+                    picStartBizTalkArtefacts.Source = new BitmapImage(new Uri("pack://application:,,,/BizTalk Benchmark Wizard;component/Resources/Images/gear_run.png"));
+                    DoEvents();
+                    this.Dispatcher.BeginInvoke(DispatcherPriority.ApplicationIdle, new Action(delegate() 
+                        { 
+                            _bizTalkHelper.CheckPortStatus("LoadGen_Receive", "LoadGen_Receive_NETTCP", "IndigoService", "EmptySchedule_Baseline1.SimpleSchedule");
+                        }));
+                    break;
+                case "CheckPortStatus":
+                    picStartBizTalkArtefacts.Source = new BitmapImage(new Uri("pack://application:,,,/BizTalk Benchmark Wizard;component/Resources/Images/gear_ok.png"));
+                    picStartCollectorSets.Source = new BitmapImage(new Uri("pack://application:,,,/BizTalk Benchmark Wizard;component/Resources/Images/gear_run.png"));
+                    DoEvents();
+                    if (chbStartCollectorSets.IsChecked == true)
+                    {
+                        this.Dispatcher.BeginInvoke(DispatcherPriority.ApplicationIdle, new Action(delegate()
+                        {
+                            _perflogHelper.StartCollectorSet();
+                        }));
+                    }
+                    else
+                        OnStepComplete(null, new StepEventArgs() { EventStep = "StartCollectorSet" });
+                    break;
+                case "StartCollectorSet":
+                    picStartCollectorSets.Source = new BitmapImage(new Uri("pack://application:,,,/BizTalk Benchmark Wizard;component/Resources/Images/gear_ok.png"));
+                    picInitPerfCounters.Source = new BitmapImage(new Uri("pack://application:,,,/BizTalk Benchmark Wizard;component/Resources/Images/gear_run.png"));
+                    DoEvents();
+                    this.Dispatcher.BeginInvoke(DispatcherPriority.ApplicationIdle, new Action(delegate()
+                    {
+                        _loadGenHelper.InitPerfCounters((Environment)environments.SelectedItem, (List<HostMaping>)lstHosts.DataContext, _bizTalkHelper.GetApplicationServerNames());
+                    }));
+                    break;
+                case "InitPerfCounters":
+                    picInitPerfCounters.Source = new BitmapImage(new Uri("pack://application:,,,/BizTalk Benchmark Wizard;component/Resources/Images/gear_ok.png"));
+                    picStartLoadgen.Source = new BitmapImage(new Uri("pack://application:,,,/BizTalk Benchmark Wizard;component/Resources/Images/gear_run.png"));
+                    DoEvents();
+                    this.Dispatcher.BeginInvoke(DispatcherPriority.ApplicationIdle, new Action(delegate()
+                    {
+                        _loadGenHelper.StartLoadGenClients((Environment)environments.SelectedItem, (List<HostMaping>)lstHosts.DataContext);
+                    }));
+                    break;
+                case "StartLoadGenClients":
+                    lblTestTime.Text = string.Format("Total test duration: {0} minutes", ((int)_loadGenHelper.TestDuration / 60).ToString());
+                    _timer = new System.Timers.Timer(TIMERTICKS);
+                    _timer.Elapsed += new ElapsedEventHandler(OnCollectCounterData);
+                    OnCollectCounterData(null, null);
+                    _timer.Start();
+                    tabControl1.SelectedIndex++;
+                    btnNext.Visibility = Visibility.Visible;
+                    btnNext.IsEnabled=false;
+                    DoEvents();
+                    break;
+            }
         }
-        private void _loadGenHelper_OnComplete(object sender, LoadGen.LoadGenStopEventArgs e)
+        private void OnTestComplete(object sender, LoadGen.LoadGenStopEventArgs e)
         {
             _perflogHelper.StopCollectorSet();
             
             this.Dispatcher.BeginInvoke(DispatcherPriority.ApplicationIdle, new Action(delegate() { tabControl1.SelectedIndex++; }));
             this.Dispatcher.BeginInvoke(DispatcherPriority.ApplicationIdle, new Action(delegate() { btnNext.IsEnabled = true; }));
             this.Dispatcher.BeginInvoke(DispatcherPriority.ApplicationIdle, new Action(delegate() { _timer.Stop(); }));
-            //btnNext.IsEnabled = true;
         }
-        private void _timer_CollectData(object sender, ElapsedEventArgs e)
+        private void OnCollectCounterData(object sender, ElapsedEventArgs e)
         {
             _timer.Enabled = false;
             

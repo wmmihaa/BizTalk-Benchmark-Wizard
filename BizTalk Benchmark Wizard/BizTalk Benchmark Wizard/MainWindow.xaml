@@ -267,17 +267,17 @@
                                 <TextBlock Name="lblWait" FontSize="20" HorizontalAlignment="Center" FontWeight="Bold" Text="Please wait while checking for installed components..."/>
                             </StackPanel>
                             <StackPanel Orientation="Vertical" Name="InstallInstructions" Visibility="Collapsed">
-                                <Label Name="lblInstallInstructionsTitle" FontWeight="Bold">Installation instructions:</Label> 
+                                <Label Name="lblInstallInstructionsTitle" FontWeight="Bold">Installation instructions:</Label>
                                 <Label Name="lblInstallInstructions">
                                     <TextBlock >1. Copy the BizTalk folder located in the [InstallDir]\Artefacts folder to your BizTalk servers<LineBreak/>
                                                                     2. Run the InstallHosts.vbs script on ONE of the BizTalk servers, to create hosts, host instances and adapter handlers.<LineBreak/>
                                                                     3. Import the BizTalk Benchmark Wizard.msi on ONE of the BizTalk Servers<LineBreak/>
                                                                     4. Install the BizTalk Benchmark Wizard.msi on ALL BizTalk servers in order to add the assemblies to GAC.<LineBreak/>
                                                                     5. Restart the BBW* hosts and stop all other host instances<LineBreak/>
-                                                                    6. Run this wizard again<LineBreak/><LineBreak/>It is strongly recommened not to run the wizard from any of the BizTalk servers. 
+                                                                    6. Run this wizard again<LineBreak/><LineBreak/>It is strongly recommened not to run the wizard from any of the BizTalk servers.
                                     </TextBlock>
-                                               
-                                               
+
+
                                 </Label>
                             </StackPanel>
 
@@ -382,12 +382,12 @@
                                             </DataTemplate>
                                         </ListBox.ItemTemplate>
                                     </ListBox>
-                                    
+
                                 </StackPanel>
                             </Border>
                         </GroupBox>
                         <StackPanel Height="60" Orientation="Horizontal"/>
-                        
+
                     </Grid>
                 </TabItem>
                 <TabItem Header="" Name="tabPrepare">
@@ -419,13 +419,71 @@
                                     <StackPanel Width="100"/>
                                     <Button Height="25" Style="{DynamicResource RoundedButton}" HorizontalAlignment="Right" Name="btnTestService" VerticalAlignment="Center" Width="130" Click="btnTestService_Click">Test the Indigo Service</Button>
                                 </StackPanel>
-                                
+
                             </StackPanel>
                             <StackPanel Height="10"/>
                             <StackPanel Orientation="Horizontal">
                                 <CheckBox Name="chbStartCollectorSets" IsChecked="False" >Start Perfmon collector sets</CheckBox>
                             </StackPanel>
                         </StackPanel>
+                    </Grid>
+                </TabItem>
+                <TabItem Header="" Name="tabInitiating" >
+                    <Grid>
+                        <Label Height="61" Margin="20,34,19,0" VerticalAlignment="Top" FontSize="30" FontWeight="Bold" FontFamily="Calibri">Please wait while initiating test runs</Label>
+                        <StackPanel Orientation="Vertical" Margin="20,90" Height="250">
+
+                            <StackPanel Orientation="Horizontal">
+                                <Image Name="picUpdateSendportUri" Height="40" Source="Resources/Images/gear_run.png"/>
+                                <StackPanel Orientation="Horizontal">
+                                    <Label FontFamily="Calibri" MaxWidth="550" Width="500" VerticalAlignment="Center">
+                                        <TextBlock TextWrapping="Wrap"><Bold>Update Indigo Service Uri</Bold></TextBlock>
+                                    </Label>
+                                </StackPanel>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Height="5" />
+                            <StackPanel Orientation="Horizontal">
+                                <Image Name="picStartBizTalkArtefacts" Height="40" Source="Resources/Images/gear_pause.png"/>
+                                <StackPanel Orientation="Horizontal">
+                                    <Label FontFamily="Calibri" MaxWidth="550" Width="500" VerticalAlignment="Center">
+                                        <TextBlock TextWrapping="Wrap"><Bold>Start BizTalk Ports and Orchestrations</Bold></TextBlock>
+                                    </Label>
+                                </StackPanel>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Height="5" />
+                            <StackPanel Orientation="Horizontal">
+                                <Image Name="picStartCollectorSets" Height="40" Source="Resources/Images/gear_pause.png"/>
+                                <StackPanel Orientation="Horizontal">
+                                    <Label FontFamily="Calibri" MaxWidth="550" Width="500" VerticalAlignment="Center">
+                                        <TextBlock TextWrapping="Wrap"><Bold>Start Perfmon Collector Sets</Bold></TextBlock>
+                                    </Label>
+                                </StackPanel>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Height="5" />
+                            <StackPanel Orientation="Vertical">
+                                <StackPanel Orientation="Horizontal">
+                                    <Image Name="picInitPerfCounters" Height="40" Source="Resources/Images/gear_pause.png"/>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Label FontFamily="Calibri" MaxWidth="550" Width="500" VerticalAlignment="Center">
+                                            <TextBlock TextWrapping="Wrap"><Bold>Initiate Perf Counters</Bold></TextBlock>
+                                        </Label>
+                                    </StackPanel>
+                                </StackPanel>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Height="5" />
+                            <StackPanel Orientation="Vertical">
+                                <StackPanel Orientation="Horizontal">
+                                    <Image Name="picStartLoadgen" Height="40" Source="Resources/Images/gear_pause.png"/>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Label FontFamily="Calibri" MaxWidth="550" Width="500" VerticalAlignment="Center">
+                                            <TextBlock TextWrapping="Wrap"><Bold>Start LoadGen Client</Bold></TextBlock>
+                                        </Label>
+                                    </StackPanel>
+                                </StackPanel>
+                            </StackPanel>
+                            
+                        </StackPanel>
+
                     </Grid>
                 </TabItem>
                 <TabItem Header="" Name="tabRun">
@@ -440,10 +498,12 @@
                                 <my1:GaugeControl Name="ProcessedGauge" Caption="Avg Processed msgs/sec"></my1:GaugeControl>
                             </StackPanel>
                             <ProgressBar Name="Progress" Width="580" Foreground="Blue"  Value="{Binding ProcessValue}" Height="20" Minimum="0" Maximum="100" Margin="10" Canvas.Left="70" Canvas.Top="266.224"/>
+        
+                            <ProgressBar Name="Progress1" Width="580" Foreground="Blue"  Value="50" Height="20" Minimum="0" Maximum="100" Margin="10" Canvas.Left="70" Canvas.Top="310.224"/>
 
                             <Label Canvas.Left="22" Canvas.Top="274" Height="28" Name="label3" Width="120">Progress:</Label>
-                            <TextBlock Name="lblTestTime" FontWeight="Bold" Text="Total test duration: 10 minutes" Height="19" Canvas.Left="80" Canvas.Top="304" Width="259" /> 
-                            
+                            <TextBlock Name="lblTestTime" FontWeight="Bold" Text="Total test duration: 10 minutes" Height="19" Canvas.Left="80" Canvas.Top="304" Width="259" />
+
                         </Canvas>
                     </Grid>
                 </TabItem>
@@ -579,6 +639,6 @@
                 </Grid>
             </Grid>
         </Popup>
-        
+
     </Grid>
 </Window>
