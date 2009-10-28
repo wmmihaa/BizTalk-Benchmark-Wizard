@@ -5,8 +5,8 @@
     <Description>
       1. Loadgen generates a new XML message and sends it over NetTCP
       2. A WCF-NetTCP Receive Location receives a the xml document from Loadgen.
-      3. The PassThruReceive pipeline performs no processing and the message is published by the EPM to the MessageBox.
-      4. The WCF One-Way Send Port, which is the only subscriber to the message, retrieves the message from the MessageBox
+      3. The PassThruReceive pipeline performs no processing and the message is published by the EPM to the MsgBox.
+      4. The WCF One-Way Send Port, which is the only subscriber to the message, retrieves the message from the MsgBox
       5. The PassThruTransmit pipeline provides no additional processing
       6. The message is delivered to the back end WCF service by the WCF NetTCP adapter
     </Description>
@@ -57,8 +57,8 @@
     <Description>
       1. Loadgen generates a new XML message and sends it over NetTCP
       2. A WCF-NetTCP Receive Location receives a the xml document from Loadgen.
-      3. The XMLReceive pipeline performs no processing and the message is published by the EPM to the MessageBox.
-      4. The message is delivered to a simple Orchestration which consists of a receive location and a send port
+      3. The XMLReceive pipeline performs no processing and the message is published by the EPM to the MsgBox
+      4. The message is delivered to a simple Orchestration which consists of a receive shape and a send shape
       5. The WCF One-Way Send Port, which is the only subscriber to the Orchestration message, retrieves the message from the MsgBox
       6. The PassThruTransmit pipeline provides no additional processing
       7. The message is delivered to the back end WCF service by the WCF NetTCP adapter

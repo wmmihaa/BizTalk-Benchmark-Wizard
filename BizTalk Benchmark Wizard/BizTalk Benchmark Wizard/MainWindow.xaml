@@ -228,7 +228,7 @@
                     <Grid Background="Transparent">
                         <Label Height="61" Margin="20,34,19,0" VerticalAlignment="Top" FontSize="30" FontWeight="Bold" FontFamily="Calibri">Welcome to BizTalk Benchmark Wizard</Label>
 
-                        <Label Margin="20,80,19,129" Name="label2"  FontFamily="Calibri">
+                        <Label Margin="40,80,19,129" Name="label2"  FontFamily="Calibri">
                             <TextBlock TextWrapping="Wrap">The purpose of this tool is to verify your BizTalk environment performs as expected. The typical use case where you would <LineBreak/>use the BizTalk Benchmark Wizard would be after BizTalk Server is installed and before deploying any solutions to the environment.<LineBreak/>
                                 <LineBreak/>BizTalk Benchmark Wizard performs load to BizTalk Server in relation to a specific scenario. During the execution of the test, counter information is collected and benchmarked against collected statistics relevant to your BizTalk Server environment<LineBreak/>
                                 After completion of the test, a result is presented showing whether or not your BizTalk investment is performing as you could expect.<LineBreak/>
@@ -240,11 +240,11 @@
                 <TabItem Header="" Name="tabPrerequsites" >
                     <Grid>
                         <Label Height="61" Margin="20,34,19,0" VerticalAlignment="Top" FontSize="30" FontWeight="Bold" FontFamily="Calibri">Prerequsites</Label>
-                        <StackPanel Orientation="Vertical" Margin="20,80" >
+                        <StackPanel Orientation="Vertical" Margin="40,80" >
                             <StackPanel Orientation="Horizontal">
                                 <Image Name="picInstallCollectorSet" Height="40" Source="Resources/Images/unknown.png"/>
                                 <StackPanel Orientation="Horizontal">
-                                    <Label FontFamily="Calibri" MaxWidth="550" Width="500">
+                                    <Label FontFamily="Calibri" MaxWidth="550" Width="490">
                                         <TextBlock TextWrapping="Wrap"><Bold>Optional</Bold> - Create Data Collector Sets for further analyzes after the completion of the test.</TextBlock>
                                     </Label>
                                     <Button Height="23" Style="{DynamicResource RoundedButton}" IsEnabled="False" HorizontalAlignment="Right" Name="btnCreateCollectors" VerticalAlignment="Center" Width="75" Click="btnCreateCollectors_Click">Create</Button>
@@ -254,7 +254,7 @@
                             <StackPanel Orientation="Horizontal">
                                 <Image Name="picInstalledScenario" Height="40" Source="Resources/Images/unknown.png"/>
                                 <StackPanel Orientation="Horizontal">
-                                    <Label FontFamily="Calibri" MaxWidth="550" Width="480">
+                                    <Label FontFamily="Calibri" MaxWidth="550" Width="450">
                                         <TextBlock TextWrapping="Wrap"><Bold>Mandatory</Bold> - Install testing scenario on all BizTalk servers.</TextBlock>
                                     </Label>
                                     <Label Name="lblInstalledScenarioManual" FontFamily="Calibri">
@@ -288,23 +288,23 @@
                     <Grid>
                         <Label Height="61" Margin="20,34,19,0" VerticalAlignment="Top" FontSize="30" FontWeight="Bold" FontFamily="Calibri">Scenarios</Label>
 
-                        <Label Margin="20,75,19,129" FontFamily="Calibri">
+                        <Label Margin="40,75,19,129" FontFamily="Calibri">
                             <TextBlock TextWrapping="Wrap">
                                 BizTalk Benchmark Wizard uses Microsoft LoadGen 2007 to generate message transmission loads to run performance and stress tests for Microsoft BizTalk Server applications. 
                                 <LineBreak/><LineBreak/>Depending on which scenario you select below, a different script will be executed. Microsoft LoadGen 2007 was installed together with BizTalk Benchmark Wizard, and can be used afterwards to continue analyzing your environment.
                             </TextBlock>
                         </Label>
-                        <Canvas Margin="20,170" >
+                        <Canvas Margin="40,170" >
                             <StackPanel Orientation="Vertical">
                                 <StackPanel Orientation="Horizontal">
-                                    <Label Canvas.Left="26" Canvas.Top="16" Height="28" Name="label1" Width="120">Select scenario:</Label>
+                                    <Label Canvas.Left="26" Canvas.Top="16" Height="28" Name="label1" Width="90">Select scenario:</Label>
                                     <ComboBox Template="{StaticResource ComboBoxTemplate}" Canvas.Left="121" Canvas.Top="16" Height="23" Name="cbScenario" Width="510" SelectionChanged="cbScenario_SelectionChanged" />
                                 </StackPanel>
-                                <StackPanel Orientation="Horizontal" Height="10"/>
-                                <GroupBox Header="Name                   Number of BizTalk Servers    Description" 
+                                <StackPanel Height="10"/>
+                                <GroupBox Header="Select an environment which, as close as possible, resembles your own" 
                                           x:Name="environmentsGroup" 
                                           Height="125" 
-                                          Width="634" 
+                                          Width="600" 
                                           Canvas.Left="25" 
                                           Canvas.Top="45">
                                     <Border Margin="0,0,0,0"
@@ -393,7 +393,7 @@
                 <TabItem Header="" Name="tabPrepare">
                     <Grid>
                         <Label Height="61" Margin="20,34,19,0" VerticalAlignment="Top" FontSize="30" FontWeight="Bold" FontFamily="Calibri">Prepare</Label>
-                        <StackPanel Orientation="Vertical" Margin="20,80,20,61" >
+                        <StackPanel Orientation="Vertical" Margin="40,80,20,61" >
                             <Label FontFamily="Calibri">
                                 <TextBlock Name="TESTLABEL" TextWrapping="Wrap">In order to create a comparable result, please terminate all suspended instances, and stop all Host Instances <LineBreak/>not running the WCF-NetTcp adapter. Make sure to have at least one Host Instance with tracking enabled.</TextBlock>
                             </Label>
@@ -416,7 +416,7 @@
                                         <TextBlock TextWrapping="Wrap"><Bold>Server name:</Bold></TextBlock>
                                     </Label>
                                     <TextBox Name="txtIndigoServiceServer" Width="280" Height="23" VerticalAlignment="Center" Text="localhost" ></TextBox>
-                                    <StackPanel Width="100"/>
+                                    <StackPanel Width="80"/>
                                     <Button Height="25" Style="{DynamicResource RoundedButton}" HorizontalAlignment="Right" Name="btnTestService" VerticalAlignment="Center" Width="130" Click="btnTestService_Click">Test the Indigo Service</Button>
                                 </StackPanel>
 
@@ -432,7 +432,7 @@
                 <TabItem Header="" Name="tabInitiating" >
                     <Grid>
                         <Label Height="61" Margin="20,34,19,0" VerticalAlignment="Top" FontSize="30" FontWeight="Bold" FontFamily="Calibri">Please wait while initiating test runs</Label>
-                        <StackPanel Orientation="Vertical" Margin="20,90" Height="250">
+                        <StackPanel Orientation="Vertical" Margin="40,90" Height="250">
 
                             <StackPanel Orientation="Horizontal">
                                 <Image Name="picUpdateSendportUri" Height="40" Source="Resources/Images/gear_run.png"/>
@@ -536,7 +536,7 @@
                             </StackPanel>
                             <StackPanel HorizontalAlignment="Center" Width="530">
                                 <Label>
-                                    <TextBlock Name="ResultDescription" TextWrapping="Wrap">
+                                    <TextBlock Name="lblResultDescription" TextWrapping="Wrap">
                                         <LineBreak/> The test did not complete with expected results. To further analyze the environment we recommend you to study the Data Collector Sets created using the <Hyperlink NavigateUri="http://www.codeplex.com/PAL">Performance Analysis of Logs (PAL) tool</Hyperlink>.
                                     </TextBlock>
                                 </Label>

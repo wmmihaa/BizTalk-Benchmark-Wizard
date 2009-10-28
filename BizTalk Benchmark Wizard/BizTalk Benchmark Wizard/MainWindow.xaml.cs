@@ -248,6 +248,7 @@ namespace BizTalk_Benchmark_Wizard
                     btnBack.Visibility = Visibility.Visible;
                     break;
                 case 2:
+                    btnNext.IsEnabled = false;
                     break;
                 case 3:
                     btnNext.Content = "Next";
@@ -314,6 +315,7 @@ namespace BizTalk_Benchmark_Wizard
             if (cpuSuccess && processedSuccess && receivedSuccess)
             {
                 lblSucess.Text = "Succeeded";
+                lblResultDescription.Text = @"<LineBreak/>Congratulations, the test completed with expected results. If you wich to further analyze the environment we recommend you to study the Data Collector Sets created using the <Hyperlink NavigateUri=""http://www.codeplex.com/PAL"">Performance Analysis of Logs (PAL) tool</Hyperlink>.";
                 picSucess.Source = new System.Windows.Media.Imaging.BitmapImage(new Uri("pack://application:,,,/BizTalk Benchmark Wizard;component/Resources/Images/passed.png"));
             }
            
