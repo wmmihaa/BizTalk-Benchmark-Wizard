@@ -40,7 +40,7 @@ namespace BizTalk_Benchmark_Wizard.Helper
 
         }
 
-        public void InitPerfCounters(Environment environment, List<HostMaping> hostmappings, List<string> servers)
+        public void InitPerfCounters(string scenario, Environment environment, List<HostMaping> hostmappings, List<string> servers)
         {
             try
             {
@@ -53,7 +53,8 @@ namespace BizTalk_Benchmark_Wizard.Helper
                         switch (hostMapping.HostName)
                         {
                             case "BBW_RxHost":
-                                UpdateServiceAddress(server, "ClientEndPoint1");
+
+                                UpdateServiceAddress(server, scenario);
 
                                 perfCounter.ReceivedCounters.Add(new PerformanceCounter("BizTalk:Messaging", "Documents received/Sec", "BBW_RxHost", server));
                                 perfCounter.HasReceiveCounter = true;
@@ -74,7 +75,7 @@ namespace BizTalk_Benchmark_Wizard.Helper
                 string rcvHost = hostmappings.First(h => h.HostName == "BBW_RxHost").SelectedHost;
 
                 RaiseInitiateStepEvent("InitPerfCounters");
-                _loadGenClients.Add(CreateAndStartLoadGenClient(CreateLoadGenScript(environment.LoadGenScriptFile, rcvHost), rcvHost));
+                //_loadGenClients.Add(CreateAndStartLoadGenClient(CreateLoadGenScript(environment.LoadGenScriptFile, rcvHost), rcvHost));
             }
             catch (Exception)
             {
@@ -99,7 +100,7 @@ namespace BizTalk_Benchmark_Wizard.Helper
         {
             try
             {
-                IndigoService.ServiceTwoWaysVoidNonTransactionalClient proxy = new BizTalk_Benchmark_Wizard.IndigoService.ServiceTwoWaysVoidNonTransactionalClient("netTcpBinding_IServiceTwoWaysVoidNonTransactional");
+                IndigoService.ServiceTwoWaysVoidNonTransactionalClient proxy = new BizTalk_Benchmark_Wizard.IndigoService.ServiceTwoWaysVoidNonTransactionalClient("IndigoService");
 
                 System.ServiceModel.EndpointAddress newAddress =
                     new System.ServiceModel.EndpointAddress(string.Format("{0}://{1}:{2}{3}",

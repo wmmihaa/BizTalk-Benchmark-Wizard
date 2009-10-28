@@ -434,7 +434,7 @@ namespace BizTalk_Benchmark_Wizard
             _perflogHelper.OnStepComplete+=new PerflogHelper.InitiateStepHandler(OnStepComplete);
             _loadGenHelper.OnComplete += new LoadGenHelper.CompleteHandler(OnTestComplete);
             
-            _bizTalkHelper.UpdateSendPortUri("IndigoService", txtIndigoServiceServer.Text);
+            _bizTalkHelper.UpdateSendPortUri(cbScenario.Text, txtIndigoServiceServer.Text);
             
         }
         void OnStepComplete(object sender, StepEventArgs e)
@@ -447,7 +447,7 @@ namespace BizTalk_Benchmark_Wizard
                     DoEvents();
                     this.Dispatcher.BeginInvoke(DispatcherPriority.ApplicationIdle, new Action(delegate() 
                         { 
-                            _bizTalkHelper.CheckPortStatus("LoadGen_Receive", "LoadGen_Receive_NETTCP", "IndigoService", "EmptySchedule_Baseline1.SimpleSchedule");
+                            _bizTalkHelper.StartBizTalkPorts();
                         }));
                     break;
                 case "CheckPortStatus":
@@ -474,7 +474,7 @@ namespace BizTalk_Benchmark_Wizard
                     DoEvents();
                     this.Dispatcher.BeginInvoke(DispatcherPriority.ApplicationIdle, new Action(delegate()
                     {
-                        _loadGenHelper.InitPerfCounters((Environment)environments.SelectedItem, (List<HostMaping>)lstHosts.DataContext, _bizTalkHelper.GetApplicationServerNames());
+                        _loadGenHelper.InitPerfCounters(cbScenario.Text, (Environment)environments.SelectedItem, (List<HostMaping>)lstHosts.DataContext, _bizTalkHelper.GetApplicationServerNames());
                     }));
                     break;
                 case "InitPerfCounters":

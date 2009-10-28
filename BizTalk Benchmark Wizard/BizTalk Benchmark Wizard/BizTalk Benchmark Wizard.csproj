@@ -267,10 +267,10 @@
     <Resource Include="Resources\Images\gear_pause.png" />
     <Resource Include="Resources\Images\gear_run.png" />
     <Resource Include="Resources\Images\gear_information.png" />
-    <Content Include="Resources\LoadGenScripts\LoadGenSettings_001.xml">
+    <Content Include="Resources\LoadGenScripts\Messaging Single and Multi Message Box_001.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Resources\LoadGenScripts\Senario1.1.xml">
+    <Content Include="Resources\LoadGenScripts\Orchestration Single Message Box_001.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Resources\LoadGenScripts\Size_2K.Xml">

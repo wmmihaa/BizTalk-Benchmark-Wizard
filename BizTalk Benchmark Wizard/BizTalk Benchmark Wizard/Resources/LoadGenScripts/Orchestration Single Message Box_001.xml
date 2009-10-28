@@ -2,13 +2,13 @@
   <CommonSection>
     <LoadGenVersion>2</LoadGenVersion>
     <OptimizeLimitFileSize>2048000</OptimizeLimitFileSize>
-    <NumThreadsPerSection>40</NumThreadsPerSection>
+    <NumThreadsPerSection>1</NumThreadsPerSection>
     <SleepInterval>400</SleepInterval>
     <LotSizePerInterval>100</LotSizePerInterval>
     <RetryInterval>10000</RetryInterval>
     <RetryNumber>1000</RetryNumber>
     <StopMode Mode="Time">
-      <TotalTime>1800</TotalTime>
+      <TotalTime>180</TotalTime>
     </StopMode>
     <Transport Name="WCF">
       <Assembly>WcfTransport.dll/WcfTransport.WcfTransport</Assembly>
@@ -35,7 +35,7 @@
         <Transactional>false</Transactional>
         <ShutdownDelay>3000</ShutdownDelay>
         <MaxConcurrentMessages>10000</MaxConcurrentMessages>
-        <ClientEndPointName>ClientEndPoint1</ClientEndPointName>
+        <ClientEndPointName>Orchestration Single Message Box</ClientEndPointName>
       </Parameters>
     </DstLocation>
   </Section>

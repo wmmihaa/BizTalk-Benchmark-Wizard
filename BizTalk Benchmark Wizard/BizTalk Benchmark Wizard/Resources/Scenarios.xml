@@ -14,7 +14,7 @@
       <Environment>
         <Name>1 BTS with SQL</Name>
         <Description>Single server installation</Description>
-        <LoadGenScriptFile>LoadGenSettings_001.xml</LoadGenScriptFile>
+        <LoadGenScriptFile>Messaging Single and Multi Message Box_001.xml</LoadGenScriptFile>
         <NuberOfActiveBizTalkServers>1</NuberOfActiveBizTalkServers>
         <BizTalkServerConfiguration>1*CPU, 4GB RAM</BizTalkServerConfiguration>
         <NuberOfActiveSQLServers>0</NuberOfActiveSQLServers>
@@ -27,7 +27,7 @@
       <Environment>
         <Name>1 BTS + 1 SQL</Name>
         <Description>All host running on 1 server</Description>
-        <LoadGenScriptFile>LoadGenSettings_001.xml</LoadGenScriptFile>
+        <LoadGenScriptFile>Messaging Single and Multi Message Box_001.xml</LoadGenScriptFile>
         <NuberOfActiveBizTalkServers>1</NuberOfActiveBizTalkServers>
         <BizTalkServerConfiguration>1*CPU, 4GB RAM</BizTalkServerConfiguration>
         <NuberOfActiveSQLServers>1</NuberOfActiveSQLServers>
@@ -40,7 +40,7 @@
       <Environment>
         <Name>2 BTS + 1 SQL</Name>
         <Description>R/S host running on separate servers</Description>
-        <LoadGenScriptFile>LoadGenSettings_001.xml</LoadGenScriptFile>
+        <LoadGenScriptFile>Messaging Single and Multi Message Box_001.xml</LoadGenScriptFile>
         <NuberOfActiveBizTalkServers>2</NuberOfActiveBizTalkServers>
         <BizTalkServerConfiguration>1*CPU, 4GB RAM</BizTalkServerConfiguration>
         <NuberOfActiveSQLServers>1</NuberOfActiveSQLServers>
@@ -67,7 +67,7 @@
       <Environment>
         <Name>1 BTS with SQL</Name>
         <Description>Single server installation</Description>
-        <LoadGenScriptFile>LoadGenSettings_001.xml</LoadGenScriptFile>
+        <LoadGenScriptFile>Orchestration Single Message Box_001.xml</LoadGenScriptFile>
         <NuberOfActiveBizTalkServers>1</NuberOfActiveBizTalkServers>
         <BizTalkServerConfiguration>1*CPU, 4GB RAM</BizTalkServerConfiguration>
         <NuberOfActiveSQLServers>0</NuberOfActiveSQLServers>
@@ -80,7 +80,7 @@
       <Environment>
         <Name>1 BTS + 1 SQL</Name>
         <Description>All host running on 1 server</Description>
-        <LoadGenScriptFile>LoadGenSettings_001.xml</LoadGenScriptFile>
+        <LoadGenScriptFile>Orchestration Single Message Box_001.xml</LoadGenScriptFile>
         <NuberOfActiveBizTalkServers>1</NuberOfActiveBizTalkServers>
         <BizTalkServerConfiguration>1*CPU, 4GB RAM</BizTalkServerConfiguration>
         <NuberOfActiveSQLServers>1</NuberOfActiveSQLServers>
@@ -93,7 +93,7 @@
       <Environment>
         <Name>2 BTS + 1 SQL</Name>
         <Description>R/S host running on separate servers</Description>
-        <LoadGenScriptFile>LoadGenSettings_001.xml</LoadGenScriptFile>
+        <LoadGenScriptFile>Orchestration Single Message Box_001.xml</LoadGenScriptFile>
         <NuberOfActiveBizTalkServers>2</NuberOfActiveBizTalkServers>
         <BizTalkServerConfiguration>1*CPU, 4GB RAM</BizTalkServerConfiguration>
         <NuberOfActiveSQLServers>1</NuberOfActiveSQLServers>
