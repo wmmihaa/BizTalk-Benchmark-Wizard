@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<BindingInfo xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Assembly="Microsoft.BizTalk.Deployment, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" Version="3.5.1.0" BindingStatus="PartiallyBound" BoundEndpoints="4" TotalEndpoints="8">
-  <Timestamp>2009-10-28T16:28:43.2528766+01:00</Timestamp>
+<BindingInfo xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Assembly="Microsoft.BizTalk.Deployment, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" Version="3.5.1.0" BindingStatus="FullyBound" BoundEndpoints="8" TotalEndpoints="8">
+  <Timestamp>2009-10-30T08:34:14.7084033+01:00</Timestamp>
   <ModuleRefCollection>
     <ModuleRef Name="[Application:BizTalk Benchmark Wizard]" Version="" Culture="" PublicKeyToken="" FullName="[Application:BizTalk Benchmark Wizard], Version=, Culture=, PublicKeyToken=">
       <Services />
@@ -12,7 +12,7 @@
     </ModuleRef>
     <ModuleRef Name="Xlang_EmptySchedule" Version="1.0.0.0" Culture="neutral" PublicKeyToken="fe4ff6a9804943c7" FullName="Xlang_EmptySchedule, Version=1.0.0.0, Culture=neutral, PublicKeyToken=fe4ff6a9804943c7">
       <Services>
-        <Service Name="EmptySchedule_Baseline1.SimpleSchedule" State="Started" TrackingOption="ServiceStartEnd MessageSendReceive OrchestrationEvents" Description="">
+        <Service Name="EmptySchedule_Baseline1.SimpleSchedule" State="Unenlisted" TrackingOption="ServiceStartEnd MessageSendReceive OrchestrationEvents" Description="">
           <Ports>
             <Port Name="Port_1" Modifier="2" BindingOption="1">
               <SendPortRef xsi:nil="true" />
@@ -26,7 +26,7 @@
             </Port>
           </Ports>
           <Roles />
-          <Host Name="BBW_PxHost" NTGroupName="BizTalk Application Users" Type="1" Trusted="false" />
+          <Host Name="BBW_PxHost" NTGroupName="SYSTEMBOLAGET\BTSACC BizTalk Application Users" Type="1" Trusted="false" />
         </Service>
         <Service Name="EmptySchedule_Baseline2.SimpleSchedule" State="Unenlisted" TrackingOption="ServiceStartEnd MessageSendReceive OrchestrationEvents" Description="">
           <Ports>
@@ -42,39 +42,39 @@
             </Port>
           </Ports>
           <Roles />
-          <Host Name="BBW_PxHost" NTGroupName="BizTalk Application Users" Type="1" Trusted="false" />
+          <Host Name="BBW_PxHost" NTGroupName="SYSTEMBOLAGET\BTSACC BizTalk Application Users" Type="1" Trusted="false" />
         </Service>
         <Service Name="EmptySchedule_Baseline4.SimpleSchedule" State="Unenlisted" TrackingOption="ServiceStartEnd MessageSendReceive OrchestrationEvents" Description="">
           <Ports>
             <Port Name="Port_1" Modifier="2" BindingOption="1">
               <SendPortRef xsi:nil="true" />
               <DistributionListRef xsi:nil="true" />
-              <ReceivePortRef xsi:nil="true" />
+              <ReceivePortRef Name="Orchestration Single Message Box" />
             </Port>
             <Port Name="Port_2" Modifier="1" BindingOption="1">
-              <SendPortRef xsi:nil="true" />
+              <SendPortRef Name="Orchestration Single Message Box" />
               <DistributionListRef xsi:nil="true" />
               <ReceivePortRef xsi:nil="true" />
             </Port>
           </Ports>
           <Roles />
-          <Host xsi:nil="true" />
+          <Host Name="BBW_PxHost" NTGroupName="SYSTEMBOLAGET\BTSACC BizTalk Application Users" Type="1" Trusted="false" />
         </Service>
         <Service Name="EmptySchedule_Baseline3.SimpleSchedule" State="Unenlisted" TrackingOption="ServiceStartEnd MessageSendReceive OrchestrationEvents" Description="">
           <Ports>
             <Port Name="Port_1" Modifier="2" BindingOption="1">
               <SendPortRef xsi:nil="true" />
               <DistributionListRef xsi:nil="true" />
-              <ReceivePortRef xsi:nil="true" />
+              <ReceivePortRef Name="Orchestration Single Message Box" />
             </Port>
             <Port Name="Port_2" Modifier="1" BindingOption="1">
-              <SendPortRef xsi:nil="true" />
+              <SendPortRef Name="Orchestration Single Message Box" />
               <DistributionListRef xsi:nil="true" />
               <ReceivePortRef xsi:nil="true" />
             </Port>
           </Ports>
           <Roles />
-          <Host xsi:nil="true" />
+          <Host Name="BBW_PxHost" NTGroupName="SYSTEMBOLAGET\BTSACC BizTalk Application Users" Type="1" Trusted="false" />
         </Service>
       </Services>
       <TrackedSchemas />
@@ -127,7 +127,7 @@
       <Description>This port is calling the Indigo Service console host.</Description>
       <TransmitPipeline Name="Microsoft.BizTalk.DefaultPipelines.PassThruTransmit" FullyQualifiedName="Microsoft.BizTalk.DefaultPipelines.PassThruTransmit, Microsoft.BizTalk.DefaultPipelines, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" Type="2" TrackingOption="ServiceStartEnd MessageSendReceive PipelineEvents" Description="" />
       <PrimaryTransport>
-        <Address>net.tcp://idcvdev02:2001/TCP1</Address>
+        <Address>net.tcp://localhost:2001/TCP1</Address>
         <TransportType Name="WCF-NetTcp" Capabilities="907" ConfigurationClsid="7fd2dfcd-6a7b-44f9-8387-29457fd2eaaf" />
         <TransportTypeData>&lt;CustomProps&gt;&lt;UseSSO vt="11"&gt;0&lt;/UseSSO&gt;&lt;InboundBodyLocation vt="8"&gt;UseBodyElement&lt;/InboundBodyLocation&gt;&lt;InboundBodyPathExpression vt="8" /&gt;&lt;MessageClientCredentialType vt="8"&gt;Windows&lt;/MessageClientCredentialType&gt;&lt;SendTimeout vt="8"&gt;00:01:00&lt;/SendTimeout&gt;&lt;OutboundXmlTemplate vt="8"&gt;&amp;lt;bts-msg-body xmlns="http://www.microsoft.com/schemas/bts2007" encoding="xml"/&amp;gt;&lt;/OutboundXmlTemplate&gt;&lt;OpenTimeout vt="8"&gt;00:01:00&lt;/OpenTimeout&gt;&lt;AlgorithmSuite vt="8"&gt;Basic256&lt;/AlgorithmSuite&gt;&lt;SecurityMode vt="8"&gt;None&lt;/SecurityMode&gt;&lt;TransportClientCredentialType vt="8"&gt;Windows&lt;/TransportClientCredentialType&gt;&lt;ClientCertificate vt="8" /&gt;&lt;TransactionProtocol vt="8"&gt;OleTransactions&lt;/TransactionProtocol&gt;&lt;MaxReceivedMessageSize vt="3"&gt;65536&lt;/MaxReceivedMessageSize&gt;&lt;StaticAction vt="8"&gt;Action&lt;/StaticAction&gt;&lt;TransportProtectionLevel vt="8"&gt;EncryptAndSign&lt;/TransportProtectionLevel&gt;&lt;CloseTimeout vt="8"&gt;00:01:00&lt;/CloseTimeout&gt;&lt;EnableTransaction vt="11"&gt;0&lt;/EnableTransaction&gt;&lt;InboundNodeEncoding vt="8"&gt;Xml&lt;/InboundNodeEncoding&gt;&lt;PropagateFaultMessage vt="11"&gt;-1&lt;/PropagateFaultMessage&gt;&lt;OutboundBodyLocation vt="8"&gt;UseBodyElement&lt;/OutboundBodyLocation&gt;&lt;/CustomProps&gt;</TransportTypeData>
         <RetryCount>0</RetryCount>
@@ -193,7 +193,7 @@
           <ReceivePipelineData xsi:nil="true" />
           <SendPipeline xsi:nil="true" />
           <SendPipelineData xsi:nil="true" />
-          <Enable>true</Enable>
+          <Enable>false</Enable>
           <ReceiveHandler Name="BBW_RxHost" HostTrusted="false">
             <TransportType Name="WCF-NetTcp" Capabilities="907" ConfigurationClsid="7fd2dfcd-6a7b-44f9-8387-29457fd2eaaf" />
           </ReceiveHandler>
@@ -227,7 +227,7 @@
           <ReceivePipelineData xsi:nil="true" />
           <SendPipeline xsi:nil="true" />
           <SendPipelineData xsi:nil="true" />
-          <Enable>true</Enable>
+          <Enable>false</Enable>
           <ReceiveHandler Name="BBW_RxHost" HostTrusted="false">
             <TransportType Name="WCF-NetTcp" Capabilities="907" ConfigurationClsid="7fd2dfcd-6a7b-44f9-8387-29457fd2eaaf" />
           </ReceiveHandler>
