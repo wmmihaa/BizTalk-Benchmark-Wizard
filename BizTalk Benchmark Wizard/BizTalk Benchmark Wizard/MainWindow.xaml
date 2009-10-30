@@ -549,9 +549,13 @@
                 </TabItem>
 
             </TabControl>
-            <TextBlock Canvas.Left="30" Canvas.Top="370">
-                 <Hyperlink NavigateUri="http://bbw.codeplex.com">http://bbw.codeplex.com</Hyperlink>
-            </TextBlock>
+            <StackPanel Orientation="Vertical" Canvas.Left="30" Canvas.Top="370">
+                <TextBlock >
+                     <Hyperlink NavigateUri="http://bbw.codeplex.com">http://bbw.codeplex.com</Hyperlink>
+                </TextBlock>
+                <TextBlock Name="lblVersion" Text="Version:1.0.0.0"/>
+            </StackPanel>
+            
             <Button Canvas.Left="501" Canvas.Top="365" Height="23" Name="btnBack" Width="74" Click="btnBack_Click" Style="{DynamicResource RoundedButton}" Visibility="Hidden">Back</Button>
             <Button Canvas.Left="581" Canvas.Top="365" Height="23" Name="btnNext" Width="74" Click="btnNext_Click" Style="{DynamicResource RoundedButton}" >Next</Button>
         </Canvas>

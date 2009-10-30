@@ -85,6 +85,9 @@ namespace BizTalk_Benchmark_Wizard
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             LoadScenarions();
+
+            Version version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
+            lblVersion.Text = string.Format("Version: {0}.{1}.{2}", version.Major, version.Minor, version.Build);
         }
         private void btnNext_Click(object sender, RoutedEventArgs e)
         {
