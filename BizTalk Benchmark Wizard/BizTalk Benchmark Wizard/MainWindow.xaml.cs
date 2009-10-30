@@ -323,7 +323,10 @@ namespace BizTalk_Benchmark_Wizard
         void RefreshPreRequsites()
         {
             if (_hasRefreshed)
+            {
+                btnNext.IsEnabled = true;
                 return;
+            }
             try
             {
                 _bizTalkHelper = new BizTalkHelper(txtServer1.Text, txtMgmtDb1.Text);
@@ -346,6 +349,7 @@ namespace BizTalk_Benchmark_Wizard
                     new System.Windows.Media.Imaging.BitmapImage(new Uri("pack://application:,,,/BizTalk Benchmark Wizard;component/Resources/Images/passed.png")) :
                     new System.Windows.Media.Imaging.BitmapImage(new Uri("pack://application:,,,/BizTalk Benchmark Wizard;component/Resources/Images/checklist.png"));
 
+                
                 List<string> btsServers = new List<string>();
                 foreach (Server s in _bizTalkHelper.GetServers(txtServer1.Text, txtMgmtDb1.Text).Where(s => s.Type == ServerType.BIZTALK))
                     btsServers.Add(s.Name);
@@ -510,11 +514,18 @@ namespace BizTalk_Benchmark_Wizard
         }
         private void OnTestComplete(object sender, LoadGen.LoadGenStopEventArgs e)
         {
-            this.Dispatcher.BeginInvoke(DispatcherPriority.ApplicationIdle, new Action(delegate() { tabControl1.SelectedIndex++; }));
-            this.Dispatcher.BeginInvoke(DispatcherPriority.ApplicationIdle, new Action(delegate() { btnNext.IsEnabled = true; }));
-            this.Dispatcher.BeginInvoke(DispatcherPriority.ApplicationIdle, new Action(delegate() { _timer.Stop(); }));
-            this.Dispatcher.BeginInvoke(DispatcherPriority.ApplicationIdle, new Action(delegate() { _perflogHelper.StopCollectorSet(); }));
-            this.Dispatcher.BeginInvoke(DispatcherPriority.ApplicationIdle, new Action(delegate() { ShowResult(); }));
+            this.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new Action(delegate() 
+                {
+                    _timer.Stop();
+                    _perflogHelper.StopCollectorSet();
+                    ShowResult();
+                    tabControl1.SelectedIndex++;
+                    btnNext.IsEnabled = true;
+                }));
+            //this.Dispatcher.BeginInvoke(DispatcherPriority.ApplicationIdle, new Action(delegate() { tabControl1.SelectedIndex++; }));
+            //this.Dispatcher.BeginInvoke(DispatcherPriority.ApplicationIdle, new Action(delegate() { btnNext.IsEnabled = true; }));
+            //this.Dispatcher.BeginInvoke(DispatcherPriority.ApplicationIdle, new Action(delegate() { _timer.Stop(); }));
+            //this.Dispatcher.BeginInvoke(DispatcherPriority.ApplicationIdle, new Action(delegate() { ShowResult(); }));
 
         }
         private void OnCollectCounterData(object sender, ElapsedEventArgs e)
