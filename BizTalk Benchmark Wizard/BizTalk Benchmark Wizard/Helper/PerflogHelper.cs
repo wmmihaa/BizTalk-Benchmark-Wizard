@@ -59,7 +59,7 @@ namespace BizTalk_Benchmark_Wizard.Helper
                     else
                         CreateDataCollectorSetForServer(server.Name, Path.Combine(basePath, @"Resources\Collector Set Templates\SQL Server.xml"));
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
                     throw;
                 }
@@ -111,10 +111,16 @@ namespace BizTalk_Benchmark_Wizard.Helper
             if (!Directory.Exists(rootPath))
                 Directory.CreateDirectory(rootPath);
 
-            string logPath = Path.Combine(rootPath, Path.GetFileNameWithoutExtension(filename)+"\\000001");
-            if (!Directory.Exists(logPath))
-                Directory.CreateDirectory(logPath);
-
+            string logPath = Path.Combine(rootPath, Path.GetFileNameWithoutExtension(filename) + "\\000001");
+            try
+            {
+                if (!Directory.Exists(logPath))
+                    Directory.CreateDirectory(logPath);
+            }
+            catch (Exception ex)
+            {
+                throw new ApplicationException(ex.Message + "\n\nTry starting the application with elevated privilages.");
+            }
             XmlDocument serverColectorDocument = new XmlDocument();
             serverColectorDocument.Load(template);
 

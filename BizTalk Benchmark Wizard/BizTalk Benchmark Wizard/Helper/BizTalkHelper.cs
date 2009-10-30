@@ -272,7 +272,13 @@ namespace BizTalk_Benchmark_Wizard.Helper
             {
                 try
                 {
-                    _explorer.ConnectionString = string.Format(ConfigurationManager.ConnectionStrings["BizTalkMgmtDatabase"].ConnectionString, this._server, this._database);
+                    _explorer.ConnectionString = new SqlConnectionStringBuilder()
+                                                    {
+                                                        DataSource = this._server, 
+                                                        InitialCatalog = this._database, 
+                                                        IntegratedSecurity=true
+                                                    }.ConnectionString;
+                        
                     string s = _explorer.Applications[BIZTALKAPPLICATIONNAME].Name;
                 }
                 catch { return false; }
@@ -352,7 +358,7 @@ namespace BizTalk_Benchmark_Wizard.Helper
             }
             catch (Exception ex)
             {
-                throw new ApplicationException("Unable to update the Uri of the IndigoService send port", ex);
+                throw new ApplicationException("Unable to update the Uri of the IndigoService send port.\n" +  ex.Message);
             }
 
         }
