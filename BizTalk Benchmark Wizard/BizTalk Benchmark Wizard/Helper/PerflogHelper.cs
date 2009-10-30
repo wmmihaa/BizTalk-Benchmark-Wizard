@@ -111,7 +111,7 @@ namespace BizTalk_Benchmark_Wizard.Helper
             if (!Directory.Exists(rootPath))
                 Directory.CreateDirectory(rootPath);
 
-            string logPath = Path.Combine(rootPath, Path.GetFileNameWithoutExtension(filename) + "\\000001");
+            string logPath = Path.Combine(rootPath, Path.GetFileNameWithoutExtension(filename));
             try
             {
                 if (!Directory.Exists(logPath))
@@ -127,7 +127,7 @@ namespace BizTalk_Benchmark_Wizard.Helper
             serverColectorDocument.SelectSingleNode("DataCollectorSet/Name").InnerText = serverName;
             serverColectorDocument.SelectSingleNode("DataCollectorSet/Description").InnerText = "Created by BizTalk benchmark wizard";
             serverColectorDocument.SelectSingleNode("DataCollectorSet/OutputLocation").InnerText = logPath;
-            serverColectorDocument.SelectSingleNode("DataCollectorSet/RootPath").InnerText = rootPath;
+            serverColectorDocument.SelectSingleNode("DataCollectorSet/RootPath").InnerText = logPath;
 
 
             serverColectorDocument.SelectSingleNode("DataCollectorSet/PerformanceCounterDataCollector/Name").InnerText = serverName;
