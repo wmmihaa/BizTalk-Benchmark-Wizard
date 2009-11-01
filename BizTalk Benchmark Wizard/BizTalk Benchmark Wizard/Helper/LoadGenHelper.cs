@@ -87,9 +87,9 @@ namespace BizTalk_Benchmark_Wizard.Helper
         {
             string rcvHost = hostmappings.First(h => h.HostName == "BBW_RxHost").SelectedHost;
 
-            RaiseInitiateStepEvent("StartLoadGenClients");
             CreateAndStartLoadGenClient(CreateLoadGenScript(environment.LoadGenScriptFile, rcvHost), rcvHost);
-           
+            RaiseInitiateStepEvent("StartLoadGenClients");
+            
         }
         public void StopAllTests()
         {

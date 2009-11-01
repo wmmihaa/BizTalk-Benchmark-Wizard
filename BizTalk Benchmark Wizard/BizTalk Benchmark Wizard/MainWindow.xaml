@@ -482,7 +482,7 @@
                                     </StackPanel>
                                 </StackPanel>
                             </StackPanel>
-                            
+
                         </StackPanel>
 
                     </Grid>
@@ -499,7 +499,7 @@
                                 <my1:GaugeControl Name="ProcessedGauge" Caption="Avg Processed msgs/sec"></my1:GaugeControl>
                             </StackPanel>
                             <ProgressBar Name="Progress" Width="580" Foreground="Blue"  Value="{Binding ProcessValue}" Height="20" Minimum="0" Maximum="100" Margin="10" Canvas.Left="70" Canvas.Top="266.224"/>
-        
+
                             <Label Canvas.Left="22" Canvas.Top="274" Height="28" Name="label3" Width="120">Progress:</Label>
                             <TextBlock Name="lblTestTime" FontWeight="Bold" Text="Total test duration: 10 minutes" TextAlignment="Center" Height="20.01" Canvas.Left="80" Canvas.Top="304" Width="579.768" />
                             <TextBlock Name="lblWarmUp" FontWeight="Bold" Text="Currently warming up..." TextAlignment="Center" Height="20.01" Canvas.Left="80" Canvas.Top="320" Width="579.768" />
@@ -555,7 +555,7 @@
                 </TextBlock>
                 <TextBlock Name="lblVersion" Text="Version:1.0.0.0"/>
             </StackPanel>
-            
+
             <Button Canvas.Left="501" Canvas.Top="365" Height="23" Name="btnBack" Width="74" Click="btnBack_Click" Style="{DynamicResource RoundedButton}" Visibility="Hidden">Back</Button>
             <Button Canvas.Left="581" Canvas.Top="365" Height="23" Name="btnNext" Width="74" Click="btnNext_Click" Style="{DynamicResource RoundedButton}" >Next</Button>
         </Canvas>
@@ -643,6 +643,55 @@
                 </Grid>
             </Grid>
         </Popup>
+        <Popup x:Name="PopupUpdateManualy" 
+               AllowsTransparency="True"
+               IsOpen="False"
+               Width="490"
+               Height="300"
+               Placement="Center" PopupAnimation="Fade">
 
+            <Grid>
+                <dropShadow:SystemDropShadowChrome CornerRadius="3,13,3,13" Color="#71000000">
+                    <Grid/>
+                </dropShadow:SystemDropShadowChrome>
+
+                <Grid>
+                    <Border Margin="0,0,5,5"
+			                BorderBrush="Gainsboro"
+			                CornerRadius="5,5,5,5"
+			                BorderThickness="1,1,1,1"
+			                Background="{StaticResource BrushedMetalBackground}"/>
+
+                    <StackPanel Orientation="Vertical" Width="460" Margin="0,25">
+                        <StackPanel Orientation="Horizontal">
+                            <Image Name="picStartManuallyedScenario" VerticalAlignment="Center" Height="40" Source="Resources/Images/gear_information.png"/>
+                            <Label VerticalAlignment="Center" FontSize="18" FontWeight="Bold" FontFamily="Calibri">Unable to commit changes to BizTalk</Label>
+
+                        </StackPanel>
+                        <TextBlock  TextWrapping="Wrap"><LineBreak/>
+                                The application is not able to commit changes to BizTalk. This might be because the BizTalk run-time assemblies are not installed on this machine.<LineBreak/>
+                                To resolve this, you will manually have to make these changes using the BizTalk Administration Console.<LineBreak/><LineBreak/>
+                                <Bold>1. Start the BizTalk Application called BizTalk Benchmark Wizard.<LineBreak/>
+                                2. Copy the Uri from the textbox below, and use it to update the Send Port Uri.<LineBreak/>
+                                3. Click "Done" to start the tests.</Bold>
+                        </TextBlock>
+                        <StackPanel Height="20"/>
+                        <StackPanel Orientation="Horizontal">
+                            <Label Height="28" HorizontalAlignment="Left" VerticalAlignment="Top" Width="105">New Send Port Uri:</Label>
+                            <TextBox x:Name="txtUri" Height="23" TextAlignment="Right" VerticalAlignment="Top" Width="320"></TextBox>
+                        </StackPanel>
+                        <StackPanel Height="10"/>
+                        <StackPanel Orientation="Horizontal">
+                            <StackPanel Width="270"/>
+                            <Button Height="23" Style="{DynamicResource RoundedButton}" Name="btnDone" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="75.263" Click="btnDone_Click">Done</Button>
+                            <StackPanel Width="5"/>
+                            <Button Height="23" Style="{DynamicResource RoundedButton}" Name="btnCancel" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="75.263" Click="btnCancel_Click">Close</Button>
+                        </StackPanel>
+                    </StackPanel>
+
+
+                </Grid>
+            </Grid>
+        </Popup>
     </Grid>
 </Window>

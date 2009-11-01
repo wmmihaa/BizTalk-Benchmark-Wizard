@@ -42,6 +42,9 @@ namespace BizTalk_Benchmark_Wizard.Helper
         private string _btsAdmGroup;
         private string _mainBizTalkServer = string.Empty; //Used for WMI
         #endregion
+        #region PublicMembers
+        public string NewIndigoUri { get; set; }
+        #endregion
         #region Private Methods
         void RaiseInitiateStepEvent(string eventStep)
         {
@@ -181,7 +184,7 @@ namespace BizTalk_Benchmark_Wizard.Helper
         private enum HandlerType { Receive, Send }
         private enum HostType { InProcess = 1, Isolated = 2 }
         #endregion
-        #region public Methods
+        #region Public Methods
         /// <summary>
         /// Queries the management database for all servers
         /// </summary>
@@ -312,21 +315,6 @@ namespace BizTalk_Benchmark_Wizard.Helper
                     reader.Close();
                 }
 
-                ////Create EnumerationOptions and run wql query
-                //EnumerationOptions enumOptions = new EnumerationOptions();
-                //enumOptions.ReturnImmediately = false;
-
-                ////Search for all HostInstances of 'InProcess' type in the Biztalk namespace scope
-                //ManagementObjectSearcher searchObject =
-                //    new ManagementObjectSearcher(string.Format(BIZTALKSCOPE, serverName), "Select * from MSBTS_ServerHost", enumOptions);
-
-                ////Enumerate through the result set and start each HostInstance if it is already stopped
-                //foreach (ManagementObject inst in searchObject.Get())
-                //{
-                //    string serverName = inst["servername"] as string;
-                //    if (!applicationServers.Contains(serverName))
-                //        applicationServers.Add(serverName);
-                //}
                 if (applicationServers.Count == 0)
                     throw new ApplicationException("No BizTalk Servers found");
 
@@ -338,7 +326,7 @@ namespace BizTalk_Benchmark_Wizard.Helper
                 throw new ApplicationException("Unable to find running hosts", ex);
             }
         }
-        public void UpdateSendPortUri(string portName, string sendHost)
+        public bool UpdateSendPortUri(string portName, string sendHost)
         {
             try
             {
@@ -349,6 +337,9 @@ namespace BizTalk_Benchmark_Wizard.Helper
                             sendHost,
                             oldAddress.Port.ToString(),
                             oldAddress.AbsolutePath));
+
+                this.NewIndigoUri = newAddress.ToString();
+
                 if (oldAddress != newAddress)
                 {
                     _explorer.SendPorts[portName].PrimaryTransport.Address = newAddress.ToString();
@@ -358,9 +349,10 @@ namespace BizTalk_Benchmark_Wizard.Helper
             }
             catch (Exception ex)
             {
-                throw new ApplicationException("Unable to update the Uri of the IndigoService send port.\n" +  ex.Message);
+                return false;
+//                throw new ApplicationException("Unable to update the Uri of the IndigoService send port.\n" +  ex.Message);
             }
-
+            return true;
         }
         public void StartBizTalkPorts()//(string receivePort, string receiveLocation, string sendPort, string orchestration)
         {

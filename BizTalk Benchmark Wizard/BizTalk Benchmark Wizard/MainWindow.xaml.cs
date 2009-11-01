@@ -197,6 +197,14 @@ namespace BizTalk_Benchmark_Wizard
                 btnCreateCollectors.IsEnabled = true;
             }
         }
+        private void btnDone_Click(object sender, RoutedEventArgs e)
+        {
+            PopupUpdateManualy.IsOpen = false;
+            DoEvents();
+            StepEventArgs stepEvent = new StepEventArgs();
+            stepEvent.EventStep = "CheckPortStatus";
+            OnStepComplete(null, stepEvent);
+        }
         private void cbScenario_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             string item = (string)e.AddedItems[0];
@@ -442,9 +450,12 @@ namespace BizTalk_Benchmark_Wizard
             _loadGenHelper.OnStepComplete+=new LoadGenHelper.InitiateStepHandler(OnStepComplete);
             _perflogHelper.OnStepComplete+=new PerflogHelper.InitiateStepHandler(OnStepComplete);
             _loadGenHelper.OnComplete += new LoadGenHelper.CompleteHandler(OnTestComplete);
-            
-            _bizTalkHelper.UpdateSendPortUri(cbScenario.Text, txtIndigoServiceServer.Text);
-            
+
+            if (!_bizTalkHelper.UpdateSendPortUri(cbScenario.Text, txtIndigoServiceServer.Text))
+            {
+                txtUri.Text = _bizTalkHelper.NewIndigoUri;
+                PopupUpdateManualy.IsOpen = true;
+            }
         }
         void OnStepComplete(object sender, StepEventArgs e)
         {
