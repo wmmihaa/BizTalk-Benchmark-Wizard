@@ -42,7 +42,7 @@ namespace BizTalk_Benchmark_Wizard.Helper
         private string _btsAdmGroup;
         private string _mainBizTalkServer = string.Empty; //Used for WMI
         #endregion
-        #region PublicMembers
+        #region Public Members
         public string NewIndigoUri { get; set; }
         #endregion
         #region Private Methods

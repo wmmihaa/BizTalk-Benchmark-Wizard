@@ -87,8 +87,7 @@ namespace BizTalk_Benchmark_Wizard.Helper
                 return true;
             }
             else
-                return false;
-//                throw new Exception("An unexpected error occured while checking for PerfMon Collector Set");
+                return false;// throw new Exception("An unexpected error occured while checking for PerfMon Collector Set.\n" + ProcessHelper.OutPutMessage);
 
         }
         /// <summary>
