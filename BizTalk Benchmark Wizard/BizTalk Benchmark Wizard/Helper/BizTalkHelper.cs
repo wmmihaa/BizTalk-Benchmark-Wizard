@@ -340,17 +340,14 @@ namespace BizTalk_Benchmark_Wizard.Helper
 
                 this.NewIndigoUri = newAddress.ToString();
 
-                if (oldAddress != newAddress)
-                {
-                    _explorer.SendPorts[portName].PrimaryTransport.Address = newAddress.ToString();
-                    _explorer.SaveChanges();
-                }
+                _explorer.SendPorts[portName].PrimaryTransport.Address = newAddress.ToString();
+                _explorer.SaveChanges();
                 RaiseInitiateStepEvent("UpdateSendPortUri");
             }
             catch (Exception ex)
             {
                 return false;
-//                throw new ApplicationException("Unable to update the Uri of the IndigoService send port.\n" +  ex.Message);
+                //                throw new ApplicationException("Unable to update the Uri of the IndigoService send port.\n" +  ex.Message);
             }
             return true;
         }
@@ -374,6 +371,30 @@ namespace BizTalk_Benchmark_Wizard.Helper
             catch (Exception ex)
             {
                 throw new ApplicationException("Unable to enable/start ports and orchestrations", ex);
+            }
+        }
+        public int GetNumberOfMsgBoxes()
+        { 
+            BizTalkDBs bizTalkDBs = new BizTalkDBs();
+            try
+            {
+                int numberOfMsgBoxes;
+                using (SqlConnection connection = new SqlConnection(string.Format(CONNECTIONSTRINGFORMAT, _database, _server)))
+                {
+                    connection.Open();
+
+                    SqlCommand command = new SqlCommand(ConfigurationManager.AppSettings["GetMsgBoxServersQuery"], connection);
+
+                    SqlDataReader reader = command.ExecuteReader();
+                    reader.Read();
+                    numberOfMsgBoxes = string.IsNullOrEmpty(reader["MSGBOXCOUNT"].ToString()) ? 1 : (int)reader["MSGBOXCOUNT"];
+                    reader.Close();
+                }
+                return numberOfMsgBoxes;
+            }
+            catch
+            {
+                return 1;
             }
         }
         #endregion

@@ -185,6 +185,37 @@
                 </Setter.Value>
             </Setter>
         </Style>
+        <Style x:Key="{x:Type local:MaskedTextBox}" TargetType="{x:Type local:MaskedTextBox}">
+            <Setter Property="SnapsToDevicePixels" Value="True"/>
+            <Setter Property="OverridesDefaultStyle" Value="True"/>
+            <Setter Property="KeyboardNavigation.TabNavigation" Value="None"/>
+            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+            <Setter Property="MinWidth" Value="20"/>
+            <Setter Property="MinHeight" Value="20"/>
+            <Setter Property="AllowDrop" Value="true"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type TextBoxBase}">
+                        <Border Name="Border"
+                                  CornerRadius="5" 
+                                  Padding="2"
+                                  Background="{StaticResource WindowBackgroundBrush}"
+                                  BorderBrush="{StaticResource SolidBorderBrush}"
+                                  BorderThickness="1" >
+                            <ScrollViewer Margin="0" x:Name="PART_ContentHost"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter TargetName="Border" Property="Background" Value="{StaticResource DisabledBackgroundBrush}"/>
+                                <Setter TargetName="Border" Property="BorderBrush" Value="{StaticResource DisabledBackgroundBrush}"/>
+                                <Setter Property="Foreground" Value="{StaticResource DisabledForegroundBrush}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
         <Style x:Key="RoundedPasswordBox" TargetType="{x:Type PasswordBox}">
             <Setter Property="SnapsToDevicePixels" Value="True"/>
             <Setter Property="OverridesDefaultStyle" Value="True"/>
@@ -232,7 +263,7 @@
                             <TextBlock TextWrapping="Wrap">The purpose of this tool is to verify your BizTalk environment performs as expected. The typical use case where you would <LineBreak/>use the BizTalk Benchmark Wizard would be after BizTalk Server is installed and before deploying any solutions to the environment.<LineBreak/>
                                 <LineBreak/>BizTalk Benchmark Wizard performs load to BizTalk Server in relation to a specific scenario. During the execution of the test, counter information is collected and benchmarked against collected statistics relevant to your BizTalk Server environment<LineBreak/>
                                 After completion of the test, a result is presented showing whether or not your BizTalk investment is performing as you could expect.<LineBreak/>
-                                <LineBreak/>The executed scenarios may or may not be relative to any realistic scenario, and is only intended for testing. The BizTalk Benchmark wizard has been developed in relation to the <Bold><Italic>BizTalk Server 2009 Scale Out Testing Study</Italic></Bold>. More information about the study can be found <Hyperlink NavigateUri="http://msdn.microsoft.com/en-us/library/ee377068(BTS.10).aspx">here</Hyperlink>.</TextBlock>
+                                <LineBreak/>The executed scenarios may or may not be relative to any realistic scenario, and is only intended for testing. The BizTalk Benchmark wizard has been developed in relation to the <Bold><Italic>BizTalk Server 2009 Scale Out Testing Study</Italic></Bold>. More information about the study can be found <Hyperlink NavigateUri="http://msdn.microsoft.com/en-us/library/ee377068(BTS.10).aspx" RequestNavigate="Hyperlink_RequestNavigate" >here</Hyperlink>.</TextBlock>
                         </Label>
 
                     </Grid>
@@ -421,10 +452,13 @@
                                 </StackPanel>
 
                             </StackPanel>
-                            <StackPanel Height="10"/>
+                            <StackPanel Height="0"/>
                             <StackPanel Orientation="Horizontal">
                                 <StackPanel Orientation="Horizontal" Width="115"/>
-                                <CheckBox Name="chbStartCollectorSets" IsChecked="False" >Start Perfmon collector sets</CheckBox>
+                                <CheckBox Name="chbStartCollectorSets" VerticalAlignment="Center" IsChecked="False" >Start Perfmon collector sets</CheckBox>
+                                <StackPanel Width="10"/> 
+                                <TextBlock VerticalAlignment="Center">Test duration (minutes):</TextBlock>
+                                <local:MaskedTextBox Mask="000" x:Name="txtTestDuration" Width="50" TextAlignment="Center">30</local:MaskedTextBox>
                             </StackPanel>
                         </StackPanel>
                     </Grid>
@@ -537,13 +571,17 @@
                             <StackPanel HorizontalAlignment="Center" Width="530">
                                 <Label>
                                     <TextBlock Name="lblResultDescription" TextWrapping="Wrap">
-                                        <LineBreak/> The test did not complete with expected results. To further analyze the environment we recommend you to study the Data Collector Sets created using the <Hyperlink NavigateUri="http://www.codeplex.com/PAL">Performance Analysis of Logs (PAL) tool</Hyperlink>.
+                                        <LineBreak/> The test did not complete with expected results. To further analyze the environment we recommend you to study the Data Collector Sets created using the <Hyperlink NavigateUri="http://www.codeplex.com/PAL" RequestNavigate="Hyperlink_RequestNavigate" >Performance Analysis of Logs (PAL) tool</Hyperlink>.
                                     </TextBlock>
                                 </Label>
                             </StackPanel>
                         </StackPanel>
                         <Canvas>
-                            <Button Height="23" Style="{DynamicResource RoundedButton}" HorizontalAlignment="Right" Name="btnGenerateReport" VerticalAlignment="Bottom" Width="116" Click="btnGenerateReport_Click" Canvas.Left="366" Canvas.Top="357">Generate report</Button>
+                            <TextBlock Canvas.Left="250" Canvas.Top="363">
+                                <Hyperlink NavigateUri="http://blogical.se/bbw/" RequestNavigate="Hyperlink_RequestNavigate" >Show High Scores</Hyperlink>
+                            </TextBlock>
+                            <Button Height="23" Style="{DynamicResource RoundedButton}" HorizontalAlignment="Right" Name="btnOpenSubmitHighScore" VerticalAlignment="Bottom" Width="106" Canvas.Left="348" Canvas.Top="357" Click="btnOpenSubmitHighScore_Click">Submit High Score</Button>
+                            <Button Height="23" Style="{DynamicResource RoundedButton}" HorizontalAlignment="Right" Name="btnGenerateReport" VerticalAlignment="Bottom" Width="106" Click="btnGenerateReport_Click" Canvas.Left="460" Canvas.Top="357">Generate report</Button>
                         </Canvas>
                     </Grid>
                 </TabItem>
@@ -551,7 +589,7 @@
             </TabControl>
             <StackPanel Orientation="Vertical" Canvas.Left="30" Canvas.Top="370">
                 <TextBlock >
-                     <Hyperlink NavigateUri="http://bbw.codeplex.com">http://bbw.codeplex.com</Hyperlink>
+                     <Hyperlink NavigateUri="http://bbw.codeplex.com" RequestNavigate="Hyperlink_RequestNavigate" >http://bbw.codeplex.com</Hyperlink>
                 </TextBlock>
                 <TextBlock Name="lblVersion" Text="Version:1.0.0.0"/>
             </StackPanel>
@@ -690,6 +728,63 @@
                     </StackPanel>
 
 
+                </Grid>
+            </Grid>
+        </Popup>       
+        <Popup x:Name="PopupSubmitHighScore" 
+               AllowsTransparency="True"
+               IsOpen="False"
+               Width="490"
+               Height="300"
+               Placement="Center">
+            <Grid>
+                <dropShadow:SystemDropShadowChrome CornerRadius="3,13,3,13" Color="#71000000">
+                    <Grid/>
+                </dropShadow:SystemDropShadowChrome>
+                <Grid>
+                    <Border Margin="0,0,5,5"
+			                BorderBrush="Gainsboro"
+			                CornerRadius="5,5,5,5"
+			                BorderThickness="1,1,1,1"
+			                Background="{StaticResource BrushedMetalBackground}"/>
+                    <StackPanel Orientation="Vertical">
+                        <TextBlock Margin="20,20"  FontSize="20" FontWeight="Bold" FontFamily="Calibri">Submit High Score</TextBlock>
+                        <TextBlock HorizontalAlignment="Center">Please provide some information about your BizTalk environment below.</TextBlock>
+                        <StackPanel Height="5"/> 
+                        <GroupBox Header="Configuration" Width="400" Height="150" Name="groupBox1">
+                            <Grid>
+                                <StackPanel Orientation="Vertical">
+                                    <StackPanel Orientation="Horizontal">
+                                        <Label Width="190">Name (three letters):</Label>
+                                            <local:MaskedTextBox FontWeight="Bold" Mask="A.A.A" x:Name="txtInitials" Height="25" Width="50" TextAlignment="Center"/>
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Label Width="190">Number of CPU on each BTS server:</Label>
+                                        <local:MaskedTextBox Mask="00" FontWeight="Bold" x:Name="txtNoOfCpu" Width="35" TextAlignment="Center"/> 
+                                        <StackPanel Width="10"/>
+                                        <ComboBox Name="cbhCores" SelectedIndex="0" Width="145" Template="{StaticResource ComboBoxTemplate}">
+                                            <ComboBoxItem Name="cbi1">Single Core</ComboBoxItem>
+                                            <ComboBoxItem Name="cbi2">Dual Core</ComboBoxItem>
+                                            <ComboBoxItem Name="cbi3">Quad Core</ComboBoxItem>
+                                        </ComboBox>
+                                        <!--<CheckBox Name="cnbIsQuad" IsChecked="False" VerticalAlignment="Center" >Quad core</CheckBox>
+                                        <StackPanel Width="10"/>
+                                        <CheckBox Name="cnbIsDual" IsChecked="False" VerticalAlignment="Center">Dual core</CheckBox>-->
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Label Width="190">CPU Ghz:</Label>
+                                        <local:MaskedTextBox Mask="0.0" FontWeight="Bold" x:Name="txtCpuGhz" Width="35" TextAlignment="Center"/>
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Label Width="190">RAM GB:</Label>
+                                        <local:MaskedTextBox Mask="000" FontWeight="Bold" x:Name="txtRamGb" Width="35" TextAlignment="Center"/>
+                                    </StackPanel>
+                                </StackPanel>
+                        </Grid>
+                        </GroupBox>
+                        <StackPanel Height="10"/>
+                        <Button Height="23" Style="{DynamicResource RoundedButton}" Name="btnSubmitHighScore" HorizontalAlignment="Center" Width="75.263" Click="btnSubmitHighScore_Click">Submit</Button>
+                    </StackPanel>
                 </Grid>
             </Grid>
         </Popup>

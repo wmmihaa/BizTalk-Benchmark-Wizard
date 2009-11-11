@@ -50,6 +50,7 @@ namespace BizTalk_Benchmark_Wizard
         IEnumerable<Environment> Environments;
         List<HostMaping> HostMappings;
         List<Result> Results = new List<Result>();
+        List<string> _btsServers = null;
         int ProcessValue
         {
             set
@@ -204,6 +205,46 @@ namespace BizTalk_Benchmark_Wizard
             StepEventArgs stepEvent = new StepEventArgs();
             stepEvent.EventStep = "CheckPortStatus";
             OnStepComplete(null, stepEvent);
+        }
+        private void btnSubmitHighScore_Click(object sender, RoutedEventArgs e)
+        {
+            btnSubmitHighScore.IsEnabled = false;
+            try
+            {
+                string config = string.Format("[SCENARIO {0}] {1}*BTS({2}*CPU({3})({4}Ghz) {5}GB RAM) {6}*MsgBox",
+                    cbScenario.Text.StartsWith("Messaging") ? "1" : "2",
+                    _btsServers.Count,
+                    txtNoOfCpu.Text.Replace("_", ""),
+                    cbhCores.Text.Replace(" Core", ""),
+                    txtCpuGhz.Text,
+                    txtRamGb.Text.Replace("_", ""),
+                    _bizTalkHelper.GetNumberOfMsgBoxes());
+
+                if (config.Length > 60)
+                    config = config.Substring(0, 60);
+
+                HighScoreService.SupplyHSSoapClient client = new BizTalk_Benchmark_Wizard.HighScoreService.SupplyHSSoapClient();
+                client.Supply(txtInitials.Text, (int)_avgProcessedValue, DateTime.Now, config);
+            }
+            catch
+            {
+                throw;
+            }
+            finally
+            {
+                PopupSubmitHighScore.IsOpen = false;
+            }
+        }
+        private void btnOpenSubmitHighScore_Click(object sender, RoutedEventArgs e)
+        {
+            btnOpenSubmitHighScore.IsEnabled = false;
+            PopupSubmitHighScore.IsOpen = true;
+        }
+        private void Hyperlink_RequestNavigate(object sender, System.Windows.Navigation.RequestNavigateEventArgs e)
+        {
+            Process.Start(new ProcessStartInfo(e.Uri.AbsoluteUri));
+            e.Handled = true;
+
         }
         private void cbScenario_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -361,9 +402,9 @@ namespace BizTalk_Benchmark_Wizard
                     new System.Windows.Media.Imaging.BitmapImage(new Uri("pack://application:,,,/BizTalk Benchmark Wizard;component/Resources/Images/checklist.png"));
 
                 
-                List<string> btsServers = new List<string>();
+                _btsServers = new List<string>();
                 foreach (Server s in _bizTalkHelper.GetServers(txtServer1.Text, txtMgmtDb1.Text).Where(s => s.Type == ServerType.BIZTALK))
-                    btsServers.Add(s.Name);
+                    _btsServers.Add(s.Name);
 
 
                 HostMappings = _bizTalkHelper.GetHostMappings();
@@ -503,7 +544,12 @@ namespace BizTalk_Benchmark_Wizard
                     DoEvents();
                     this.Dispatcher.BeginInvoke(DispatcherPriority.ApplicationIdle, new Action(delegate()
                     {
-                        _loadGenHelper.StartLoadGenClients((Environment)environments.SelectedItem, (List<HostMaping>)lstHosts.DataContext);
+                        int duration=30;
+                        if(txtTestDuration.Text.Length>0)
+                            duration = int.Parse(txtTestDuration.Text.Replace("_", ""));
+
+                        duration = duration * 60;
+                        _loadGenHelper.StartLoadGenClients((Environment)environments.SelectedItem, (List<HostMaping>)lstHosts.DataContext, duration);
                     }));
                     break;
                 case "StartLoadGenClients":
@@ -618,6 +664,8 @@ namespace BizTalk_Benchmark_Wizard
         }
 
         #endregion
+
+        
     }
     /// <summary>
     /// Used for presenting the test result

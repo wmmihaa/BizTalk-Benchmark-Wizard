@@ -83,11 +83,11 @@ namespace BizTalk_Benchmark_Wizard.Helper
                 throw new ApplicationException(@"Unable to find PerfMon Counter. Make sure all BBW* host instances are started. If you lost the counters, this post might help you recover counters:\n<""http://blogs.msdn.com/biztalkperformance/archive/2007/09/30/how-to-manually-recreate-missing-biztalk-performance-counters.aspx""");
             }
         }
-        public void StartLoadGenClients(Environment environment, List<HostMaping> hostmappings)
+        public void StartLoadGenClients(Environment environment, List<HostMaping> hostmappings, int testDuration)
         {
             string rcvHost = hostmappings.First(h => h.HostName == "BBW_RxHost").SelectedHost;
 
-            CreateAndStartLoadGenClient(CreateLoadGenScript(environment.LoadGenScriptFile, rcvHost), rcvHost);
+            CreateAndStartLoadGenClient(CreateLoadGenScript(environment.LoadGenScriptFile, rcvHost, testDuration), rcvHost);
             RaiseInitiateStepEvent("StartLoadGenClients");
             
         }
@@ -133,7 +133,7 @@ namespace BizTalk_Benchmark_Wizard.Helper
         }
         #endregion
         #region Private methods
-        private string CreateLoadGenScript(string template, string server)
+        private string CreateLoadGenScript(string template, string server, int testDuration)
         {
             string rootPath = Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location), "Resources\\LoadGenScripts");
 
@@ -148,6 +148,8 @@ namespace BizTalk_Benchmark_Wizard.Helper
                 while (reader.Peek() >= 0)
                 {
                     string newLine = reader.ReadLine();
+                    if (newLine.Trim().StartsWith("<TotalTime>"))
+                        newLine = string.Format("<TotalTime>{0}</TotalTime>", testDuration);
                     newLine = newLine.Replace("@ServerName", server);
                     newLine = newLine.Replace("@FilePath", rootPath);
                     writer.WriteLine(newLine);

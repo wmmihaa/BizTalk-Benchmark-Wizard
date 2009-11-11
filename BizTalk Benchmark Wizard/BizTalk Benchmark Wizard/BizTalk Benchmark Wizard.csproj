@@ -170,6 +170,7 @@
     <Compile Include="Helper\LoadGenHelper.cs" />
     <Compile Include="Helper\PerflogHelper.cs" />
     <Compile Include="Helper\ProcessHelper.cs" />
+    <Compile Include="MaskedTextBox.cs" />
     <Compile Include="Resources\Class1.cs" />
     <Compile Include="Resources\Styles\Class1.cs" />
     <Compile Include="Scenarios.cs" />
@@ -188,6 +189,11 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <Compile Include="Service References\HighScoreService\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
     <Compile Include="Service References\IndigoService\Reference.cs">
       <AutoGen>True</AutoGen>
@@ -293,6 +299,14 @@
     <Content Include="Artefacts\IndigoService\IndigoService.exe.org" />
     <Content Include="Artefacts\IndigoService\StartIndigoService.bat" />
     <Content Include="Artefacts\BizTalk\BizTalk Benchmark Wizard.msi" />
+    <None Include="Service References\HighScoreService\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Service References\HighScoreService\configuration.svcinfo" />
+    <None Include="Service References\HighScoreService\configuration91.svcinfo" />
+    <None Include="Service References\HighScoreService\supplyhs.disco" />
+    <None Include="Service References\HighScoreService\supplyhs.wsdl" />
     <None Include="Service References\IndigoService\Reference.svcmap">
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
@@ -304,6 +318,7 @@
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
+    <WCFMetadataStorage Include="Service References\HighScoreService\" />
     <WCFMetadataStorage Include="Service References\IndigoService\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
