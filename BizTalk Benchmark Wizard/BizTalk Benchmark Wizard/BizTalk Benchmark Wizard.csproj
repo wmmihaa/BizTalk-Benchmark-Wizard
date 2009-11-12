@@ -22,6 +22,8 @@
     <SignAssembly>false</SignAssembly>
     <AssemblyOriginatorKeyFile>
     </AssemblyOriginatorKeyFile>
+    <ApplicationManifest>BizTalk Benchmark Wizard.exe.manifest</ApplicationManifest>
+    <ApplicationIcon>BBW_Logo.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -257,6 +259,7 @@
     <Content Include="Artefacts\IndigoService\IndigoService.exe" />
     <Content Include="Artefacts\IndigoService\IndigoService.new.exe" />
     <Content Include="Artefacts\IndigoService\versionwithlogging\IndigoService.exe" />
+    <Resource Include="BBW_Logo.ico" />
     <Content Include="LoadGenHelper.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -273,6 +276,7 @@
     <Resource Include="Resources\Images\gear_pause.png" />
     <Resource Include="Resources\Images\gear_run.png" />
     <Resource Include="Resources\Images\gear_information.png" />
+    <Resource Include="Resources\Images\BBW_Logo.png" />
     <Content Include="Resources\LoadGenScripts\Messaging Single and Multi Message Box_001.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -299,6 +303,7 @@
     <Content Include="Artefacts\IndigoService\IndigoService.exe.org" />
     <Content Include="Artefacts\IndigoService\StartIndigoService.bat" />
     <Content Include="Artefacts\BizTalk\BizTalk Benchmark Wizard.msi" />
+    <None Include="BizTalk Benchmark Wizard.exe.manifest" />
     <None Include="Service References\HighScoreService\Reference.svcmap">
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>

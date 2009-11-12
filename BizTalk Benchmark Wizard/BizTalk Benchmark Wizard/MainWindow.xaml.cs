@@ -663,9 +663,7 @@ namespace BizTalk_Benchmark_Wizard
             GC.SuppressFinalize(this);
         }
 
-        #endregion
-
-        
+        #endregion     
     }
     /// <summary>
     /// Used for presenting the test result

@@ -8,7 +8,10 @@
         Title="BizTalk Benchmark Wizard" 
         Height="447" 
         Width="709" 
-        ResizeMode="NoResize" xmlns:my="http://schemas.microsoft.com/wpf/2008/toolkit" Loaded="Window_Loaded">
+        ResizeMode="NoResize"
+        Icon="Resources/Images/BBW_Logo.png"
+        xmlns:my="http://schemas.microsoft.com/wpf/2008/toolkit" 
+        Loaded="Window_Loaded">
     <Window.Resources>
         <Style  TargetType="{x:Type TabControl}">
             <Setter Property="OverridesDefaultStyle" Value="True" />
@@ -249,6 +252,7 @@
     </Window.Resources>
     <Grid>
         <Canvas>
+           
             <TabControl Height="430"
                         Name="tabControl1" 
                         Width="693"
