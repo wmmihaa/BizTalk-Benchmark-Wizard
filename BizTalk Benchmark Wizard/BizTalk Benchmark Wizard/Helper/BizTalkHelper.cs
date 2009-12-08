@@ -434,12 +434,18 @@ namespace BizTalk_Benchmark_Wizard.Helper
     }
     public class HostMaping
     {
+        string _selectedHost;
         public string HostName { get; set; }
         public string HostDescription { get; set; }
-        public string SelectedHost { get; set; }
+        public string SelectedHost
+        {
+            get { return _selectedHost; }
+            set { _selectedHost = value; }
+        }
         public List<string> BizTalkServers = new List<string>();
         public IEnumerable<string> Servers
         {
+            set { BizTalkServers = (List<string>)value; }
             get { return (IEnumerable<string>)BizTalkServers; }
         }
     }

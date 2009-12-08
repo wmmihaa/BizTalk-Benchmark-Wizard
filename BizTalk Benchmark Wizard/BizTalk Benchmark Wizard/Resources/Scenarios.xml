@@ -27,7 +27,7 @@
       </Environment>
       <Environment>
         <Name>1*BTS(1*CPU(Quad)) + 1*SQL(1*CPU(Quad))</Name>
-        <Description>Two server installation. One BizTalk Server and one SQL server, each with ONE CPU (Quad)</Description>
+        <Description>Two server installation. 1 BizTalk Server and 1 SQL server, each with 1 CPU (Quad)</Description>
         <LoadGenScriptFile>Messaging Single and Multi Message Box_001.xml</LoadGenScriptFile>
         <NuberOfActiveBizTalkServers>1</NuberOfActiveBizTalkServers>
         <BizTalkServerConfiguration></BizTalkServerConfiguration>
@@ -41,7 +41,7 @@
       </Environment>
       <Environment>
         <Name>1*BTS(1*CPU(Quad)) + 1*SQL(2*CPU(Quad))</Name>
-        <Description>Two server installation. One BizTalk Server with ONE CPU (Quad) and one SQL server with TWO CPU (Quad)</Description>
+        <Description>Two server installation. 1 BizTalk Server with 1 CPU (Quad) and one SQL server with 2 CPU (Quad)</Description>
         <LoadGenScriptFile>Messaging Single and Multi Message Box_001.xml</LoadGenScriptFile>
         <NuberOfActiveBizTalkServers>1</NuberOfActiveBizTalkServers>
         <BizTalkServerConfiguration></BizTalkServerConfiguration>
@@ -55,7 +55,7 @@
       </Environment>
       <Environment>
         <Name>1*BTS(2*CPU(Quad)) + 1*SQL(2*CPU(Quad))</Name>
-        <Description>Two server installation. One BizTalk Server with TWO CPU (Quad) and one SQL server with TWO CPU (Quad)</Description>
+        <Description>Two server installation. 1 BizTalk Server with 2 CPU (Quad) and one SQL server with 2 CPU (Quad)</Description>
         <LoadGenScriptFile>Messaging Single and Multi Message Box_001.xml</LoadGenScriptFile>
         <NuberOfActiveBizTalkServers>1</NuberOfActiveBizTalkServers>
         <BizTalkServerConfiguration></BizTalkServerConfiguration>
@@ -69,7 +69,7 @@
       </Environment>
       <Environment>
         <Name>2*BTS(1*CPU(Quad)) + 1*SQL(2*CPU(Quad))</Name>
-        <Description>Three server installation. Two BizTalk Server with ONE CPU (Quad) and one SQL serverwith TWO CPU (Quad)</Description>
+        <Description>Three server installation. 2 BizTalk Servers with 1 CPU (Quad) and one SQL serverwith 2 CPU (Quad)</Description>
         <LoadGenScriptFile>Messaging Single and Multi Message Box_001.xml</LoadGenScriptFile>
         <NuberOfActiveBizTalkServers>2</NuberOfActiveBizTalkServers>
         <BizTalkServerConfiguration></BizTalkServerConfiguration>
@@ -83,7 +83,7 @@
       </Environment>
       <Environment>
         <Name>2*BTS(2*CPU(Quad)) + 1*SQL(2*CPU(Quad))</Name>
-        <Description>Three server installation. Two BizTalk Server with TWO CPU (Quad) and one SQL serverwith TWO CPU (Quad)</Description>
+        <Description>Three server installation. 2 BizTalk Servers with 2 CPU (Quad) and one SQL serverwith 2 CPU (Quad)</Description>
         <LoadGenScriptFile>Messaging Single and Multi Message Box_001.xml</LoadGenScriptFile>
         <NuberOfActiveBizTalkServers>2</NuberOfActiveBizTalkServers>
         <BizTalkServerConfiguration></BizTalkServerConfiguration>
@@ -97,7 +97,7 @@
       </Environment>
       <Environment>
         <Name>2*BTS(2*CPU(Quad)) + 1*SQL(4*CPU(Quad))</Name>
-        <Description>Three server installation. Two BizTalk Server with TWO CPU (Quad) and one SQL serverwith FOUR CPU (Quad)</Description>
+        <Description>Three server installation. 2 BizTalk Servers with 2 CPU (Quad) and one SQL serverwith FOUR CPU (Quad)</Description>
         <LoadGenScriptFile>Messaging Single and Multi Message Box_001.xml</LoadGenScriptFile>
         <NuberOfActiveBizTalkServers>2</NuberOfActiveBizTalkServers>
         <BizTalkServerConfiguration></BizTalkServerConfiguration>

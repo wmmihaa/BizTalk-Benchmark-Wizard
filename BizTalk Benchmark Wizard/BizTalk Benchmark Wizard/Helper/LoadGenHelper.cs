@@ -40,46 +40,79 @@ namespace BizTalk_Benchmark_Wizard.Helper
 
         }
 
-        public void InitPerfCounters(string scenario, Environment environment, List<HostMaping> hostmappings, List<Server> servers)
+        public void InitPerfCounters(string scenario, List<HostMaping> hostmappings, Server msgBoxServer)
         {
             try
             {
-                foreach (Server server in servers)
+                foreach (HostMaping hostMapping in hostmappings)
                 {
                     PerfCounter perfCounter = new PerfCounter();
-                    perfCounter.Server = server.Name;
-                    if (server.Type == ServerType.BIZTALK)
+                    perfCounter.Server = hostMapping.SelectedHost;
+
+                    switch (hostMapping.HostName)
                     {
-                        foreach (HostMaping hostMapping in hostmappings.Where(h => h.SelectedHost == server.Name))
-                        {
-                            switch (hostMapping.HostName)
-                            {
-                                case "BBW_RxHost":
+                        case "BBW_RxHost":
 
-                                    UpdateServiceAddress(server.Name, scenario);
+                            UpdateServiceAddress(hostMapping.SelectedHost, scenario);
 
-                                    perfCounter.ReceivedCounters.Add(new PerformanceCounter("BizTalk:Messaging", "Documents received/Sec", "BBW_RxHost", server.Name));
-                                    perfCounter.CPUCounters1.Add(new PerformanceCounter("Processor", "% Processor Time", "_Total", server.Name));
-                                    perfCounter.HasReceiveCounter = true;
-                                    break;
-                                case "BBW_PxHost":
-                                    break;
-                                case "BBW_TxHost":
-                                    perfCounter.ProcessedCounters.Add(new PerformanceCounter("BizTalk:Messaging", "Documents processed/Sec", "BBW_TxHost", server.Name));
-                                    perfCounter.CPUCounters2.Add(new PerformanceCounter("Processor", "% Processor Time", "_Total", server.Name));
-                                    perfCounter.HasProcessingCounter = true;
-                                    break;
-                            }
-                            MainWindow.DoEvents();
-                        }
+                            perfCounter.ReceivedCounters.Add(new PerformanceCounter("BizTalk:Messaging", "Documents received/Sec", "BBW_RxHost", hostMapping.SelectedHost));
+                            perfCounter.CPUCounters1.Add(new PerformanceCounter("Processor", "% Processor Time", "_Total", hostMapping.SelectedHost));
+                            perfCounter.HasReceiveCounter = true;
+                            break;
+                        case "BBW_PxHost":
+                            break;
+                        case "BBW_TxHost":
+                            perfCounter.ProcessedCounters.Add(new PerformanceCounter("BizTalk:Messaging", "Documents processed/Sec", "BBW_TxHost", hostMapping.SelectedHost));
+                            perfCounter.CPUCounters2.Add(new PerformanceCounter("Processor", "% Processor Time", "_Total", hostMapping.SelectedHost));
+                            perfCounter.HasProcessingCounter = true;
+                            break;
                     }
-                    else
-                        perfCounter.CPUCounters3.Add(new PerformanceCounter("Processor", "% Processor Time", "_Total", server.Name));
-
                     PerfCounters.Add(perfCounter);
-                    
+                    MainWindow.DoEvents();
                 }
 
+                PerfCounter sqlPerfCounter = new PerfCounter();
+                sqlPerfCounter.Server = msgBoxServer.Name;
+                sqlPerfCounter.CPUCounters3.Add(new PerformanceCounter("Processor", "% Processor Time", "_Total", msgBoxServer.Name));
+                PerfCounters.Add(sqlPerfCounter);
+
+                /*
+                //foreach (Server server in bizTalkServers)
+                //{
+                //    PerfCounter perfCounter = new PerfCounter();
+                //    perfCounter.Server = server.Name;
+                //    if (server.Type == ServerType.BIZTALK)
+                //    {
+                //        foreach (HostMaping hostMapping in hostmappings.Where(h => h.SelectedHost == server.Name))
+                //        {
+                //            switch (hostMapping.HostName)
+                //            {
+                //                case "BBW_RxHost":
+
+                //                    UpdateServiceAddress(server.Name, scenario);
+
+                //                    perfCounter.ReceivedCounters.Add(new PerformanceCounter("BizTalk:Messaging", "Documents received/Sec", "BBW_RxHost", server.Name));
+                //                    perfCounter.CPUCounters1.Add(new PerformanceCounter("Processor", "% Processor Time", "_Total", server.Name));
+                //                    perfCounter.HasReceiveCounter = true;
+                //                    break;
+                //                case "BBW_PxHost":
+                //                    break;
+                //                case "BBW_TxHost":
+                //                    perfCounter.ProcessedCounters.Add(new PerformanceCounter("BizTalk:Messaging", "Documents processed/Sec", "BBW_TxHost", server.Name));
+                //                    perfCounter.CPUCounters2.Add(new PerformanceCounter("Processor", "% Processor Time", "_Total", server.Name));
+                //                    perfCounter.HasProcessingCounter = true;
+                //                    break;
+                //            }
+                //            MainWindow.DoEvents();
+                //        }
+                //    }
+                //    else
+                //        perfCounter.CPUCounters3.Add(new PerformanceCounter("Processor", "% Processor Time", "_Total", server.Name));
+
+                //    PerfCounters.Add(perfCounter);
+                    
+                //}
+                */
                 string rcvHost = hostmappings.First(h => h.HostName == "BBW_RxHost").SelectedHost;
 
                 RaiseInitiateStepEvent("InitPerfCounters");

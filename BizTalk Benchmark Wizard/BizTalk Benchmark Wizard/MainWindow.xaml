@@ -326,10 +326,10 @@
                         <Label Margin="40,75,19,129" FontFamily="Calibri">
                             <TextBlock TextWrapping="Wrap">
                                 BizTalk Benchmark Wizard uses Microsoft LoadGen 2007 to generate message transmission loads to run performance and stress tests for Microsoft BizTalk Server applications. 
-                                <LineBreak/><LineBreak/>Depending on which scenario you select below, a different script will be executed. Microsoft LoadGen 2007 was installed together with BizTalk Benchmark Wizard, and can be used afterwards to continue analyzing your environment.
+                                <LineBreak/>Depending on which scenario you select below, a different script will be executed. Microsoft LoadGen 2007 was installed together with BizTalk Benchmark Wizard, and can be used afterwards to continue analyzing your environment.
                             </TextBlock>
                         </Label>
-                        <Canvas Margin="40,170" >
+                        <Canvas Margin="40,150" >
                             <StackPanel Orientation="Vertical">
                                 <StackPanel Orientation="Horizontal">
                                     <Label Canvas.Left="26" Canvas.Top="16" Height="28" Name="label1" Width="90">Select scenario:</Label>
@@ -338,7 +338,7 @@
                                 <StackPanel Height="10"/>
                                 <GroupBox Header="Select an environment which, as close as possible, resembles your own" 
                                           x:Name="environmentsGroup" 
-                                          Height="125" 
+                                          Height="150" 
                                           Width="600" 
                                           Canvas.Left="25" 
                                           Canvas.Top="45">
@@ -405,10 +405,10 @@
                                             <DataTemplate>
                                                 <StackPanel Orientation="Horizontal">
                                                     <TextBlock Text="{Binding Path=HostDescription}" VerticalAlignment="Center" Width="260" FontWeight="Bold"  Height="25"/>
-                                                    <ComboBox Template="{StaticResource ComboBoxTemplate}" 
-                                                              ItemsSource="{Binding Path=Servers}" 
+                                                    <ComboBox Template="{StaticResource ComboBoxTemplate}"
+                                                              ItemsSource="{Binding Path=Servers, Mode=TwoWay}" 
                                                               SelectedIndex="0" 
-                                                              SelectedValue="{Binding Path=SelectedHost}"
+                                                              SelectedItem="{Binding Path=SelectedHost, Mode=TwoWay}"
                                                               Width="250"
                                                               Height="20"/>
                                                 </StackPanel>

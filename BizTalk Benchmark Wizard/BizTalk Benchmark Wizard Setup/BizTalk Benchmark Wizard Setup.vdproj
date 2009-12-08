@@ -111,6 +111,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_4FBD687E2FE043B1ACEFBBB60ED61DFE"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_59F186A052B989726226B973BB10683D"
         "OwnerKey" = "8:_5DC36017F2B4415089AB3556E182CC49"
         "MsmSig" = "8:_UNDEFINED"
@@ -963,6 +969,26 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_4FBD687E2FE043B1ACEFBBB60ED61DFE"
+            {
+            "SourcePath" = "8:..\\BizTalk Benchmark Wizard\\Indigo.ico"
+            "TargetName" = "8:Indigo.ico"
+            "Tag" = "8:"
+            "Folder" = "8:_FD5F5EF316CD468DADC2E67EB9FC006C"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_59F186A052B989726226B973BB10683D"
             {
             "AssemblyRegister" = "3:1"
@@ -1569,7 +1595,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:BizTalk Benchmark Wizard"
         "ProductCode" = "8:{617F4FF3-1B6C-4968-BDD7-2BC2E11BE1F4}"
-        "PackageCode" = "8:{469277F4-774B-436E-BA18-E24A6BEB4B71}"
+        "PackageCode" = "8:{8B6726DB-03AA-483E-9F13-AA70183441F1}"
         "UpgradeCode" = "8:{F2E6EF88-D906-45EA-9DD1-CCE7751B604B}"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:FALSE"
@@ -1713,7 +1739,7 @@
             "Target" = "8:_0900BF164A0044E695AC802928587E5D"
             "Folder" = "8:_E911E292E0C14C71B14C4FBE92C990AB"
             "WorkingFolder" = "8:_FD5F5EF316CD468DADC2E67EB9FC006C"
-            "Icon" = "8:"
+            "Icon" = "8:_4FBD687E2FE043B1ACEFBBB60ED61DFE"
             "Feature" = "8:"
             }
         }

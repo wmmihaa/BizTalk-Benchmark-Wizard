@@ -448,8 +448,9 @@ namespace BizTalk_Benchmark_Wizard
 
                 HostMappings = _bizTalkHelper.GetHostMappings();
                 DoEvents();
+                
                 this.lstHosts.DataContext = (IEnumerable<HostMaping>) HostMappings;
-
+                
                 WaitPanel.Visibility = Visibility.Collapsed;
 
                 if (isBizTalkScenariosInstalled)
@@ -574,7 +575,7 @@ namespace BizTalk_Benchmark_Wizard
                     DoEvents();
                     this.Dispatcher.BeginInvoke(DispatcherPriority.ApplicationIdle, new Action(delegate()
                     {
-                        _loadGenHelper.InitPerfCounters(cbScenario.Text, (Environment)environments.SelectedItem, (List<HostMaping>)lstHosts.DataContext, _perflogHelper.Servers);
+                        _loadGenHelper.InitPerfCounters(cbScenario.Text, (List<HostMaping>)lstHosts.DataContext, _perflogHelper.Servers.First(s=>s.Type==ServerType.SQL));
                     }));
                     break;
                 case "InitPerfCounters":

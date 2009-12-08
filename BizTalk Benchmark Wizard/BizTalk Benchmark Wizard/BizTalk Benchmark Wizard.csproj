@@ -260,6 +260,9 @@
     <Content Include="Artefacts\IndigoService\IndigoService.new.exe" />
     <Content Include="Artefacts\IndigoService\versionwithlogging\IndigoService.exe" />
     <Resource Include="BBW_Logo.ico" />
+    <Resource Include="Indigo.ico">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
     <Content Include="LoadGenHelper.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
