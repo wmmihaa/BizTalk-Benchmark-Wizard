@@ -67,6 +67,23 @@ namespace BizTalk_Benchmark_Wizard
     }
     public class Environment
     {
+        /*
+         <Environment>
+            <Name>1 BTS with SQL</Name>
+            <Description>Single server installation</Description>
+            <LoadGenScriptFile>Orchestration Single Message Box_001.xml</LoadGenScriptFile>
+            <NuberOfActiveBizTalkServers>1</NuberOfActiveBizTalkServers>
+            <BizTalkServerConfiguration>1*CPU, 4GB RAM</BizTalkServerConfiguration>
+            <NuberOfActiveSQLServers>0</NuberOfActiveSQLServers>
+            <SqlServerConfiguration>1*CPU, 4GB RAM</SqlServerConfiguration>
+            <MaxExpectedCpuUtilizationBizTalkRxHost>95</MaxExpectedCpuUtilizationBizTalkRxHost>
+            <MaxExpectedCpuUtilizationBizTalkTxHost>95</MaxExpectedCpuUtilizationBizTalkTxHost>
+            <MaxExpectedCpuUtilizationSql>45</MaxExpectedCpuUtilizationSql>
+            <MinExpectedDocsProcessed>100</MinExpectedDocsProcessed>
+            <MinExpectedDocsReceived>40</MinExpectedDocsReceived>
+          </Environment>
+         */
+
         /// <summary>
         /// Name of the environment. Eg. 1BTS + 1SQL
         /// </summary>
@@ -98,7 +115,11 @@ namespace BizTalk_Benchmark_Wizard
         /// <summary>
         /// Maximum Expected Cpu Utilization BizTalk
         /// </summary>
-        public int MaxExpectedCpuUtilizationBizTalk { get; set; }
+        public int MaxExpectedCpuUtilizationBizTalkRxHost { get; set; }
+        /// <summary>
+        /// Maximum Expected Cpu Utilization BizTalk
+        /// </summary>
+        public int MaxExpectedCpuUtilizationBizTalkTxHost { get; set; }
         /// <summary>
         /// Maximum Expected Cpu UtilizationSql
         /// </summary>

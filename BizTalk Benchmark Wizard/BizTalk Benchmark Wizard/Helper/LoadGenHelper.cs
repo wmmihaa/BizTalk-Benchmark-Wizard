@@ -40,36 +40,44 @@ namespace BizTalk_Benchmark_Wizard.Helper
 
         }
 
-        public void InitPerfCounters(string scenario, Environment environment, List<HostMaping> hostmappings, List<string> servers)
+        public void InitPerfCounters(string scenario, Environment environment, List<HostMaping> hostmappings, List<Server> servers)
         {
             try
             {
-                foreach (string server in servers)
+                foreach (Server server in servers)
                 {
                     PerfCounter perfCounter = new PerfCounter();
-                    perfCounter.Server = server;
-                    foreach (HostMaping hostMapping in hostmappings.Where(h => h.SelectedHost == server))
+                    perfCounter.Server = server.Name;
+                    if (server.Type == ServerType.BIZTALK)
                     {
-                        switch (hostMapping.HostName)
+                        foreach (HostMaping hostMapping in hostmappings.Where(h => h.SelectedHost == server.Name))
                         {
-                            case "BBW_RxHost":
+                            switch (hostMapping.HostName)
+                            {
+                                case "BBW_RxHost":
 
-                                UpdateServiceAddress(server, scenario);
+                                    UpdateServiceAddress(server.Name, scenario);
 
-                                perfCounter.ReceivedCounters.Add(new PerformanceCounter("BizTalk:Messaging", "Documents received/Sec", "BBW_RxHost", server));
-                                perfCounter.HasReceiveCounter = true;
-                                break;
-                            case "BBW_PxHost":
-                                break;
-                            case "BBW_TxHost":
-                                perfCounter.ProcessedCounters.Add(new PerformanceCounter("BizTalk:Messaging", "Documents processed/Sec", "BBW_TxHost", server));
-                                perfCounter.HasProcessingCounter = true;
-                                break;
+                                    perfCounter.ReceivedCounters.Add(new PerformanceCounter("BizTalk:Messaging", "Documents received/Sec", "BBW_RxHost", server.Name));
+                                    perfCounter.CPUCounters1.Add(new PerformanceCounter("Processor", "% Processor Time", "_Total", server.Name));
+                                    perfCounter.HasReceiveCounter = true;
+                                    break;
+                                case "BBW_PxHost":
+                                    break;
+                                case "BBW_TxHost":
+                                    perfCounter.ProcessedCounters.Add(new PerformanceCounter("BizTalk:Messaging", "Documents processed/Sec", "BBW_TxHost", server.Name));
+                                    perfCounter.CPUCounters2.Add(new PerformanceCounter("Processor", "% Processor Time", "_Total", server.Name));
+                                    perfCounter.HasProcessingCounter = true;
+                                    break;
+                            }
+                            MainWindow.DoEvents();
                         }
-                        MainWindow.DoEvents();
                     }
-                    perfCounter.CPUCounters.Add(new PerformanceCounter("Processor", "% Processor Time", "_Total", server));
+                    else
+                        perfCounter.CPUCounters3.Add(new PerformanceCounter("Processor", "% Processor Time", "_Total", server.Name));
+
                     PerfCounters.Add(perfCounter);
+                    
                 }
 
                 string rcvHost = hostmappings.First(h => h.HostName == "BBW_RxHost").SelectedHost;
@@ -188,19 +196,19 @@ namespace BizTalk_Benchmark_Wizard.Helper
 
             return _loadGen;
         }
-        private void CreatePerfCounter(string server)
-        {
-            PerfCounter perfCounter = new PerfCounter();
-            perfCounter.Server = server;
+        //private void CreatePerfCounter(string server)
+        //{
+        //    PerfCounter perfCounter = new PerfCounter();
+        //    perfCounter.Server = server;
 
-            perfCounter.ProcessedCounters.Add(new PerformanceCounter("BizTalk:Messaging", "Documents processed/Sec", "BBW_TxHost", server));
+        //    perfCounter.ProcessedCounters.Add(new PerformanceCounter("BizTalk:Messaging", "Documents processed/Sec", "BBW_TxHost", server));
 
-            perfCounter.ReceivedCounters.Add(new PerformanceCounter("BizTalk:Messaging", "Documents received/Sec", "BBW_RxHost", server));
+        //    perfCounter.ReceivedCounters.Add(new PerformanceCounter("BizTalk:Messaging", "Documents received/Sec", "BBW_RxHost", server));
 
-            perfCounter.CPUCounters.Add(new PerformanceCounter("Processor", "% Processor Time", "_Total", server));
+        //    perfCounter.CPUCounters.Add(new PerformanceCounter("Processor", "% Processor Time", "_Total", server));
 
-            PerfCounters.Add(perfCounter);
-        }
+        //    PerfCounters.Add(perfCounter);
+        //}
         protected void RaiseCompleteEvent(object sender, LoadGenStopEventArgs e)
         {
             if (OnComplete != null)
@@ -282,7 +290,9 @@ namespace BizTalk_Benchmark_Wizard.Helper
 
         public List<PerformanceCounter> ProcessedCounters = new List<PerformanceCounter>();
         public List<PerformanceCounter> ReceivedCounters = new List<PerformanceCounter>();
-        public List<PerformanceCounter> CPUCounters = new List<PerformanceCounter>();
+        public List<PerformanceCounter> CPUCounters1 = new List<PerformanceCounter>();
+        public List<PerformanceCounter> CPUCounters2 = new List<PerformanceCounter>();
+        public List<PerformanceCounter> CPUCounters3 = new List<PerformanceCounter>();
 
         public float ProcessedCounterValue
         {
@@ -296,7 +306,7 @@ namespace BizTalk_Benchmark_Wizard.Helper
                 }
                 catch (Exception ex)
                 {
-                    throw new ApplicationException("Unable to collect perfcounter. Make sure you run the application with elevated rights", ex);
+                    throw new ApplicationException("Unable to collect perfcounter. Make sure you have all BBW* host instances are started.", ex);
                 }
                 return ret;
             }
@@ -318,14 +328,14 @@ namespace BizTalk_Benchmark_Wizard.Helper
                 return ret;
             }
         }
-        public float CPUCounterValue
+        public float CPUCounterValue1
         {
             get
             {
                 float ret = 1;
                 try
                 {
-                    foreach (PerformanceCounter c in this.CPUCounters)
+                    foreach (PerformanceCounter c in this.CPUCounters1)
                         ret += c.NextValue();
                 }
                 catch (Exception ex)
@@ -335,6 +345,41 @@ namespace BizTalk_Benchmark_Wizard.Helper
                 return ret;
             }
         }
+        public float CPUCounterValue2
+        {
+            get
+            {
+                float ret = 1;
+                try
+                {
+                    foreach (PerformanceCounter c in this.CPUCounters2)
+                        ret += c.NextValue();
+                }
+                catch (Exception ex)
+                {
+                    throw new ApplicationException("Unable to collect perfcounter. Make sure you run the application with elevated rights", ex);
+                }
+                return ret;
+            }
+        }
+        public float CPUCounterValue3
+        {
+            get
+            {
+                float ret = 1;
+                try
+                {
+                    foreach (PerformanceCounter c in this.CPUCounters3)
+                        ret += c.NextValue();
+                }
+                catch (Exception ex)
+                {
+                    throw new ApplicationException("Unable to collect perfcounter. Make sure you run the application with elevated rights", ex);
+                }
+                return ret;
+            }
+        }
+
         public string Server = string.Empty;
     }
     [System.ServiceModel.ServiceContract]

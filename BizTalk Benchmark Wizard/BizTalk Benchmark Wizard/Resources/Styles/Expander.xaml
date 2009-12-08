@@ -88,8 +88,8 @@
             <Border 
               Name="Content" 
               Grid.Row="1" 
-              Background="{StaticResource WindowBackgroundBrush}"
-              BorderBrush="{StaticResource SolidBorderBrush}" 
+              Background="{StaticResource BrushedMetalBackground}"
+              BorderBrush="Gainsboro" 
               BorderThickness="1,0,1,1" 
               CornerRadius="0,0,2,2" >
               <ContentPresenter Margin="4" />

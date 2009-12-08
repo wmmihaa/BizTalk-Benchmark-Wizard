@@ -39,14 +39,19 @@ namespace BizTalk_Benchmark_Wizard
         LoadGenHelper _loadGenHelper;
         System.Timers.Timer _timer;
         DateTime _testStartTime;
-        long _avgCpuValue;
+        long _avgCpuValue1;
+        long _avgCpuValue2;
+        long _avgCpuValue3;
         long _avgProcessedValue;
         long _avgRreceivedValue;
-        long _totalCpuValue;
+        long _totalCpuValue1;
+        long _totalCpuValue2;
+        long _totalCpuValue3;
         long _totalProcessedValue;
         long _totalRreceivedValue;
         long _timerCount;
         bool _isWarmingUp = true;
+        double _initialHeight;
         IEnumerable<Environment> Environments;
         List<HostMaping> HostMappings;
         List<Result> Results = new List<Result>();
@@ -89,6 +94,7 @@ namespace BizTalk_Benchmark_Wizard
 
             Version version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
             lblVersion.Text = string.Format("Version: {0}.{1}.{2}", version.Major, version.Minor, version.Build);
+            _initialHeight = this.Height;
         }
         private void btnNext_Click(object sender, RoutedEventArgs e)
         {
@@ -123,7 +129,8 @@ namespace BizTalk_Benchmark_Wizard
                         environments.SelectedIndex = 1;
                     else
                         environments.SelectedIndex = 2;
-                   btnNext.IsEnabled = false;
+
+                    btnNext.IsEnabled = false;
                     break;
                 case 2:
                     break;
@@ -327,6 +334,17 @@ namespace BizTalk_Benchmark_Wizard
                     break;
             }
         }
+        private void Expander_Expanded(object sender, RoutedEventArgs e)
+        {
+            ReceivedGauge.Visibility = Visibility.Hidden;
+            ProcessedGauge.Visibility = Visibility.Hidden;
+        }
+        private void Expander_Collapsed(object sender, RoutedEventArgs e)
+        {
+            ReceivedGauge.Visibility = Visibility.Visible;
+            ProcessedGauge.Visibility = Visibility.Visible;
+        }
+
         #endregion
         #region Private Methods
         void ShowResult()
@@ -334,18 +352,39 @@ namespace BizTalk_Benchmark_Wizard
             Results.Clear();
 
             Environment environment = (Environment)environments.SelectedItem;
-            bool cpuSuccess = _avgCpuValue < (long)environment.MaxExpectedCpuUtilizationBizTalk ? true : false;
+            bool cpuSuccess1 = _avgCpuValue1 < (long)environment.MaxExpectedCpuUtilizationBizTalkRxHost ? true : false;
+            bool cpuSuccess2 = _avgCpuValue2 < (long)environment.MaxExpectedCpuUtilizationBizTalkTxHost ? true : false;
+            bool cpuSuccess3 = _avgCpuValue3 < (long)environment.MaxExpectedCpuUtilizationSql ? true : false;
+
             bool processedSuccess = _avgProcessedValue > (long)environment.MinExpectedDocsProcessed ? true : false;
             bool receivedSuccess = _avgRreceivedValue > (long)environment.MinExpectedDocsReceived ? true : false;
 
-            // CPU
+            // CPU#1
             Results.Add(new Result()
             {
-                CounterName = "Avg Processor time (BizTalk)",
-                TestValue = _avgCpuValue.ToString(CultureInfo.InvariantCulture),
-                Kpi = "<" + environment.MaxExpectedCpuUtilizationBizTalk.ToString(),
-                Status = cpuSuccess ? "Succeeded" : "Failed"
+                CounterName = "Avg Processor time (BizTalk Receive)",
+                TestValue = _avgCpuValue1.ToString(CultureInfo.InvariantCulture),
+                Kpi = "<" + environment.MaxExpectedCpuUtilizationBizTalkRxHost.ToString(),
+                Status = cpuSuccess1 ? "Succeeded" : "Failed"
             });
+            // CPU#2
+            Results.Add(new Result()
+            {
+                CounterName = "Avg Processor time (BizTalk Processed)",
+                TestValue = _avgCpuValue2.ToString(CultureInfo.InvariantCulture),
+                Kpi = "<" + environment.MaxExpectedCpuUtilizationBizTalkTxHost.ToString(),
+                Status = cpuSuccess1 ? "Succeeded" : "Failed"
+            });
+            // CPU#3
+            Results.Add(new Result()
+            {
+                CounterName = "Avg Processor time (SQL MsgBox)",
+                TestValue = _avgCpuValue3.ToString(CultureInfo.InvariantCulture),
+                Kpi = "<" + environment.MaxExpectedCpuUtilizationSql.ToString(),
+                Status = cpuSuccess1 ? "Succeeded" : "Failed"
+            });
+
+
             //Processed
             Results.Add(new Result()
             {
@@ -364,7 +403,7 @@ namespace BizTalk_Benchmark_Wizard
             });
             ResultGrid.DataContext = Results;
 
-            if (cpuSuccess && processedSuccess && receivedSuccess)
+            if (cpuSuccess1 && cpuSuccess2 && cpuSuccess3 && processedSuccess && receivedSuccess)
             {
                 lblSucess.Text = "Succeeded";
                 lblResultDescription.Text = @"<LineBreak/>Congratulations, the test completed with expected results. If you wich to further analyze the environment we recommend you to study the Data Collector Sets created using the <Hyperlink NavigateUri=""http://www.codeplex.com/PAL"">Performance Analysis of Logs (PAL) tool</Hyperlink>.";
@@ -535,7 +574,7 @@ namespace BizTalk_Benchmark_Wizard
                     DoEvents();
                     this.Dispatcher.BeginInvoke(DispatcherPriority.ApplicationIdle, new Action(delegate()
                     {
-                        _loadGenHelper.InitPerfCounters(cbScenario.Text, (Environment)environments.SelectedItem, (List<HostMaping>)lstHosts.DataContext, _bizTalkHelper.GetApplicationServerNames());
+                        _loadGenHelper.InitPerfCounters(cbScenario.Text, (Environment)environments.SelectedItem, (List<HostMaping>)lstHosts.DataContext, _perflogHelper.Servers);
                     }));
                     break;
                 case "InitPerfCounters":
@@ -556,7 +595,9 @@ namespace BizTalk_Benchmark_Wizard
                     lblTestTime.Text = string.Format("Total test duration: {0} minutes", ((int)_loadGenHelper.TestDuration / 60).ToString());
 
                     _testStartTime = DateTime.Now;
-                    CPUGauge.MaxValue = 90;
+                    CPUGauge1.MaxValue = 90;
+                    CPUGauge2.MaxValue = 90;
+                    CPUGauge3.MaxValue = 90;
                     ProcessedGauge.MaxValue = 180;
                     ReceivedGauge.MaxValue = 180;
                     ProcessValue = 0;
@@ -591,8 +632,10 @@ namespace BizTalk_Benchmark_Wizard
         private void OnCollectCounterData(object sender, ElapsedEventArgs e)
         {
             _timer.Enabled = false;
-            
-            float cpuValue=0;
+
+            float cpuValue1 = 0;
+            float cpuValue2 = 0;
+            float cpuValue3 = 0;
             float processedValue=0;
             float receivedValue=0;
 
@@ -600,7 +643,9 @@ namespace BizTalk_Benchmark_Wizard
             {
                 foreach (PerfCounter c in _loadGenHelper.PerfCounters)
                 {
-                    cpuValue += (long)c.CPUCounterValue;
+                    cpuValue1 += (long)c.CPUCounterValue1;
+                    cpuValue2 += (long)c.CPUCounterValue2;
+                    cpuValue3 += (long)c.CPUCounterValue3;
 
                     if (c.HasProcessingCounter)
                         processedValue += (long)c.ProcessedCounterValue;
@@ -621,17 +666,26 @@ namespace BizTalk_Benchmark_Wizard
                     }
                     
                     _timerCount++;
-                    _totalCpuValue += (long)cpuValue / _loadGenHelper.PerfCounters.Count;
+                    _totalCpuValue1 += (long)cpuValue1 > 100 ? 100 : (int)cpuValue1;
+                    _totalCpuValue2 += (long)cpuValue2 > 100 ? 100 : (int)cpuValue2;
+                    _totalCpuValue3 += (long)cpuValue3 > 100 ? 100 : (int)cpuValue3;
+
                     _totalProcessedValue += (long)processedValue;
                     _totalRreceivedValue += (long)receivedValue;
 
-                    _avgCpuValue = _totalCpuValue / _timerCount; //(long)((_avgCpuValue + cpuValue) * _timerCount);
+                    _avgCpuValue1 = _totalCpuValue1 / _timerCount;
+                    _avgCpuValue2 = _totalCpuValue2 / _timerCount;
+                    _avgCpuValue3 = _totalCpuValue3 / _timerCount; 
+
                     _avgProcessedValue = _totalProcessedValue / _timerCount; //(long)((_avgProcessedValue + processedValue) * _timerCount);
                     _avgRreceivedValue = _totalRreceivedValue / _timerCount; //(long)((_avgRreceivedValue + receivedValue) * _timerCount);
                 }
 
                 // Set gauge values
-                CPUGauge.SetCounter((int)cpuValue / _loadGenHelper.PerfCounters.Count, (int)_avgCpuValue);
+                CPUGauge1.SetCounter((int)cpuValue1 > 100 ? 100 : (int)cpuValue1, (int)_avgCpuValue1);
+                CPUGauge2.SetCounter((int)cpuValue2 > 100 ? 100 : (int)cpuValue2, (int)_avgCpuValue2);
+                CPUGauge3.SetCounter((int)cpuValue3 > 100 ? 100 : (int)cpuValue3, (int)_avgCpuValue3);
+
                 ProcessedGauge.SetCounter((int)processedValue, (int)_avgProcessedValue);
                 ReceivedGauge.SetCounter((int)receivedValue, (int)_avgRreceivedValue);
 
@@ -664,6 +718,7 @@ namespace BizTalk_Benchmark_Wizard
         }
 
         #endregion     
+
     }
     /// <summary>
     /// Used for presenting the test result

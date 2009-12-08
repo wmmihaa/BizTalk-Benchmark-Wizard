@@ -1,7 +1,7 @@
 ﻿<UserControl x:Class="bLogical.GaugeControl.GaugeControl"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    Height="222.411" Width="193.256" Loaded="UserControl_Loaded">
+    Height="222" Width="194" Loaded="UserControl_Loaded">
     <UserControl.Resources>
 
         <SolidColorBrush x:Key="DisabledForegroundBrush" Color="#888" />

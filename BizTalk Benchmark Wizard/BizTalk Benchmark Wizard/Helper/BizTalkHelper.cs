@@ -197,16 +197,19 @@ namespace BizTalk_Benchmark_Wizard.Helper
             BizTalkDBs bizTalkDBs = GetSqlServerNames();
             this._btsAdmGroup = bizTalkDBs.BizTalkAdminGroup;
 
-            servers.Add(new Server() { Name = bizTalkDBs.BamDBServerNameComputerName, Type = ServerType.SQL });
-
-            if (servers.Count(s => s.Name == bizTalkDBs.RuleEngineDBServerNameComputerName) == 0)
-                servers.Add(new Server() { Name = bizTalkDBs.RuleEngineDBServerNameComputerName, Type = ServerType.SQL });
-
             if (servers.Count(s => s.Name == bizTalkDBs.SubscriptionDBServerNameComputerName) == 0)
                 servers.Add(new Server() { Name = bizTalkDBs.SubscriptionDBServerNameComputerName, Type = ServerType.SQL });
 
-            if (servers.Count(s => s.Name == bizTalkDBs.TrackingDBServerNameComputerName) == 0)
-                servers.Add(new Server() { Name = bizTalkDBs.TrackingDBServerNameComputerName, Type = ServerType.SQL });
+            //servers.Add(new Server() { Name = bizTalkDBs.BamDBServerNameComputerName, Type = ServerType.SQL });
+
+            //if (servers.Count(s => s.Name == bizTalkDBs.RuleEngineDBServerNameComputerName) == 0)
+            //    servers.Add(new Server() { Name = bizTalkDBs.RuleEngineDBServerNameComputerName, Type = ServerType.SQL });
+
+            //if (servers.Count(s => s.Name == bizTalkDBs.SubscriptionDBServerNameComputerName) == 0)
+            //    servers.Add(new Server() { Name = bizTalkDBs.SubscriptionDBServerNameComputerName, Type = ServerType.SQL });
+
+            //if (servers.Count(s => s.Name == bizTalkDBs.TrackingDBServerNameComputerName) == 0)
+            //    servers.Add(new Server() { Name = bizTalkDBs.TrackingDBServerNameComputerName, Type = ServerType.SQL });
 
             
             foreach (string btsServer in GetApplicationServerNames())

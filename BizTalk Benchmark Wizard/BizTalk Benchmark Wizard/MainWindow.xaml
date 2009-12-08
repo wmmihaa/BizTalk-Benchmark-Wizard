@@ -355,11 +355,9 @@
                                                 <ListBox.ItemTemplate>
                                                     <DataTemplate>
                                                         <StackPanel Orientation="Horizontal">
-                                                            <TextBlock Text="{Binding Path=Name}" VerticalAlignment="Center" Width="100" FontWeight="Bold"/>
-                                                            <StackPanel Width="60" Orientation="Horizontal"/>
-                                                            <TextBlock Text="{Binding Path=NuberOfActiveBizTalkServers}" VerticalAlignment="Center" Width="50" FontWeight="Bold"/>
-                                                            <StackPanel Width="30" Orientation="Horizontal"/>
-                                                            <TextBlock Text="{Binding Path=Description}" VerticalAlignment="Center" Width="300"/>
+                                                            <!--<TextBlock Text="{Binding Path=Name}" VerticalAlignment="Center" Width="200" FontWeight="Bold"/>
+                                                            <StackPanel Width="20" Orientation="Horizontal"/>-->
+                                                            <TextBlock Text="{Binding Path=Description}" VerticalAlignment="Center" Width="600"/>
                                                         </StackPanel>
                                                     </DataTemplate>
                                                 </ListBox.ItemTemplate>
@@ -526,41 +524,46 @@
                     </Grid>
                 </TabItem>
                 <TabItem Header="" Name="tabRun">
-                    <Grid>
-                        <Canvas>
-                            <StackPanel Orientation="Horizontal" Margin="0,30" >
+                    <Canvas>
+                        <Expander Name="CPUGaugeExpander" Header="View CPU Counters" Expanded="Expander_Expanded" Collapsed="Expander_Collapsed" MaxHeight="250" >
+                            <StackPanel Orientation="Horizontal"  >
                                 <StackPanel Width="20"/>
-                                <my1:GaugeControl Name="CPUGauge" Caption="Avg CPU"></my1:GaugeControl>
+                                <my1:GaugeControl Name="CPUGauge1" Caption="Avg CPU Receive"></my1:GaugeControl>
                                 <StackPanel Width="30"/>
+                                <my1:GaugeControl Name="CPUGauge2" Caption="Avg CPU Send" ></my1:GaugeControl>
+                                <StackPanel Width="30"/>
+                                <my1:GaugeControl Name="CPUGauge3" Caption="Avg CPU SQL"></my1:GaugeControl>
+                            </StackPanel>
+                        </Expander>
+                        <StackPanel Orientation="Vertical" Margin="45,20">
+                            
+                            <StackPanel Orientation="Horizontal" Margin="0,10" HorizontalAlignment="Center">
                                 <my1:GaugeControl Name="ReceivedGauge" Caption="Avg Received msgs/sec" ></my1:GaugeControl>
                                 <StackPanel Width="30"/>
                                 <my1:GaugeControl Name="ProcessedGauge" Caption="Avg Processed msgs/sec"></my1:GaugeControl>
                             </StackPanel>
-                            <ProgressBar Name="Progress" Width="580" Foreground="Blue"  Value="{Binding ProcessValue}" Height="20" Minimum="0" Maximum="100" Margin="10" Canvas.Left="70" Canvas.Top="266.224"/>
-
-                            <Label Canvas.Left="22" Canvas.Top="274" Height="28" Name="label3" Width="120">Progress:</Label>
+                            <ProgressBar Name="Progress" Width="580" Foreground="Blue"  Value="{Binding ProcessValue}" Height="20" Minimum="0" Maximum="100" />
                             <TextBlock Name="lblTestTime" FontWeight="Bold" Text="Total test duration: 10 minutes" TextAlignment="Center" Height="20.01" Canvas.Left="80" Canvas.Top="304" Width="579.768" />
                             <TextBlock Name="lblWarmUp" FontWeight="Bold" Text="Currently warming up..." TextAlignment="Center" Height="20.01" Canvas.Left="80" Canvas.Top="320" Width="579.768" />
 
-                        </Canvas>
-                    </Grid>
+                        </StackPanel>
+                    </Canvas>
                 </TabItem>
                 <TabItem Header="" Name="tabAnalyze">
                     <Grid>
                         <StackPanel Orientation="Vertical" Margin="20">
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                                 <Image Name="picSucess" Source="Resources/Images/failed.png" Width="100" Height="100"/>
-                            </StackPanel>
-                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" >
-                                <Label FontSize="42" FontWeight="Bold" >
+                                <Label FontSize="42" FontWeight="Bold" VerticalAlignment="Center">
                                     <TextBlock Name="lblSucess" Text="Failed!"/>
                                 </Label>
                             </StackPanel>
+                            
                             <StackPanel HorizontalAlignment="Center">
                                 <my:DataGrid Name="ResultGrid" 
                                      ItemsSource="{Binding}" 
                                      AutoGenerateColumns="False" 
-                                     Height="110" 
+                                     Height="170" 
                                      Width="524" 
                                      Canvas.Left="25" 
                                      Canvas.Top="45">
@@ -592,7 +595,7 @@
 
             </TabControl>
             <StackPanel Orientation="Vertical" Canvas.Left="30" Canvas.Top="370">
-                <TextBlock >
+                <TextBlock Name="lblHomeUri">
                      <Hyperlink NavigateUri="http://bbw.codeplex.com" RequestNavigate="Hyperlink_RequestNavigate" >http://bbw.codeplex.com</Hyperlink>
                 </TextBlock>
                 <TextBlock Name="lblVersion" Text="Version:1.0.0.0"/>
@@ -689,7 +692,7 @@
                AllowsTransparency="True"
                IsOpen="False"
                Width="490"
-               Height="300"
+               Height="310"
                Placement="Center" PopupAnimation="Fade">
 
             <Grid>

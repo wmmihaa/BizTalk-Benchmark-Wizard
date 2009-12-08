@@ -12,43 +12,102 @@
     </Description>
     <Environments>
       <Environment>
-        <Name>1 BTS with SQL</Name>
+        <Name>Single server installation1(1*CPU(Quad))</Name>
         <Description>Single server installation</Description>
         <LoadGenScriptFile>Messaging Single and Multi Message Box_001.xml</LoadGenScriptFile>
         <NuberOfActiveBizTalkServers>1</NuberOfActiveBizTalkServers>
         <BizTalkServerConfiguration>1*CPU, 4GB RAM</BizTalkServerConfiguration>
         <NuberOfActiveSQLServers>0</NuberOfActiveSQLServers>
         <SqlServerConfiguration>1*CPU, 4GB RAM</SqlServerConfiguration>
-        <MaxExpectedCpuUtilizationBizTalk>95</MaxExpectedCpuUtilizationBizTalk>
+        <MaxExpectedCpuUtilizationBizTalkRxHost>95</MaxExpectedCpuUtilizationBizTalkRxHost>
+        <MaxExpectedCpuUtilizationBizTalkTxHost>95</MaxExpectedCpuUtilizationBizTalkTxHost>
         <MaxExpectedCpuUtilizationSql>45</MaxExpectedCpuUtilizationSql>
         <MinExpectedDocsProcessed>100</MinExpectedDocsProcessed>
         <MinExpectedDocsReceived>40</MinExpectedDocsReceived>
       </Environment>
       <Environment>
-        <Name>1 BTS + 1 SQL</Name>
-        <Description>All host running on 1 server</Description>
+        <Name>1*BTS(1*CPU(Quad)) + 1*SQL(1*CPU(Quad))</Name>
+        <Description>Two server installation. One BizTalk Server and one SQL server, each with ONE CPU (Quad)</Description>
         <LoadGenScriptFile>Messaging Single and Multi Message Box_001.xml</LoadGenScriptFile>
         <NuberOfActiveBizTalkServers>1</NuberOfActiveBizTalkServers>
-        <BizTalkServerConfiguration>1*CPU, 4GB RAM</BizTalkServerConfiguration>
+        <BizTalkServerConfiguration></BizTalkServerConfiguration>
         <NuberOfActiveSQLServers>1</NuberOfActiveSQLServers>
-        <SqlServerConfiguration>1*CPU, 4GB RAM</SqlServerConfiguration>
-        <MaxExpectedCpuUtilizationBizTalk>100</MaxExpectedCpuUtilizationBizTalk>
-        <MaxExpectedCpuUtilizationSql>30</MaxExpectedCpuUtilizationSql>
-        <MinExpectedDocsProcessed>10</MinExpectedDocsProcessed>
-        <MinExpectedDocsReceived>10</MinExpectedDocsReceived>
+        <SqlServerConfiguration></SqlServerConfiguration>
+        <MaxExpectedCpuUtilizationBizTalkRxHost>95</MaxExpectedCpuUtilizationBizTalkRxHost>
+        <MaxExpectedCpuUtilizationBizTalkTxHost>95</MaxExpectedCpuUtilizationBizTalkTxHost>
+        <MaxExpectedCpuUtilizationSql>40</MaxExpectedCpuUtilizationSql>
+        <MinExpectedDocsProcessed>400</MinExpectedDocsProcessed>
+        <MinExpectedDocsReceived>400</MinExpectedDocsReceived>
       </Environment>
       <Environment>
-        <Name>2 BTS + 1 SQL</Name>
-        <Description>R/S host running on separate servers</Description>
+        <Name>1*BTS(1*CPU(Quad)) + 1*SQL(2*CPU(Quad))</Name>
+        <Description>Two server installation. One BizTalk Server with ONE CPU (Quad) and one SQL server with TWO CPU (Quad)</Description>
+        <LoadGenScriptFile>Messaging Single and Multi Message Box_001.xml</LoadGenScriptFile>
+        <NuberOfActiveBizTalkServers>1</NuberOfActiveBizTalkServers>
+        <BizTalkServerConfiguration></BizTalkServerConfiguration>
+        <NuberOfActiveSQLServers>1</NuberOfActiveSQLServers>
+        <SqlServerConfiguration></SqlServerConfiguration>
+        <MaxExpectedCpuUtilizationBizTalkRxHost>95</MaxExpectedCpuUtilizationBizTalkRxHost>
+        <MaxExpectedCpuUtilizationBizTalkTxHost>95</MaxExpectedCpuUtilizationBizTalkTxHost>
+        <MaxExpectedCpuUtilizationSql>50</MaxExpectedCpuUtilizationSql>
+        <MinExpectedDocsProcessed>500</MinExpectedDocsProcessed>
+        <MinExpectedDocsReceived>500</MinExpectedDocsReceived>
+      </Environment>
+      <Environment>
+        <Name>1*BTS(2*CPU(Quad)) + 1*SQL(2*CPU(Quad))</Name>
+        <Description>Two server installation. One BizTalk Server with TWO CPU (Quad) and one SQL server with TWO CPU (Quad)</Description>
+        <LoadGenScriptFile>Messaging Single and Multi Message Box_001.xml</LoadGenScriptFile>
+        <NuberOfActiveBizTalkServers>1</NuberOfActiveBizTalkServers>
+        <BizTalkServerConfiguration></BizTalkServerConfiguration>
+        <NuberOfActiveSQLServers>1</NuberOfActiveSQLServers>
+        <SqlServerConfiguration></SqlServerConfiguration>
+        <MaxExpectedCpuUtilizationBizTalkRxHost>95</MaxExpectedCpuUtilizationBizTalkRxHost>
+        <MaxExpectedCpuUtilizationBizTalkTxHost>95</MaxExpectedCpuUtilizationBizTalkTxHost>
+        <MaxExpectedCpuUtilizationSql>30</MaxExpectedCpuUtilizationSql>
+        <MinExpectedDocsProcessed>600</MinExpectedDocsProcessed>
+        <MinExpectedDocsReceived>600</MinExpectedDocsReceived>
+      </Environment>
+      <Environment>
+        <Name>2*BTS(1*CPU(Quad)) + 1*SQL(2*CPU(Quad))</Name>
+        <Description>Three server installation. Two BizTalk Server with ONE CPU (Quad) and one SQL serverwith TWO CPU (Quad)</Description>
         <LoadGenScriptFile>Messaging Single and Multi Message Box_001.xml</LoadGenScriptFile>
         <NuberOfActiveBizTalkServers>2</NuberOfActiveBizTalkServers>
-        <BizTalkServerConfiguration>1*CPU, 4GB RAM</BizTalkServerConfiguration>
+        <BizTalkServerConfiguration></BizTalkServerConfiguration>
         <NuberOfActiveSQLServers>1</NuberOfActiveSQLServers>
-        <SqlServerConfiguration>1*CPU, 4GB RAM</SqlServerConfiguration>
-        <MaxExpectedCpuUtilizationBizTalk>80</MaxExpectedCpuUtilizationBizTalk>
-        <MaxExpectedCpuUtilizationSql>40</MaxExpectedCpuUtilizationSql>
-        <MinExpectedDocsProcessed>150</MinExpectedDocsProcessed>
-        <MinExpectedDocsReceived>100</MinExpectedDocsReceived>
+        <SqlServerConfiguration></SqlServerConfiguration>
+        <MaxExpectedCpuUtilizationBizTalkRxHost>95</MaxExpectedCpuUtilizationBizTalkRxHost>
+        <MaxExpectedCpuUtilizationBizTalkTxHost>95</MaxExpectedCpuUtilizationBizTalkTxHost>
+        <MaxExpectedCpuUtilizationSql>30</MaxExpectedCpuUtilizationSql>
+        <MinExpectedDocsProcessed>600</MinExpectedDocsProcessed>
+        <MinExpectedDocsReceived>600</MinExpectedDocsReceived>
+      </Environment>
+      <Environment>
+        <Name>2*BTS(2*CPU(Quad)) + 1*SQL(2*CPU(Quad))</Name>
+        <Description>Three server installation. Two BizTalk Server with TWO CPU (Quad) and one SQL serverwith TWO CPU (Quad)</Description>
+        <LoadGenScriptFile>Messaging Single and Multi Message Box_001.xml</LoadGenScriptFile>
+        <NuberOfActiveBizTalkServers>2</NuberOfActiveBizTalkServers>
+        <BizTalkServerConfiguration></BizTalkServerConfiguration>
+        <NuberOfActiveSQLServers>1</NuberOfActiveSQLServers>
+        <SqlServerConfiguration></SqlServerConfiguration>
+        <MaxExpectedCpuUtilizationBizTalkRxHost>95</MaxExpectedCpuUtilizationBizTalkRxHost>
+        <MaxExpectedCpuUtilizationBizTalkTxHost>95</MaxExpectedCpuUtilizationBizTalkTxHost>
+        <MaxExpectedCpuUtilizationSql>45</MaxExpectedCpuUtilizationSql>
+        <MinExpectedDocsProcessed>700</MinExpectedDocsProcessed>
+        <MinExpectedDocsReceived>700</MinExpectedDocsReceived>
+      </Environment>
+      <Environment>
+        <Name>2*BTS(2*CPU(Quad)) + 1*SQL(4*CPU(Quad))</Name>
+        <Description>Three server installation. Two BizTalk Server with TWO CPU (Quad) and one SQL serverwith FOUR CPU (Quad)</Description>
+        <LoadGenScriptFile>Messaging Single and Multi Message Box_001.xml</LoadGenScriptFile>
+        <NuberOfActiveBizTalkServers>2</NuberOfActiveBizTalkServers>
+        <BizTalkServerConfiguration></BizTalkServerConfiguration>
+        <NuberOfActiveSQLServers>1</NuberOfActiveSQLServers>
+        <SqlServerConfiguration></SqlServerConfiguration>
+        <MaxExpectedCpuUtilizationBizTalkRxHost>95</MaxExpectedCpuUtilizationBizTalkRxHost>
+        <MaxExpectedCpuUtilizationBizTalkTxHost>95</MaxExpectedCpuUtilizationBizTalkTxHost>
+        <MaxExpectedCpuUtilizationSql>45</MaxExpectedCpuUtilizationSql>
+        <MinExpectedDocsProcessed>800</MinExpectedDocsProcessed>
+        <MinExpectedDocsReceived>800</MinExpectedDocsReceived>
       </Environment>
     </Environments>
   </Scenario>
@@ -72,37 +131,13 @@
         <BizTalkServerConfiguration>1*CPU, 4GB RAM</BizTalkServerConfiguration>
         <NuberOfActiveSQLServers>0</NuberOfActiveSQLServers>
         <SqlServerConfiguration>1*CPU, 4GB RAM</SqlServerConfiguration>
-        <MaxExpectedCpuUtilizationBizTalk>95</MaxExpectedCpuUtilizationBizTalk>
+        <MaxExpectedCpuUtilizationBizTalkRxHost>95</MaxExpectedCpuUtilizationBizTalkRxHost>
+        <MaxExpectedCpuUtilizationBizTalkTxHost>95</MaxExpectedCpuUtilizationBizTalkTxHost>
         <MaxExpectedCpuUtilizationSql>45</MaxExpectedCpuUtilizationSql>
-        <MinExpectedDocsProcessed>1000</MinExpectedDocsProcessed>
-        <MinExpectedDocsReceived>1000</MinExpectedDocsReceived>
+        <MinExpectedDocsProcessed>100</MinExpectedDocsProcessed>
+        <MinExpectedDocsReceived>40</MinExpectedDocsReceived>
       </Environment>
-      <Environment>
-        <Name>1 BTS + 1 SQL</Name>
-        <Description>All host running on 1 server</Description>
-        <LoadGenScriptFile>Orchestration Single Message Box_001.xml</LoadGenScriptFile>
-        <NuberOfActiveBizTalkServers>1</NuberOfActiveBizTalkServers>
-        <BizTalkServerConfiguration>1*CPU, 4GB RAM</BizTalkServerConfiguration>
-        <NuberOfActiveSQLServers>1</NuberOfActiveSQLServers>
-        <SqlServerConfiguration>1*CPU, 4GB RAM</SqlServerConfiguration>
-        <MaxExpectedCpuUtilizationBizTalk>80</MaxExpectedCpuUtilizationBizTalk>
-        <MaxExpectedCpuUtilizationSql>30</MaxExpectedCpuUtilizationSql>
-        <MinExpectedDocsProcessed>1300</MinExpectedDocsProcessed>
-        <MinExpectedDocsReceived>1300</MinExpectedDocsReceived>
-      </Environment>
-      <Environment>
-        <Name>2 BTS + 1 SQL</Name>
-        <Description>R/S host running on separate servers</Description>
-        <LoadGenScriptFile>Orchestration Single Message Box_001.xml</LoadGenScriptFile>
-        <NuberOfActiveBizTalkServers>2</NuberOfActiveBizTalkServers>
-        <BizTalkServerConfiguration>1*CPU, 4GB RAM</BizTalkServerConfiguration>
-        <NuberOfActiveSQLServers>1</NuberOfActiveSQLServers>
-        <SqlServerConfiguration>1*CPU, 4GB RAM</SqlServerConfiguration>
-        <MaxExpectedCpuUtilizationBizTalk>70</MaxExpectedCpuUtilizationBizTalk>
-        <MaxExpectedCpuUtilizationSql>40</MaxExpectedCpuUtilizationSql>
-        <MinExpectedDocsProcessed>2000</MinExpectedDocsProcessed>
-        <MinExpectedDocsReceived>2000</MinExpectedDocsReceived>
-      </Environment>
+     
     </Environments>
   </Scenario>
 </ArrayOfScenario>

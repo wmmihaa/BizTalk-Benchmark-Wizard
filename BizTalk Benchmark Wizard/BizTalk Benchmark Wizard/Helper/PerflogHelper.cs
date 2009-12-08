@@ -26,6 +26,7 @@ namespace BizTalk_Benchmark_Wizard.Helper
             _servers = servers;
         }
         List<string> _existingCollectoSets = new List<string>();
+        public List<Server> Servers { get { return _servers; } }
         /// <summary>
         /// Checks if collector sets are installed from all servers
         /// </summary>
