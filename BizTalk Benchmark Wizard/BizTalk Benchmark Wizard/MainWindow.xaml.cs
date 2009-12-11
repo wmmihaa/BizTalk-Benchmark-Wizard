@@ -19,6 +19,7 @@ using System.Threading;
 using System.Diagnostics;
 using System.Globalization;
 using System.Configuration;
+using BizTalk_Benchmark_Wizard.Reports;
 
 namespace BizTalk_Benchmark_Wizard
 {
@@ -171,7 +172,29 @@ namespace BizTalk_Benchmark_Wizard
         }
         private void btnGenerateReport_Click(object sender, RoutedEventArgs e)
         {
+            List<TestResult> testResults = new List<TestResult>();
 
+            foreach (Result result in Results)
+	        {
+                testResults.Add(new TestResult
+                {
+                    Scenario = cbScenario.Text,
+                    TestDate = DateTime.Now,
+                    TestDuration = txtTestDuration.Text.Replace("_","") + " minutes",
+                    TestDescription = ScenarioDescription.Text,
+                    NumberOfBizTalkServers = 1,
+                    BizTalkConfiguration = "bla bla bla",
+                    NumberOfSqlServers = 1,
+                    SqlConfiguration = "Bla bla bla...",
+                    CounterName = result.CounterName,
+                    Kpi = result.Kpi,
+                    TestValue = result.TestValue,
+                    Status = result.Status,
+                    Result = lblSucess.Text
+                });	 
+	        }
+            
+            ReportHelper.CreateReport(testResults, cbScenario.Text);
         }
         private void btnTestService_Click(object sender, RoutedEventArgs e)
         {
@@ -338,11 +361,13 @@ namespace BizTalk_Benchmark_Wizard
         {
             ReceivedGauge.Visibility = Visibility.Hidden;
             ProcessedGauge.Visibility = Visibility.Hidden;
+            CPUGaugeExpander.Header = "View Process Counters";
         }
         private void Expander_Collapsed(object sender, RoutedEventArgs e)
         {
             ReceivedGauge.Visibility = Visibility.Visible;
             ProcessedGauge.Visibility = Visibility.Visible;
+            CPUGaugeExpander.Header = "View CPU Counters";
         }
 
         #endregion
@@ -350,7 +375,7 @@ namespace BizTalk_Benchmark_Wizard
         void ShowResult()
         {
             Results.Clear();
-
+            
             Environment environment = (Environment)environments.SelectedItem;
             bool cpuSuccess1 = _avgCpuValue1 < (long)environment.MaxExpectedCpuUtilizationBizTalkRxHost ? true : false;
             bool cpuSuccess2 = _avgCpuValue2 < (long)environment.MaxExpectedCpuUtilizationBizTalkTxHost ? true : false;
@@ -373,7 +398,7 @@ namespace BizTalk_Benchmark_Wizard
                 CounterName = "Avg Processor time (BizTalk Processed)",
                 TestValue = _avgCpuValue2.ToString(CultureInfo.InvariantCulture),
                 Kpi = "<" + environment.MaxExpectedCpuUtilizationBizTalkTxHost.ToString(),
-                Status = cpuSuccess1 ? "Succeeded" : "Failed"
+                Status = cpuSuccess2 ? "Succeeded" : "Failed"
             });
             // CPU#3
             Results.Add(new Result()
@@ -381,7 +406,7 @@ namespace BizTalk_Benchmark_Wizard
                 CounterName = "Avg Processor time (SQL MsgBox)",
                 TestValue = _avgCpuValue3.ToString(CultureInfo.InvariantCulture),
                 Kpi = "<" + environment.MaxExpectedCpuUtilizationSql.ToString(),
-                Status = cpuSuccess1 ? "Succeeded" : "Failed"
+                Status = cpuSuccess3 ? "Succeeded" : "Failed"
             });
 
 
@@ -410,6 +435,8 @@ namespace BizTalk_Benchmark_Wizard
                 picSucess.Source = new System.Windows.Media.Imaging.BitmapImage(new Uri("pack://application:,,,/BizTalk Benchmark Wizard;component/Resources/Images/passed.png"));
             }
            
+
+
         }
         void RefreshPreRequsites()
         {

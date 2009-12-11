@@ -14,7 +14,8 @@ namespace BizTalk_Benchmark_Wizard
     {
         private void Application_DispatcherUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
         {
-            ((MainWindow)this.Windows[0]).txtException.Text = e.Exception.Message;
+            ((MainWindow)this.Windows[0]).txtException.Text = e.Exception.InnerException != null ? e.Exception.InnerException.Message : e.Exception.Message;
+            
             ((MainWindow)this.Windows[0]).PopupException.IsOpen = true;
             e.Handled=true;
         }
