@@ -52,6 +52,7 @@ namespace BizTalk_Benchmark_Wizard
         long _totalRreceivedValue;
         long _timerCount;
         bool _isWarmingUp = true;
+        bool _showCpuGauges = false;
         double _initialHeight;
         IEnumerable<Environment> Environments;
         List<HostMaping> HostMappings;
@@ -132,6 +133,7 @@ namespace BizTalk_Benchmark_Wizard
                         environments.SelectedIndex = 2;
 
                     btnNext.IsEnabled = false;
+                    environments.Focus();
                     break;
                 case 2:
                     break;
@@ -172,29 +174,42 @@ namespace BizTalk_Benchmark_Wizard
         }
         private void btnGenerateReport_Click(object sender, RoutedEventArgs e)
         {
+            btnGenerateReport.IsEnabled = false;
+            this.Cursor = Cursors.Wait;
             List<TestResult> testResults = new List<TestResult>();
 
-            foreach (Result result in Results)
-	        {
-                testResults.Add(new TestResult
+            try
+            {
+                foreach (Result result in Results)
                 {
-                    Scenario = cbScenario.Text,
-                    TestDate = DateTime.Now,
-                    TestDuration = txtTestDuration.Text.Replace("_","") + " minutes",
-                    TestDescription = ScenarioDescription.Text,
-                    NumberOfBizTalkServers = 1,
-                    BizTalkConfiguration = "bla bla bla",
-                    NumberOfSqlServers = 1,
-                    SqlConfiguration = "Bla bla bla...",
-                    CounterName = result.CounterName,
-                    Kpi = result.Kpi,
-                    TestValue = result.TestValue,
-                    Status = result.Status,
-                    Result = lblSucess.Text
-                });	 
-	        }
-            
-            ReportHelper.CreateReport(testResults, cbScenario.Text);
+                    testResults.Add(new TestResult
+                    {
+                        Scenario = cbScenario.Text,
+                        TestDate = DateTime.Now,
+                        TestDuration = txtTestDuration.Text.Replace("_", "") + " minutes",
+                        TestDescription = ScenarioDescription.Text,
+                        NumberOfBizTalkServers = 1,
+                        BizTalkConfiguration = "bla bla bla",
+                        NumberOfSqlServers = 1,
+                        SqlConfiguration = "Bla bla bla...",
+                        CounterName = result.CounterName,
+                        Kpi = result.Kpi,
+                        TestValue = result.TestValue,
+                        Status = result.Status,
+                        Result = lblSucess.Text
+                    });
+                }
+
+                ReportHelper.CreateReport(testResults, cbScenario.Text);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                btnGenerateReport.IsEnabled = true;
+            }
         }
         private void btnTestService_Click(object sender, RoutedEventArgs e)
         {
@@ -362,12 +377,14 @@ namespace BizTalk_Benchmark_Wizard
             ReceivedGauge.Visibility = Visibility.Hidden;
             ProcessedGauge.Visibility = Visibility.Hidden;
             CPUGaugeExpander.Header = "View Process Counters";
+            _showCpuGauges = true;
         }
         private void Expander_Collapsed(object sender, RoutedEventArgs e)
         {
             ReceivedGauge.Visibility = Visibility.Visible;
             ProcessedGauge.Visibility = Visibility.Visible;
             CPUGaugeExpander.Header = "View CPU Counters";
+            _showCpuGauges = false;
         }
 
         #endregion
@@ -708,15 +725,18 @@ namespace BizTalk_Benchmark_Wizard
                     _avgProcessedValue = _totalProcessedValue / _timerCount; //(long)((_avgProcessedValue + processedValue) * _timerCount);
                     _avgRreceivedValue = _totalRreceivedValue / _timerCount; //(long)((_avgRreceivedValue + receivedValue) * _timerCount);
                 }
-
-                // Set gauge values
-                CPUGauge1.SetCounter((int)cpuValue1 > 100 ? 100 : (int)cpuValue1, (int)_avgCpuValue1);
-                CPUGauge2.SetCounter((int)cpuValue2 > 100 ? 100 : (int)cpuValue2, (int)_avgCpuValue2);
-                CPUGauge3.SetCounter((int)cpuValue3 > 100 ? 100 : (int)cpuValue3, (int)_avgCpuValue3);
-
-                ProcessedGauge.SetCounter((int)processedValue, (int)_avgProcessedValue);
-                ReceivedGauge.SetCounter((int)receivedValue, (int)_avgRreceivedValue);
-
+                if (_showCpuGauges)
+                {
+                    // Set gauge values
+                    CPUGauge1.SetCounter((int)cpuValue1 > 100 ? 100 : (int)cpuValue1, (int)_avgCpuValue1);
+                    CPUGauge2.SetCounter((int)cpuValue2 > 100 ? 100 : (int)cpuValue2, (int)_avgCpuValue2);
+                    CPUGauge3.SetCounter((int)cpuValue3 > 100 ? 100 : (int)cpuValue3, (int)_avgCpuValue3);
+                }
+                else
+                {
+                    ProcessedGauge.SetCounter((int)processedValue, (int)_avgProcessedValue);
+                    ReceivedGauge.SetCounter((int)receivedValue, (int)_avgRreceivedValue);
+                }
                 
                 long percentCompleted = (long)((duration / _loadGenHelper.TestDuration) * 100);
                 if(percentCompleted<=100)
@@ -726,7 +746,6 @@ namespace BizTalk_Benchmark_Wizard
             }
             catch (Exception)
             {
-                
                 throw;
             }
 
