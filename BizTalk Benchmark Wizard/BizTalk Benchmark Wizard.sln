@@ -7,9 +7,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BizTalk Benchmark Wizard", 
 EndProject
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "BizTalk Benchmark Wizard Setup", "BizTalk Benchmark Wizard Setup\BizTalk Benchmark Wizard Setup.vdproj", "{A6529B9F-1F28-4994-8D46-949E10462193}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BizTalkInstaller", "BizTalkInstaller\BizTalkInstaller.csproj", "{C42339F8-94F1-40F6-AEF1-30423EC7B16A}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 4
+		SccNumberOfProjects = 5
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://tfs08.codeplex.com/
 		SccLocalPath0 = .
@@ -22,6 +24,9 @@ Global
 		SccProjectUniqueName3 = BizTalk\u0020Benchmark\u0020Wizard\u0020Setup\\BizTalk\u0020Benchmark\u0020Wizard\u0020Setup.vdproj
 		SccProjectName3 = BizTalk\u0020Benchmark\u0020Wizard\u0020Setup
 		SccLocalPath3 = BizTalk\u0020Benchmark\u0020Wizard\u0020Setup
+		SccProjectUniqueName4 = BizTalkInstaller\\BizTalkInstaller.csproj
+		SccProjectName4 = BizTalkInstaller
+		SccLocalPath4 = BizTalkInstaller
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -38,6 +43,10 @@ Global
 		{56A5B68A-B031-42CC-A897-5D128BB8B20E}.Release|Any CPU.Build.0 = Release|Any CPU
 		{A6529B9F-1F28-4994-8D46-949E10462193}.Debug|Any CPU.ActiveCfg = Debug
 		{A6529B9F-1F28-4994-8D46-949E10462193}.Release|Any CPU.ActiveCfg = Release
+		{C42339F8-94F1-40F6-AEF1-30423EC7B16A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C42339F8-94F1-40F6-AEF1-30423EC7B16A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C42339F8-94F1-40F6-AEF1-30423EC7B16A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C42339F8-94F1-40F6-AEF1-30423EC7B16A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,0 +1,220 @@
+﻿<Window x:Class="BizTalkInstaller.Window1"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Title="Window1" Height="446.622" Width="588.83">
+    <Window.Resources>
+        <Style  TargetType="{x:Type TabControl}">
+            <Setter Property="OverridesDefaultStyle" Value="True" />
+            <Setter Property="SnapsToDevicePixels" Value="True" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type TabControl}">
+                        <Grid KeyboardNavigation.TabNavigation="Local">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <TabPanel Name="HeaderPanel"
+                                        Grid.Row="0"
+                                        Panel.ZIndex="1" 
+                                        Margin="0,0,4,-1" 
+                                        IsItemsHost="True"
+                                        KeyboardNavigation.TabIndex="1"
+                                        Background="Transparent" />
+                            <Border Name="Border" 
+                                    Grid.Row="1" 
+                                    Margin="0,0,0,0"
+			                        BorderBrush="Gainsboro"
+			                        CornerRadius="5,5,5,5"
+                                    KeyboardNavigation.TabNavigation="Local"
+                                    KeyboardNavigation.DirectionalNavigation="Contained"
+                                    KeyboardNavigation.TabIndex="2"
+                                    BorderThickness="0,0,0,0"
+			                        Background="Transparent">
+
+                                <ContentPresenter Name="PART_SelectedContentHost"
+                                                  Margin="4"
+                                                  ContentSource="SelectedContent" />
+                            </Border>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style TargetType="{x:Type TabItem}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type TabItem}">
+                        <Grid>
+
+                            <Border Name="Border"
+                                     Background="Transparent"
+                                     BorderBrush="Transparent" 
+                                     BorderThickness="1,1,1,1" 
+                                     CornerRadius="6,6,0,0" >
+                                <ContentPresenter x:Name="ContentSite"
+                                                   VerticalAlignment="Center"
+                                                   HorizontalAlignment="Center"
+                                                   ContentSource="Header"
+                                                   Margin="12,2,12,2"/>
+                            </Border>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        
+    </Window.Resources>
+    <Grid>
+        <Canvas>
+            <TabControl Height="445.511"
+                        Name="tabControl1" 
+                        Width="561.83"
+                        Background="Transparent" 
+                        Canvas.Top="-14"
+                        Margin="5,0,0,0" TabStripPlacement="Bottom" SelectionChanged="tabControl1_SelectionChanged">
+                <TabItem Header="" Name="tabWelcome">
+                    <StackPanel Orientation="Vertical">
+                        <TextBlock FontWeight="Bold" FontFamily="Calibri" VerticalAlignment="Top" HorizontalAlignment="Center" FontSize="30">Welcome to BizTalk Benchmark Wizard<LineBreak/>Bizalk Server Setup</TextBlock>
+
+                        <TextBlock Margin="20,20" TextWrapping="Wrap" FontSize="15">
+                            This wizard aims to help you installing all BizTalk artifacts needed to run the BizTalk Benchmark Wizard test tool.<LineBreak/><LineBreak/>
+                            The following artifacts will be installed:<LineBreak/><Bold>
+                            1. Three BizTalk Hosts (RxHost, PxHost and TxHost).<LineBreak/>
+                            2. Three Host Instances, one for each BizTalk Host.<LineBreak/>
+                            3. Two netTcp Adapter Handlers, one for Receive and one for Send.<LineBreak/>
+                            4. BizTalk Benchmark Wizard Application.</Bold><LineBreak/><LineBreak/>
+                            You will be asked to provide the name of the Windows Group used for access control, along with user name and password for the service account running the Instances.
+
+                        </TextBlock>
+                    </StackPanel>
+                </TabItem>
+                <TabItem Header="" Name="tabLogins">
+                    <StackPanel Orientation="Vertical">
+                        <TextBlock FontWeight="Bold" FontFamily="Calibri" VerticalAlignment="Top" HorizontalAlignment="Center" FontSize="30">
+                            Setting up Hosts and Adapter Handlers</TextBlock>
+                        <TextBlock Margin="20,20" TextWrapping="Wrap" FontSize="15">
+                            The Windows group is used to control access of the hosts and the associated instances to databases and other resources. 
+                            Each instance of the host must run under a user account that is a member of the group.<LineBreak/><LineBreak/>
+                            In order to find the name of all BizTalk servers, you will also need to specify the name of the server on which the management database is physically stored.
+                        </TextBlock>
+                        <StackPanel Orientation="Vertical" Width="365" >
+
+                            <StackPanel Orientation="Horizontal">
+                                <Label Height="28" HorizontalAlignment="Left" VerticalAlignment="Top" Width="139.944">BizTalk Database Server:</Label>
+                                <TextBox x:Name="txtServer1" Height="23" Width="215.557" VerticalAlignment="Top" />
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <Label Height="28" HorizontalAlignment="Left" VerticalAlignment="Top" Width="139.944">Management Database:</Label>
+                                <TextBox x:Name="txtMgmtDb1" Height="23"  VerticalAlignment="Top" Width="215.557">BizTalkMgmtDb</TextBox>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <Label Height="28" HorizontalAlignment="Left" VerticalAlignment="Top" Width="139.944">Windows Group:</Label>
+                                <TextBox Name="txtNtGroupName" Height="23" Width="215.557" VerticalAlignment="Top" />
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <Label Height="28" HorizontalAlignment="Left" VerticalAlignment="Top" Width="139.944">User name</Label>
+                                <TextBox Name="txtUserName" Height="23"  VerticalAlignment="Top" Width="215.557"></TextBox>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <Label Height="28" HorizontalAlignment="Left" VerticalAlignment="Top" Width="139.944">Password:</Label>
+                                <PasswordBox Name="txtPassword" Height="23" VerticalAlignment="Top" Width="215.557"></PasswordBox>
+                            </StackPanel>
+
+                        </StackPanel>
+                    </StackPanel>
+                </TabItem>
+                <TabItem Header="" Name="tabHostInstanceSetup">
+                    <StackPanel Orientation="Vertical">
+                        <TextBlock FontWeight="Bold" FontFamily="Calibri" VerticalAlignment="Top" HorizontalAlignment="Center" FontSize="30">
+                            Setting up Host Instances</TextBlock>
+
+                        <TextBlock Margin="20,20" TextWrapping="Wrap" FontSize="15">
+                            Using the comboboxes below, please select the servers where you  would like to run the host instances.<LineBreak/>
+                        </TextBlock>
+                        <StackPanel Orientation="Vertical" Width="400">
+                            <StackPanel Orientation="Horizontal" >
+                                <TextBlock FontSize="15" Width="200" >RxHost (Receive Host)</TextBlock>
+                                <ComboBox Name="cbRxHost" Width="200" ></ComboBox> 
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" >
+                                <TextBlock FontSize="15" Width="200">PxHost (Orchestration Host)</TextBlock>
+                                <ComboBox Name="cbPxHost" Width="200" ></ComboBox>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" >
+                                <TextBlock FontSize="15" Width="200">TxHost (Send Host)</TextBlock>
+                                <ComboBox Name="cbTxHost" Width="200" ></ComboBox>
+                            </StackPanel>
+                            <StackPanel Height="50"/>
+                            <StackPanel Orientation="Horizontal" >
+                                <CheckBox Name="chbStopAllHosts" FontSize="15">Stop all other hosts</CheckBox> 
+                            </StackPanel>
+                        </StackPanel> 
+                    </StackPanel>
+                </TabItem>
+                <TabItem Header="" Name="tabInfo">
+                    <StackPanel Orientation="Vertical">
+                        <TextBlock FontWeight="Bold" FontFamily="Calibri" VerticalAlignment="Top" HorizontalAlignment="Center" FontSize="30">
+                            Setting up  Hosts, Instances and Handlers
+                        </TextBlock>
+                        <StackPanel Orientation="Vertical" Margin="40,40" Height="250">
+
+                            <StackPanel Orientation="Horizontal">
+                                <Image Name="picHosts" Height="40" Source="Images/gear_run.png"/>
+                                <StackPanel Orientation="Horizontal">
+                                    <Label FontFamily="Calibri" MaxWidth="550" Width="500" VerticalAlignment="Center" FontSize="15">
+                                        <TextBlock TextWrapping="Wrap"><Bold>Three BizTalk Hosts (RxHost, PxHost and TxHost)</Bold></TextBlock>
+                                    </Label>
+                                </StackPanel>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <Image Name="picInstances" Height="40" Source="Images/gear_pause.png"/>
+                                <StackPanel Orientation="Horizontal">
+                                    <Label FontFamily="Calibri" MaxWidth="550" Width="500" VerticalAlignment="Center" FontSize="15" >
+                                        <TextBlock TextWrapping="Wrap"><Bold>Three Host Instances, one for each BizTalk Host</Bold></TextBlock>
+                                    </Label>
+                                </StackPanel>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <Image Name="picHandlers" Height="40" Source="Images/gear_pause.png"/>
+                                <StackPanel Orientation="Horizontal">
+                                    <Label FontFamily="Calibri" MaxWidth="550" Width="500" VerticalAlignment="Center" FontSize="15">
+                                        <TextBlock TextWrapping="Wrap"><Bold>Two netTcp Adapter Handlers, one for Receive and one for Send</Bold></TextBlock>
+                                    </Label>
+                                </StackPanel>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <Image Name="picArtifacts" Height="40" Source="Images/gear_pause.png"/>
+                                <StackPanel Orientation="Horizontal">
+                                    <Label FontFamily="Calibri" MaxWidth="550" Width="500" VerticalAlignment="Center" FontSize="15">
+                                        <TextBlock TextWrapping="Wrap"><Bold>BizTalk Benchmark Wizard Application.</Bold></TextBlock>
+                                    </Label>
+                                </StackPanel>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <Image Name="picStartsInstances" Height="40" Source="Images/gear_pause.png"/>
+                                <StackPanel Orientation="Horizontal">
+                                    <Label FontFamily="Calibri" MaxWidth="550" Width="500" VerticalAlignment="Center" FontSize="15">
+                                        <TextBlock TextWrapping="Wrap"><Bold>Start Host Instances</Bold></TextBlock>
+                                    </Label>
+                                </StackPanel>
+                            </StackPanel>
+                        </StackPanel>
+                    </StackPanel>
+                </TabItem>
+                <TabItem Header="" Name="tabProgress">
+                    <TextBlock Margin="50,50" >4</TextBlock>
+                </TabItem>
+            </TabControl>
+            <StackPanel Orientation="Vertical" Canvas.Left="30" Canvas.Top="370">
+                <TextBlock Name="lblHomeUri">
+                     <Hyperlink NavigateUri="http://bbw.codeplex.com" RequestNavigate="Hyperlink_RequestNavigate" >http://bbw.codeplex.com</Hyperlink>
+                </TextBlock>
+                <TextBlock Name="lblVersion" Text="Version:1.0.0.0"/>
+            </StackPanel>
+            <Button Canvas.Left="390" Canvas.Top="360" Height="23" Name="btnBack" Width="74.437"  Visibility="Hidden" Click="btnBack_Click">Back</Button>
+            <Button Canvas.Left="470" Canvas.Top="360" Height="23" Name="btnNext" Width="74.437" Click="btnNext_Click">Next</Button>
+
+        </Canvas>
+    </Grid>
+</Window>
