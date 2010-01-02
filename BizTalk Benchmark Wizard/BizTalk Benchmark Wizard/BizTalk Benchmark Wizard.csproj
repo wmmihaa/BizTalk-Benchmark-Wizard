@@ -292,12 +292,18 @@
     <Content Include="Resources\LoadGenScripts\Messaging Single and Multi Message Box_001.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Resource Include="Resources\LoadGenScripts\Messaging Single and Multi Message Box_002.xml" />
-    <Resource Include="Resources\LoadGenScripts\Messaging Single and Multi Message Box_003.xml" />
+    <Content Include="Resources\LoadGenScripts\Messaging Single and Multi Message Box_002.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\LoadGenScripts\Messaging Single and Multi Message Box_003.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Resources\LoadGenScripts\Orchestration Single Message Box_001.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Resource Include="Resources\LoadGenScripts\Orchestration Single Message Box_002.xml" />
+    <Content Include="Resources\LoadGenScripts\Orchestration Single Message Box_002.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Resources\LoadGenScripts\Size_2K.Xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

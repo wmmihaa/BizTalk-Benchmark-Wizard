@@ -33,7 +33,7 @@ DeleteHost "BBW_RxHost"
 wscript.echo""
 
 wscript.echo "**********************************************************"
-wscript.echo "CleanUp BBW_RxHost"
+wscript.echo "CleanUp BBW_TxHost"
 wscript.echo "**********************************************************"
 'CleanUp BBW_TxHost
 DeleteReceiveHandler "BBW_TxHost", "WCF-NetTcp", "MSBTS_ReceiveHandler"
@@ -79,7 +79,7 @@ end Sub
 
 Sub DeleteHost (HostName)
    On Error Resume Next
-
+    wscript.echo "DeleteHost"
    Dim objLocator, objService, objHS
 
    ' Connects to local server WMI Provider BizTalk namespace
@@ -88,7 +88,11 @@ Sub DeleteHost (HostName)
 
    ' Look for WMI Class MSBTS_HostSetting with name equals HostName value
    Set objHS = objService.Get("MSBTS_HostSetting.Name='" & HostName & "'")
-
+   If objHS = Nothing Then
+        wscript.echo "Host not found"
+        Exit Sub
+   End If
+    
    ' Delete instance
    objHS.Delete_
 
@@ -169,7 +173,6 @@ end Sub
 ' Uninstall and unmap a host instance using MSBTS_ServerHost and MSBTS_HostInstance
 Sub UnMapUninstallHostInstance (HostName, ServerName)
    On Error Resume Next
-
    Dim Query, HostInstanceName, HostInstSet, Inst, ServerHostSet
 
    HostInstanceName = "Microsoft BizTalk Server " & HostName & " " & ServerName
@@ -178,8 +181,8 @@ Sub UnMapUninstallHostInstance (HostName, ServerName)
    ' Only one instance will be returned becasue Name value is unique
    Query = "SELECT * FROM MSBTS_HostInstance WHERE Name =""" & HostInstanceName & """"
    Set HostInstSet = GetObject("Winmgmts:!root\MicrosoftBizTalkServer").ExecQuery(Query)
-
-   If HostInstSet.Count > 0 Then
+  
+  If HostInstSet.Count > 0 Then
       For Each Inst in HostInstSet
 
          ' If host instance is running, then we need to first stop it
@@ -191,12 +194,14 @@ Sub UnMapUninstallHostInstance (HostName, ServerName)
          End If
          
          If ( HostInstConfigState_NotInstalled <> Inst.ConfigurationState ) Then
-            
             Inst.uninstall      ' Calling MSBTS_HostInstance::Uninstall() method
             CheckWMIError
             wscript.echo "HostInstance - " & HostName & " - has been uninstalled successfully from server - " & ServerName
          End If
       Next
+   Else
+    wscript.echo "Instance not found"
+    Exit Sub
    End If
 
    ' Step 2 - Delete mapping between server and host using MSBTS_ServerHost class
@@ -204,10 +209,10 @@ Sub UnMapUninstallHostInstance (HostName, ServerName)
    Query = "SELECT * FROM MSBTS_ServerHost WHERE HostName =""" & HostName & """ AND ServerName = """ & ServerName & """"
    Set ServerHostSet = GetObject("Winmgmts:!root\MicrosoftBizTalkServer").ExecQuery(Query)
 
+    
    If ServerHostSet.Count > 0 Then
       For Each Inst In ServerHostSet
              If( -1 = Inst.IsMapped ) Then
-            
                 Inst.Unmap   ' Calling MSBTS_ServerHost::Unmap() method
             CheckWMIError
 
@@ -260,6 +265,11 @@ Sub DeleteReceiveHandler (HostName, adapterName, handlerType)
    ' Get WMI class MSBTS_ReceiveHandler
    Set objReceiveHandler = objService.Get (handlerType)
 
+   If ( objReceiveHandler = nothing) Then
+         wscript.echo "Handler does not exist"
+        Exit Sub
+   End If
+   
    Set objRH = objReceiveHandler.SpawnInstance_
 
    objRH.AdapterName = adapterName
@@ -269,7 +279,7 @@ Sub DeleteReceiveHandler (HostName, adapterName, handlerType)
    objRH.Delete_
 
    CheckWMIError
-   wscript.echo handlerType & " for " & adapterName & " " & HostName & " - has been created successfully"
+   wscript.echo handlerType & " for " & adapterName & " " & HostName & " - has been removed successfully"
    
 end Sub
 
