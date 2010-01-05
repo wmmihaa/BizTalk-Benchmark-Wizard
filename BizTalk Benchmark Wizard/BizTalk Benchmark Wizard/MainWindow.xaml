@@ -592,11 +592,12 @@
                             </StackPanel>
                         </StackPanel>
                         <Canvas>
-                            <TextBlock Canvas.Left="250" Canvas.Top="363">
+                            <TextBlock Canvas.Left="195" Canvas.Top="363" Width="87.5">
                                 <Hyperlink NavigateUri="http://blogical.se/bbw/" RequestNavigate="Hyperlink_RequestNavigate" >Show High Scores</Hyperlink>
                             </TextBlock>
-                            <Button Height="23" Style="{DynamicResource RoundedButton}" HorizontalAlignment="Right" Name="btnOpenSubmitHighScore" VerticalAlignment="Bottom" Width="106" Canvas.Left="348" Canvas.Top="357" Click="btnOpenSubmitHighScore_Click">Submit High Score</Button>
-                            <Button Height="23" Style="{DynamicResource RoundedButton}" HorizontalAlignment="Right" Name="btnGenerateReport" VerticalAlignment="Bottom" Width="106" Click="btnGenerateReport_Click" Canvas.Left="460" Canvas.Top="357">Generate report</Button>
+                            <Button Height="23" Style="{DynamicResource RoundedButton}" HorizontalAlignment="Right" Name="btnOpenSubmitHighScore" VerticalAlignment="Bottom" Width="106.25" Canvas.Left="292.5" Canvas.Top="357" Click="btnOpenSubmitHighScore_Click">Submit High Score</Button>
+                            <Button Height="23" Style="{DynamicResource RoundedButton}" HorizontalAlignment="Right" Name="btnGenerateReport" VerticalAlignment="Bottom" Width="73.75" Click="btnGenerateReport_Click" Canvas.Left="405" Canvas.Top="357">Report</Button>
+                            <Button Height="23" Style="{DynamicResource RoundedButton}" HorizontalAlignment="Right" Name="btnReRunTest" VerticalAlignment="Bottom" Width="73.75" Canvas.Left="492.5" Canvas.Top="357" Click="btnReRunTest_Click">Re-Run</Button>
                         </Canvas>
                     </Grid>
                 </TabItem>
@@ -636,23 +637,27 @@
                             <TextBlock><Bold>Please enter the name of the server on which the management<LineBreak/>
                                 database is physically stored.</Bold><LineBreak/></TextBlock>
                         </StackPanel>
-
                         <StackPanel Orientation="Horizontal">
                             <Label Height="28" HorizontalAlignment="Left" VerticalAlignment="Top" Width="139.944">BizTalk Database Server:</Label>
                             <TextBox x:Name="txtServer1" Height="23" Width="215.557" VerticalAlignment="Top" TextAlignment="Right"/>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal">
                             <Label Height="28" HorizontalAlignment="Left" VerticalAlignment="Top" Width="139.944">Management Database:</Label>
-                            <TextBox x:Name="txtMgmtDb1" Height="23" TextAlignment="Right" VerticalAlignment="Top" Width="215.557">BizTalkMgmtDb</TextBox>
+                            <TextBox x:Name="txtMgmtDb1" Height="23" TextAlignment="Right" VerticalAlignment="Top" Width="215.557">BizTalkMgmtDb</TextBox><StackPanel Width="5"/>
+                            
                         </StackPanel>
-                        <StackPanel Height="20"/>
+                        <StackPanel Orientation="Horizontal">
+                            <StackPanel Width="140"/>
+                            <CheckBox Name="chbCheckPrerequsites" VerticalAlignment="Center" IsChecked="True" >Check Prerequsites</CheckBox>
+                        </StackPanel>
+                        <StackPanel Height="15"/>
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,10,0">
                             <Button Height="23" Style="{DynamicResource RoundedButton}" Name="btnOk1" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="75.263" Click="btnOk_Click">Ok</Button>
                             <StackPanel Width="5"/>
                             <Button Height="23" Style="{DynamicResource RoundedButton}" HorizontalAlignment="Right" Name="btnCancel1" VerticalAlignment="Bottom" Width="75" Click="btnCancel_Click">Cancel</Button>
+                            
                         </StackPanel>
                     </StackPanel>
-
                 </Grid>
             </Grid>
         </Popup>

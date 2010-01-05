@@ -107,6 +107,7 @@ namespace BizTalk_Benchmark_Wizard
                     {
                         txtServer1.Text = Properties.Settings.Default.DefaultServer;
                         txtIndigoServiceServer.Text = Properties.Settings.Default.DefaultIndigoServiceUri;
+                        chbCheckPrerequsites.IsChecked = Properties.Settings.Default.DefaultServer == "(localhost)";
                         btnNext.IsEnabled = false;
                         PopupLogin.IsOpen = true;
                         _isLogedIn = true;
@@ -284,6 +285,31 @@ namespace BizTalk_Benchmark_Wizard
         {
             btnOpenSubmitHighScore.IsEnabled = false;
             PopupSubmitHighScore.IsOpen = true;
+        }
+        private void btnReRunTest_Click(object sender, RoutedEventArgs e)
+        {
+            _avgCpuValue1 = 0;
+            _avgCpuValue2 = 0;
+            _avgCpuValue3 = 0;
+            _avgProcessedValue = 0;
+            _avgRreceivedValue = 0;
+            _totalCpuValue1 = 0;
+            _totalCpuValue2 = 0;
+            _totalCpuValue3 = 0;
+            _totalProcessedValue = 0;
+            _totalRreceivedValue = 0;
+            _timerCount = 0;
+            _loadGenHelper = new LoadGenHelper();
+            btnNext.Content = "Next";
+
+            picServiceIsRunning.Source = new BitmapImage(new Uri("pack://application:,,,/BizTalk Benchmark Wizard;component/Resources/Images/unknown.png"));
+            picUpdateSendportUri.Source = new BitmapImage(new Uri("pack://application:,,,/BizTalk Benchmark Wizard;component/Resources/Images/gear_run.png"));
+            picStartBizTalkArtefacts.Source = new BitmapImage(new Uri("pack://application:,,,/BizTalk Benchmark Wizard;component/Resources/Images/gear_pause.png"));
+            picStartCollectorSets.Source = new BitmapImage(new Uri("pack://application:,,,/BizTalk Benchmark Wizard;component/Resources/Images/gear_pause.png"));
+            picInitPerfCounters.Source = new BitmapImage(new Uri("pack://application:,,,/BizTalk Benchmark Wizard;component/Resources/Images/gear_pause.png"));
+            picStartLoadgen.Source = new BitmapImage(new Uri("pack://application:,,,/BizTalk Benchmark Wizard;component/Resources/Images/gear_pause.png"));
+
+            tabControl1.SelectedIndex = 2;
         }
         private void Hyperlink_RequestNavigate(object sender, System.Windows.Navigation.RequestNavigateEventArgs e)
         {
@@ -467,7 +493,14 @@ namespace BizTalk_Benchmark_Wizard
                 _bizTalkHelper = new BizTalkHelper(txtServer1.Text, txtMgmtDb1.Text);
                 _perflogHelper = new PerflogHelper(_bizTalkHelper.GetServers(txtServer1.Text, txtMgmtDb1.Text));
 
-                bool isDataCollectorSetsCreated = _perflogHelper.IsDataCollectorSetsCreated;
+
+                //Check for CollectorSets
+                bool isDataCollectorSetsCreated;
+
+                if (!(bool)chbCheckPrerequsites.IsChecked)
+                    isDataCollectorSetsCreated = true;
+                else
+                    isDataCollectorSetsCreated = _perflogHelper.IsDataCollectorSetsCreated;
 
                 DoEvents();
                 picInstallCollectorSet.Source = isDataCollectorSetsCreated ?
@@ -478,7 +511,13 @@ namespace BizTalk_Benchmark_Wizard
                 btnCreateCollectors.IsEnabled = isDataCollectorSetsCreated ? false : true;
                 chbStartCollectorSets.IsEnabled = isDataCollectorSetsCreated ? true : false;
 
-                bool isBizTalkScenariosInstalled = _bizTalkHelper.IsBizTalkScenariosInstalled;
+                //Check for BizTalk Scenarios
+                bool isBizTalkScenariosInstalled;
+                if (!(bool)chbCheckPrerequsites.IsChecked)
+                    isBizTalkScenariosInstalled = true;
+                else
+                    isBizTalkScenariosInstalled = _bizTalkHelper.IsBizTalkScenariosInstalled;
+
                 DoEvents();
                 picInstalledScenario.Source = isBizTalkScenariosInstalled ?
                     new System.Windows.Media.Imaging.BitmapImage(new Uri("pack://application:,,,/BizTalk Benchmark Wizard;component/Resources/Images/passed.png")) :
@@ -673,6 +712,11 @@ namespace BizTalk_Benchmark_Wizard
             //this.Dispatcher.BeginInvoke(DispatcherPriority.ApplicationIdle, new Action(delegate() { _timer.Stop(); }));
             //this.Dispatcher.BeginInvoke(DispatcherPriority.ApplicationIdle, new Action(delegate() { ShowResult(); }));
 
+            _bizTalkHelper.OnStepComplete -= new BizTalkHelper.InitiateStepHandler(OnStepComplete);
+            _loadGenHelper.OnStepComplete -= new LoadGenHelper.InitiateStepHandler(OnStepComplete);
+            _perflogHelper.OnStepComplete -= new PerflogHelper.InitiateStepHandler(OnStepComplete);
+            _loadGenHelper.OnComplete -= new LoadGenHelper.CompleteHandler(OnTestComplete);
+
         }
         private void OnCollectCounterData(object sender, ElapsedEventArgs e)
         {
@@ -765,7 +809,6 @@ namespace BizTalk_Benchmark_Wizard
         }
 
         #endregion     
-
     }
     /// <summary>
     /// Used for presenting the test result
