@@ -27,7 +27,6 @@ If WScript.Arguments.Count = 6 Then
     CreateHost "BBW_RxHost",1,WScript.Arguments(0),false, false
     MapInstallHostInstance "BBW_RxHost", WScript.Arguments(3), WScript.Arguments(1), WScript.Arguments(2)
     CreateReceiveHandler "BBW_RxHost", "WCF-NetTcp", "MSBTS_ReceiveHandler"
-    CreateReceiveHandler "BBW_RxHost", "WCF-NetTcp", "MSBTS_SendHandler2"
     wscript.echo""
 
     wscript.echo "**********************************************************"
@@ -35,7 +34,6 @@ If WScript.Arguments.Count = 6 Then
     wscript.echo "**********************************************************"
     CreateHost "BBW_TxHost",1,WScript.Arguments(0),false, false
     MapInstallHostInstance "BBW_TxHost", WScript.Arguments(4), WScript.Arguments(1), WScript.Arguments(2)
-    CreateReceiveHandler "BBW_TxHost", "WCF-NetTcp", "MSBTS_ReceiveHandler"
     CreateReceiveHandler "BBW_TxHost", "WCF-NetTcp", "MSBTS_SendHandler2"
     wscript.echo""
 

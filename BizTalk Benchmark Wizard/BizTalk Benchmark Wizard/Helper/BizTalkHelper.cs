@@ -333,6 +333,15 @@ namespace BizTalk_Benchmark_Wizard.Helper
         {
             try
             {
+                if (string.IsNullOrEmpty(_explorer.ConnectionString))
+                {
+                    _explorer.ConnectionString = new SqlConnectionStringBuilder()
+                    {
+                        DataSource = this._server,
+                        InitialCatalog = this._database,
+                        IntegratedSecurity = true
+                    }.ConnectionString;
+                }
                 string sendPortAddress = _explorer.SendPorts[portName].PrimaryTransport.Address;
                 Uri oldAddress = new Uri(sendPortAddress);
                 Uri newAddress = new Uri(string.Format("{0}://{1}:{2}{3}",
