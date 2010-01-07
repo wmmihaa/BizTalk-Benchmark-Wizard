@@ -16,6 +16,7 @@
                 <ResourceDictionary Source="Resources\Styles\ScrollViewer.xaml"/>
                 <ResourceDictionary Source="Resources\Styles\Checkbox.xaml"/>
                 <ResourceDictionary Source="Resources\Styles\Progressbar.xaml"/>
+                <ResourceDictionary Source="Resources\Styles\RoundedButton.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>
