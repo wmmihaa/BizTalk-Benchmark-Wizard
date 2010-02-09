@@ -1,0 +1,257 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ArrayOfScenario xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Scenario>
+    <Name>BizTalk - Messaging flow</Name>
+    <Type>BizTalk</Type>
+    <Description>
+      1. Loadgen generates a new XML message and sends it over NetTCP
+      2. A WCF-NetTCP Receive Location receives a the xml document from Loadgen.
+      3. The PassThruReceive pipeline performs no processing and the message is published by the EPM to the MsgBox.
+      4. The WCF One-Way Send Port, which is the only subscriber to the message, retrieves the message from the MsgBox
+      5. The PassThruTransmit pipeline provides no additional processing
+      6. The message is delivered to the back end WCF service by the WCF NetTCP adapter
+    </Description>
+    <Environments>
+      <Environment>
+        <Name>Single server installation1(1*CPU(Quad))</Name>
+        <Description>Single server installation</Description>
+        <LoadGenScriptFile>Messaging Single and Multi Message Box_001.xml</LoadGenScriptFile>
+        <NuberOfActiveBizTalkServers>1</NuberOfActiveBizTalkServers>
+        <BizTalkServerConfiguration>1*CPU, 4GB RAM</BizTalkServerConfiguration>
+        <NuberOfActiveSQLServers>0</NuberOfActiveSQLServers>
+        <SqlServerConfiguration>1*CPU, 4GB RAM</SqlServerConfiguration>
+        <MaxExpectedCpuUtilizationBizTalkRxHost>95</MaxExpectedCpuUtilizationBizTalkRxHost>
+        <MaxExpectedCpuUtilizationBizTalkTxHost>95</MaxExpectedCpuUtilizationBizTalkTxHost>
+        <MaxExpectedCpuUtilizationSql>95</MaxExpectedCpuUtilizationSql>
+        <MinExpectedDocsProcessed>300</MinExpectedDocsProcessed>
+        <MinExpectedDocsReceived>300</MinExpectedDocsReceived>
+      </Environment>
+      <Environment>
+        <Name>1*BTS(1*CPU(Quad)) + 1*SQL(1*CPU(Quad))</Name>
+        <Description>Two server installation. 1 BizTalk Server and 1 SQL server, each with 1 CPU (Quad)</Description>
+        <LoadGenScriptFile>Messaging Single and Multi Message Box_001.xml</LoadGenScriptFile>
+        <NuberOfActiveBizTalkServers>1</NuberOfActiveBizTalkServers>
+        <BizTalkServerConfiguration></BizTalkServerConfiguration>
+        <NuberOfActiveSQLServers>1</NuberOfActiveSQLServers>
+        <SqlServerConfiguration></SqlServerConfiguration>
+        <MaxExpectedCpuUtilizationBizTalkRxHost>95</MaxExpectedCpuUtilizationBizTalkRxHost>
+        <MaxExpectedCpuUtilizationBizTalkTxHost>95</MaxExpectedCpuUtilizationBizTalkTxHost>
+        <MaxExpectedCpuUtilizationSql>50</MaxExpectedCpuUtilizationSql>
+        <MinExpectedDocsProcessed>700</MinExpectedDocsProcessed>
+        <MinExpectedDocsReceived>700</MinExpectedDocsReceived>
+      </Environment>
+      <Environment>
+        <Name>1*BTS(1*CPU(Quad)) + 1*SQL(2*CPU(Quad))</Name>
+        <Description>Two server installation. 1 BizTalk Server with 1 CPU (Quad) and one SQL server with 2 CPU (Quad)</Description>
+        <LoadGenScriptFile>Messaging Single and Multi Message Box_001.xml</LoadGenScriptFile>
+        <NuberOfActiveBizTalkServers>1</NuberOfActiveBizTalkServers>
+        <BizTalkServerConfiguration></BizTalkServerConfiguration>
+        <NuberOfActiveSQLServers>1</NuberOfActiveSQLServers>
+        <SqlServerConfiguration></SqlServerConfiguration>
+        <MaxExpectedCpuUtilizationBizTalkRxHost>95</MaxExpectedCpuUtilizationBizTalkRxHost>
+        <MaxExpectedCpuUtilizationBizTalkTxHost>95</MaxExpectedCpuUtilizationBizTalkTxHost>
+        <MaxExpectedCpuUtilizationSql>50</MaxExpectedCpuUtilizationSql>
+        <MinExpectedDocsProcessed>700</MinExpectedDocsProcessed>
+        <MinExpectedDocsReceived>700</MinExpectedDocsReceived>
+      </Environment>
+      <Environment>
+        <Name>1*BTS(2*CPU(Quad)) + 1*SQL(2*CPU(Quad))</Name>
+        <Description>Two server installation. 1 BizTalk Server with 2 CPU (Quad) and one SQL server with 2 CPU (Quad)</Description>
+        <LoadGenScriptFile>Messaging Single and Multi Message Box_001.xml</LoadGenScriptFile>
+        <NuberOfActiveBizTalkServers>1</NuberOfActiveBizTalkServers>
+        <BizTalkServerConfiguration></BizTalkServerConfiguration>
+        <NuberOfActiveSQLServers>1</NuberOfActiveSQLServers>
+        <SqlServerConfiguration></SqlServerConfiguration>
+        <MaxExpectedCpuUtilizationBizTalkRxHost>95</MaxExpectedCpuUtilizationBizTalkRxHost>
+        <MaxExpectedCpuUtilizationBizTalkTxHost>95</MaxExpectedCpuUtilizationBizTalkTxHost>
+        <MaxExpectedCpuUtilizationSql>50</MaxExpectedCpuUtilizationSql>
+        <MinExpectedDocsProcessed>1000</MinExpectedDocsProcessed>
+        <MinExpectedDocsReceived>1000</MinExpectedDocsReceived>
+      </Environment>
+      <Environment>
+        <Name>2*BTS(1*CPU(Quad)) + 1*SQL(2*CPU(Quad))</Name>
+        <Description>Three server installation. 2 BizTalk Servers with 1 CPU (Quad) and one SQL serverwith 2 CPU (Quad)</Description>
+        <LoadGenScriptFile>Messaging Single and Multi Message Box_002.xml</LoadGenScriptFile>
+        <NuberOfActiveBizTalkServers>2</NuberOfActiveBizTalkServers>
+        <BizTalkServerConfiguration></BizTalkServerConfiguration>
+        <NuberOfActiveSQLServers>1</NuberOfActiveSQLServers>
+        <SqlServerConfiguration></SqlServerConfiguration>
+        <MaxExpectedCpuUtilizationBizTalkRxHost>80</MaxExpectedCpuUtilizationBizTalkRxHost>
+        <MaxExpectedCpuUtilizationBizTalkTxHost>70</MaxExpectedCpuUtilizationBizTalkTxHost>
+        <MaxExpectedCpuUtilizationSql>60</MaxExpectedCpuUtilizationSql>
+        <MinExpectedDocsProcessed>1100</MinExpectedDocsProcessed>
+        <MinExpectedDocsReceived>1100</MinExpectedDocsReceived>
+      </Environment>
+      <Environment>
+        <Name>2*BTS(2*CPU(Quad)) + 1*SQL(2*CPU(Quad))</Name>
+        <Description>Three server installation. 2 BizTalk Servers with 2 CPU (Quad) and one SQL serverwith 2 CPU (Quad)</Description>
+        <LoadGenScriptFile>Messaging Single and Multi Message Box_002.xml</LoadGenScriptFile>
+        <NuberOfActiveBizTalkServers>2</NuberOfActiveBizTalkServers>
+        <BizTalkServerConfiguration></BizTalkServerConfiguration>
+        <NuberOfActiveSQLServers>1</NuberOfActiveSQLServers>
+        <SqlServerConfiguration></SqlServerConfiguration>
+        <MaxExpectedCpuUtilizationBizTalkRxHost>75</MaxExpectedCpuUtilizationBizTalkRxHost>
+        <MaxExpectedCpuUtilizationBizTalkTxHost>60</MaxExpectedCpuUtilizationBizTalkTxHost>
+        <MaxExpectedCpuUtilizationSql>60</MaxExpectedCpuUtilizationSql>
+        <MinExpectedDocsProcessed>1300</MinExpectedDocsProcessed>
+        <MinExpectedDocsReceived>1300</MinExpectedDocsReceived>
+      </Environment>
+      <Environment>
+        <Name>2*BTS(2*CPU(Quad)) + 1*SQL(4*CPU(Quad))</Name>
+        <Description>Three server installation. 2 BizTalk Servers with 2 CPU (Quad) and one SQL serverwith FOUR CPU (Quad)</Description>
+        <LoadGenScriptFile>Messaging Single and Multi Message Box_003.xml</LoadGenScriptFile>
+        <NuberOfActiveBizTalkServers>2</NuberOfActiveBizTalkServers>
+        <BizTalkServerConfiguration></BizTalkServerConfiguration>
+        <NuberOfActiveSQLServers>1</NuberOfActiveSQLServers>
+        <SqlServerConfiguration></SqlServerConfiguration>
+        <MaxExpectedCpuUtilizationBizTalkRxHost>75</MaxExpectedCpuUtilizationBizTalkRxHost>
+        <MaxExpectedCpuUtilizationBizTalkTxHost>60</MaxExpectedCpuUtilizationBizTalkTxHost>
+        <MaxExpectedCpuUtilizationSql>45</MaxExpectedCpuUtilizationSql>
+        <MinExpectedDocsProcessed>1400</MinExpectedDocsProcessed>
+        <MinExpectedDocsReceived>1400</MinExpectedDocsReceived>
+      </Environment>
+    </Environments>
+  </Scenario>
+  <Scenario>
+    <Name>BizTalk - Simple Orchestration</Name>
+    <Type>BizTalk</Type>
+    <Description>
+      1. Loadgen generates a new XML message and sends it over NetTCP
+      2. A WCF-NetTCP Receive Location receives a the xml document from Loadgen.
+      3. The XMLReceive pipeline performs no processing and the message is published by the EPM to the MsgBox
+      4. The message is delivered to a simple Orchestration which consists of a receive shape and a send shape
+      5. The WCF One-Way Send Port, which is the only subscriber to the Orchestration message, retrieves the message from the MsgBox
+      6. The PassThruTransmit pipeline provides no additional processing
+      7. The message is delivered to the back end WCF service by the WCF NetTCP adapter
+    </Description>
+    <Environments>
+      <Environment>
+        <Name>Single server installation1(1*CPU(Quad))</Name>
+        <Description>Single server installation</Description>
+        <LoadGenScriptFile>Orchestration Single Message Box_001.xml</LoadGenScriptFile>
+        <NuberOfActiveBizTalkServers>1</NuberOfActiveBizTalkServers>
+        <BizTalkServerConfiguration>1*CPU, 4GB RAM</BizTalkServerConfiguration>
+        <NuberOfActiveSQLServers>0</NuberOfActiveSQLServers>
+        <SqlServerConfiguration>1*CPU, 4GB RAM</SqlServerConfiguration>
+        <MaxExpectedCpuUtilizationBizTalkRxHost>95</MaxExpectedCpuUtilizationBizTalkRxHost>
+        <MaxExpectedCpuUtilizationBizTalkTxHost>95</MaxExpectedCpuUtilizationBizTalkTxHost>
+        <MaxExpectedCpuUtilizationSql>95</MaxExpectedCpuUtilizationSql>
+        <MinExpectedDocsProcessed>200</MinExpectedDocsProcessed>
+        <MinExpectedDocsReceived>200</MinExpectedDocsReceived>
+      </Environment>
+      <Environment>
+        <Name>1*BTS(1*CPU(Quad)) + 1*SQL(1*CPU(Quad))</Name>
+        <Description>Two server installation. 1 BizTalk Server and 1 SQL server, each with 1 CPU (Quad)</Description>
+        <LoadGenScriptFile>Orchestration Single Message Box_001.xml</LoadGenScriptFile>
+        <NuberOfActiveBizTalkServers>1</NuberOfActiveBizTalkServers>
+        <BizTalkServerConfiguration></BizTalkServerConfiguration>
+        <NuberOfActiveSQLServers>1</NuberOfActiveSQLServers>
+        <SqlServerConfiguration></SqlServerConfiguration>
+        <MaxExpectedCpuUtilizationBizTalkRxHost>95</MaxExpectedCpuUtilizationBizTalkRxHost>
+        <MaxExpectedCpuUtilizationBizTalkTxHost>95</MaxExpectedCpuUtilizationBizTalkTxHost>
+        <MaxExpectedCpuUtilizationSql>60</MaxExpectedCpuUtilizationSql>
+        <MinExpectedDocsProcessed>300</MinExpectedDocsProcessed>
+        <MinExpectedDocsReceived>300</MinExpectedDocsReceived>
+      </Environment>
+      <Environment>
+        <Name>1*BTS(1*CPU(Quad)) + 1*SQL(2*CPU(Quad))</Name>
+        <Description>Two server installation. 1 BizTalk Server with 1 CPU (Quad) and one SQL server with 2 CPU (Quad)</Description>
+        <LoadGenScriptFile>Orchestration Single Message Box_001.xml</LoadGenScriptFile>
+        <NuberOfActiveBizTalkServers>1</NuberOfActiveBizTalkServers>
+        <BizTalkServerConfiguration></BizTalkServerConfiguration>
+        <NuberOfActiveSQLServers>1</NuberOfActiveSQLServers>
+        <SqlServerConfiguration></SqlServerConfiguration>
+        <MaxExpectedCpuUtilizationBizTalkRxHost>95</MaxExpectedCpuUtilizationBizTalkRxHost>
+        <MaxExpectedCpuUtilizationBizTalkTxHost>95</MaxExpectedCpuUtilizationBizTalkTxHost>
+        <MaxExpectedCpuUtilizationSql>60</MaxExpectedCpuUtilizationSql>
+        <MinExpectedDocsProcessed>350</MinExpectedDocsProcessed>
+        <MinExpectedDocsReceived>350</MinExpectedDocsReceived>
+      </Environment>
+      <Environment>
+        <Name>1*BTS(2*CPU(Quad)) + 1*SQL(2*CPU(Quad))</Name>
+        <Description>Two server installation. 1 BizTalk Server with 2 CPU (Quad) and one SQL server with 2 CPU (Quad)</Description>
+        <LoadGenScriptFile>Orchestration Single Message Box_001.xml</LoadGenScriptFile>
+        <NuberOfActiveBizTalkServers>1</NuberOfActiveBizTalkServers>
+        <BizTalkServerConfiguration></BizTalkServerConfiguration>
+        <NuberOfActiveSQLServers>1</NuberOfActiveSQLServers>
+        <SqlServerConfiguration></SqlServerConfiguration>
+        <MaxExpectedCpuUtilizationBizTalkRxHost>95</MaxExpectedCpuUtilizationBizTalkRxHost>
+        <MaxExpectedCpuUtilizationBizTalkTxHost>95</MaxExpectedCpuUtilizationBizTalkTxHost>
+        <MaxExpectedCpuUtilizationSql>60</MaxExpectedCpuUtilizationSql>
+        <MinExpectedDocsProcessed>380</MinExpectedDocsProcessed>
+        <MinExpectedDocsReceived>380</MinExpectedDocsReceived>
+      </Environment>
+      <Environment>
+        <Name>2*BTS(1*CPU(Quad)) + 1*SQL(2*CPU(Quad))</Name>
+        <Description>Three server installation. 2 BizTalk Servers with 1 CPU (Quad) and one SQL serverwith 2 CPU (Quad)</Description>
+        <LoadGenScriptFile>Orchestration Single Message Box_002.xml</LoadGenScriptFile>
+        <NuberOfActiveBizTalkServers>2</NuberOfActiveBizTalkServers>
+        <BizTalkServerConfiguration></BizTalkServerConfiguration>
+        <NuberOfActiveSQLServers>1</NuberOfActiveSQLServers>
+        <SqlServerConfiguration></SqlServerConfiguration>
+        <MaxExpectedCpuUtilizationBizTalkRxHost>80</MaxExpectedCpuUtilizationBizTalkRxHost>
+        <MaxExpectedCpuUtilizationBizTalkTxHost>70</MaxExpectedCpuUtilizationBizTalkTxHost>
+        <MaxExpectedCpuUtilizationSql>60</MaxExpectedCpuUtilizationSql>
+        <MinExpectedDocsProcessed>410</MinExpectedDocsProcessed>
+        <MinExpectedDocsReceived>410</MinExpectedDocsReceived>
+      </Environment>
+      <Environment>
+        <Name>2*BTS(2*CPU(Quad)) + 1*SQL(2*CPU(Quad))</Name>
+        <Description>Three server installation. 2 BizTalk Servers with 2 CPU (Quad) and one SQL serverwith 2 CPU (Quad)</Description>
+        <LoadGenScriptFile>Orchestration Single Message Box_002.xml</LoadGenScriptFile>
+        <NuberOfActiveBizTalkServers>2</NuberOfActiveBizTalkServers>
+        <BizTalkServerConfiguration></BizTalkServerConfiguration>
+        <NuberOfActiveSQLServers>1</NuberOfActiveSQLServers>
+        <SqlServerConfiguration></SqlServerConfiguration>
+        <MaxExpectedCpuUtilizationBizTalkRxHost>75</MaxExpectedCpuUtilizationBizTalkRxHost>
+        <MaxExpectedCpuUtilizationBizTalkTxHost>60</MaxExpectedCpuUtilizationBizTalkTxHost>
+        <MaxExpectedCpuUtilizationSql>60</MaxExpectedCpuUtilizationSql>
+        <MinExpectedDocsProcessed>460</MinExpectedDocsProcessed>
+        <MinExpectedDocsReceived>460</MinExpectedDocsReceived>
+      </Environment>
+      <Environment>
+        <Name>2*BTS(2*CPU(Quad)) + 1*SQL(4*CPU(Quad))</Name>
+        <Description>Three server installation. 2 BizTalk Servers with 2 CPU (Quad) and one SQL serverwith FOUR CPU (Quad)</Description>
+        <LoadGenScriptFile>Orchestration Single Message Box_002.xml</LoadGenScriptFile>
+        <NuberOfActiveBizTalkServers>2</NuberOfActiveBizTalkServers>
+        <BizTalkServerConfiguration></BizTalkServerConfiguration>
+        <NuberOfActiveSQLServers>1</NuberOfActiveSQLServers>
+        <SqlServerConfiguration></SqlServerConfiguration>
+        <MaxExpectedCpuUtilizationBizTalkRxHost>75</MaxExpectedCpuUtilizationBizTalkRxHost>
+        <MaxExpectedCpuUtilizationBizTalkTxHost>60</MaxExpectedCpuUtilizationBizTalkTxHost>
+        <MaxExpectedCpuUtilizationSql>45</MaxExpectedCpuUtilizationSql>
+        <MinExpectedDocsProcessed>520</MinExpectedDocsProcessed>
+        <MinExpectedDocsReceived>520</MinExpectedDocsReceived>
+      </Environment>
+    </Environments>
+  </Scenario>
+  <Scenario>
+    <Name>AppFabric Simple Workflow</Name>
+    <Type>AppFabric</Type>
+    <Description>
+      1. The application generates a new XML message and sends it over NetTCP
+      2. A WCF-NetTCP WF endpoint receives a the xml message.
+      3. A Receive Activity receives the message is published by the EPM to the MsgBox
+      4. The message is delivered to a simple Orchestration which consists of a receive shape and a send shape
+      5. The WCF One-Way Send Port, which is the only subscriber to the Orchestration message, retrieves the message from the MsgBox
+      6. The PassThruTransmit pipeline provides no additional processing
+      7. The message is delivered to the back end WCF service by the WCF NetTCP adapter
+    </Description>
+    <Environments>
+      <Environment>
+        <Name>Single server installation1(1*CPU(Quad))</Name>
+        <Description>Single server installation</Description>
+        <LoadGenScriptFile>AppFabric Simple Workflow_001.xml</LoadGenScriptFile>
+        <NuberOfActiveBizTalkServers>1</NuberOfActiveBizTalkServers>
+        <BizTalkServerConfiguration>1*CPU, 4GB RAM</BizTalkServerConfiguration>
+        <NuberOfActiveSQLServers>0</NuberOfActiveSQLServers>
+        <SqlServerConfiguration>1*CPU, 4GB RAM</SqlServerConfiguration>
+        <MaxExpectedCpuUtilizationBizTalkRxHost>95</MaxExpectedCpuUtilizationBizTalkRxHost>
+        <MaxExpectedCpuUtilizationBizTalkTxHost>95</MaxExpectedCpuUtilizationBizTalkTxHost>
+        <MaxExpectedCpuUtilizationSql>95</MaxExpectedCpuUtilizationSql>
+        <MinExpectedDocsProcessed>200</MinExpectedDocsProcessed>
+        <MinExpectedDocsReceived>200</MinExpectedDocsReceived>
+      </Environment>
+    </Environments>
+  </Scenario>
+</ArrayOfScenario>

@@ -1,0 +1,40 @@
+﻿<Activity x:Class="BizTalkBenchmarkWizard.IndigoServiceReference.Activities.ConsumeMessage2" xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities" xmlns:bi="clr-namespace:BizTalkBenchmarkWizard.IndigoServiceReference;assembly=BizTalkBenchmarkWizard, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null" xmlns:bi1="clr-namespace:BizTalkBenchmarkWizard.IndigoServiceReference;assembly=BizTalkBenchmarkWizard" xmlns:p="http://tempuri.org/" xmlns:p1="http://schemas.microsoft.com/netfx/2009/xaml/servicemodel" xmlns:srs="clr-namespace:System.Runtime.Serialization;assembly=System.Runtime.Serialization, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <x:Members>
+    <x:Property Name="msg" Type="InArgument(bi1:SmallMessage)" />
+  </x:Members>
+  <Sequence>
+    <Sequence.Variables>
+      <x:Reference>__ReferenceID1</x:Reference>
+      <x:Reference>__ReferenceID2</x:Reference>
+    </Sequence.Variables>
+    <p1:Send x:Name="__ReferenceID0" Action="http://tempuri.org/IServiceTwoWaysVoidNonTransactional/ConsumeMessage2" EndpointConfigurationName="endpoint1" OperationName="ConsumeMessage2" ServiceContractName="p:IServiceTwoWaysVoidNonTransactional">
+      <p1:Send.CorrelationInitializers>
+        <p1:RequestReplyCorrelationInitializer>
+          <p1:RequestReplyCorrelationInitializer.CorrelationHandle>
+            <InArgument x:TypeArguments="p1:CorrelationHandle">
+              <VariableValue x:TypeArguments="p1:CorrelationHandle">
+                <VariableValue.Variable>
+                  <Variable x:TypeArguments="p1:CorrelationHandle" x:Name="__ReferenceID2" />
+                </VariableValue.Variable>
+              </VariableValue>
+            </InArgument>
+          </p1:RequestReplyCorrelationInitializer.CorrelationHandle>
+        </p1:RequestReplyCorrelationInitializer>
+      </p1:Send.CorrelationInitializers>
+      <p1:SendMessageContent>
+        <InArgument x:TypeArguments="bi1:ConsumeMessage2Request">[New BizTalkBenchmarkWizard.IndigoServiceReference.ConsumeMessage2Request() With { .msg = msg }]</InArgument>
+      </p1:SendMessageContent>
+    </p1:Send>
+    <p1:ReceiveReply Request="{x:Reference __ReferenceID0}" Action="http://tempuri.org/IServiceTwoWaysVoidNonTransactional/ConsumeMessage2Response">
+      <p1:ReceiveMessageContent>
+        <OutArgument x:TypeArguments="bi1:ConsumeMessage2Response">
+          <VariableReference x:TypeArguments="bi1:ConsumeMessage2Response">
+            <VariableReference.Variable>
+              <Variable x:TypeArguments="bi1:ConsumeMessage2Response" x:Name="__ReferenceID1" Name="tempResult" />
+            </VariableReference.Variable>
+          </VariableReference>
+        </OutArgument>
+      </p1:ReceiveMessageContent>
+    </p1:ReceiveReply>
+  </Sequence>
+</Activity>

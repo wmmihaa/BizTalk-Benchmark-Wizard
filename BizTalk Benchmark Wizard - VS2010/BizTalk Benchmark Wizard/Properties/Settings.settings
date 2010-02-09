@@ -1,0 +1,12 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="BizTalk_Benchmark_Wizard.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="DefaultServer" Type="System.String" Scope="User">
+      <Value Profile="(Default)">(localhost)</Value>
+    </Setting>
+    <Setting Name="DefaultIndigoServiceUri" Type="System.String" Scope="User">
+      <Value Profile="(Default)">(localhost)</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>

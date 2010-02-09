@@ -1,0 +1,91 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "bLogical.GaugeControl", "bLogical.GaugeControl\bLogical.GaugeControl.csproj", "{C78E61D3-799D-4959-8EB9-E14534CEA9E7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BizTalk Benchmark Wizard", "BizTalk Benchmark Wizard\BizTalk Benchmark Wizard.csproj", "{56A5B68A-B031-42CC-A897-5D128BB8B20E}"
+EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "BizTalk Benchmark Wizard Setup", "BizTalk Benchmark Wizard Setup\BizTalk Benchmark Wizard Setup.vdproj", "{A6529B9F-1F28-4994-8D46-949E10462193}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AppFabric Projects", "AppFabric Projects", "{23013AD6-10C7-4B69-ACE2-88E4451CF256}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "LoagGen Artefacts", "LoagGen Artefacts", "{F5006D7C-B0EC-4F17-A065-3D7B0DB8C06A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BizTalkBenchmarkWizard.LoadGenArtefacts", "LoadGen Artefacts\BizTalkBenchmarkWizard.LoadGenArtefacts\BizTalkBenchmarkWizard.LoadGenArtefacts.csproj", "{6FDCC732-A9BF-4F4E-A1EE-75C3BA561CE4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IndigoService", "IndigoService\IndigoService.csproj", "{28BA7B2C-67BE-4568-821C-B7054509BF08}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BizTalkBenchmarkWizard.PerformanceCounterHelper", "BizTalkBenchmarkWizard.PerformanceCounterHelper\BizTalkBenchmarkWizard.PerformanceCounterHelper.csproj", "{908F739A-1397-4733-A0BC-30FDB131925B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BizTalkBenchmarkWizard", "AppFabric Artefacts\BizTalkBenchmarkWizard\BizTalkBenchmarkWizard.csproj", "{5B64954B-DEE3-4FA7-8D09-DCC2ECC4D182}"
+EndProject
+Global
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 8
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = https://tfs08.codeplex.com/
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = BizTalk\u0020Benchmark\u0020Wizard\\BizTalk\u0020Benchmark\u0020Wizard.csproj
+		SccProjectName1 = BizTalk\u0020Benchmark\u0020Wizard
+		SccLocalPath1 = BizTalk\u0020Benchmark\u0020Wizard
+		SccProjectUniqueName2 = bLogical.GaugeControl\\bLogical.GaugeControl.csproj
+		SccProjectName2 = bLogical.GaugeControl
+		SccLocalPath2 = bLogical.GaugeControl
+		SccProjectUniqueName3 = BizTalk\u0020Benchmark\u0020Wizard\u0020Setup\\BizTalk\u0020Benchmark\u0020Wizard\u0020Setup.vdproj
+		SccProjectName3 = BizTalk\u0020Benchmark\u0020Wizard\u0020Setup
+		SccLocalPath3 = BizTalk\u0020Benchmark\u0020Wizard\u0020Setup
+		SccProjectUniqueName4 = LoadGen\u0020Artefacts\\BizTalkBenchmarkWizard.LoadGenArtefacts\\BizTalkBenchmarkWizard.LoadGenArtefacts.csproj
+		SccProjectTopLevelParentUniqueName4 = BizTalk\u0020Benchmark\u0020Wizard.sln
+		SccProjectName4 = LoadGen\u0020Artefacts/BizTalkBenchmarkWizard.LoadGenArtefacts
+		SccLocalPath4 = LoadGen\u0020Artefacts\\BizTalkBenchmarkWizard.LoadGenArtefacts
+		SccProjectUniqueName5 = IndigoService\\IndigoService.csproj
+		SccProjectName5 = IndigoService
+		SccLocalPath5 = IndigoService
+		SccProjectUniqueName6 = BizTalkBenchmarkWizard.PerformanceCounterHelper\\BizTalkBenchmarkWizard.PerformanceCounterHelper.csproj
+		SccProjectName6 = BizTalkBenchmarkWizard.PerformanceCounterHelper
+		SccLocalPath6 = BizTalkBenchmarkWizard.PerformanceCounterHelper
+		SccProjectUniqueName7 = AppFabric\u0020Artefacts\\BizTalkBenchmarkWizard\\BizTalkBenchmarkWizard.csproj
+		SccProjectTopLevelParentUniqueName7 = BizTalk\u0020Benchmark\u0020Wizard.sln
+		SccProjectName7 = AppFabric\u0020Artefacts/BizTalkBenchmarkWizard
+		SccLocalPath7 = AppFabric\u0020Artefacts\\BizTalkBenchmarkWizard
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C78E61D3-799D-4959-8EB9-E14534CEA9E7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C78E61D3-799D-4959-8EB9-E14534CEA9E7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C78E61D3-799D-4959-8EB9-E14534CEA9E7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C78E61D3-799D-4959-8EB9-E14534CEA9E7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{56A5B68A-B031-42CC-A897-5D128BB8B20E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{56A5B68A-B031-42CC-A897-5D128BB8B20E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{56A5B68A-B031-42CC-A897-5D128BB8B20E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{56A5B68A-B031-42CC-A897-5D128BB8B20E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A6529B9F-1F28-4994-8D46-949E10462193}.Debug|Any CPU.ActiveCfg = Debug
+		{A6529B9F-1F28-4994-8D46-949E10462193}.Release|Any CPU.ActiveCfg = Release
+		{6FDCC732-A9BF-4F4E-A1EE-75C3BA561CE4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6FDCC732-A9BF-4F4E-A1EE-75C3BA561CE4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6FDCC732-A9BF-4F4E-A1EE-75C3BA561CE4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6FDCC732-A9BF-4F4E-A1EE-75C3BA561CE4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{28BA7B2C-67BE-4568-821C-B7054509BF08}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{28BA7B2C-67BE-4568-821C-B7054509BF08}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{28BA7B2C-67BE-4568-821C-B7054509BF08}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{28BA7B2C-67BE-4568-821C-B7054509BF08}.Release|Any CPU.Build.0 = Release|Any CPU
+		{908F739A-1397-4733-A0BC-30FDB131925B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{908F739A-1397-4733-A0BC-30FDB131925B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{908F739A-1397-4733-A0BC-30FDB131925B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{908F739A-1397-4733-A0BC-30FDB131925B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5B64954B-DEE3-4FA7-8D09-DCC2ECC4D182}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5B64954B-DEE3-4FA7-8D09-DCC2ECC4D182}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5B64954B-DEE3-4FA7-8D09-DCC2ECC4D182}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5B64954B-DEE3-4FA7-8D09-DCC2ECC4D182}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{5B64954B-DEE3-4FA7-8D09-DCC2ECC4D182} = {23013AD6-10C7-4B69-ACE2-88E4451CF256}
+		{6FDCC732-A9BF-4F4E-A1EE-75C3BA561CE4} = {F5006D7C-B0EC-4F17-A065-3D7B0DB8C06A}
+	EndGlobalSection
+EndGlobal

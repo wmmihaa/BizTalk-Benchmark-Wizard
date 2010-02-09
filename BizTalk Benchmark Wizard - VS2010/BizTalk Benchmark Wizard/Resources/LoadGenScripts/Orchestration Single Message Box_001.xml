@@ -1,0 +1,42 @@
+<LoadGenFramework>
+  <CommonSection>
+    <LoadGenVersion>2</LoadGenVersion>
+    <OptimizeLimitFileSize>2048000</OptimizeLimitFileSize>
+    <NumThreadsPerSection>1</NumThreadsPerSection>
+    <SleepInterval>400</SleepInterval>
+    <LotSizePerInterval>100</LotSizePerInterval>
+    <RetryInterval>10000</RetryInterval>
+    <RetryNumber>1000</RetryNumber>
+    <StopMode Mode="Time">
+      <TotalTime>1800</TotalTime>
+    </StopMode>
+    <Transport Name="WCF">
+      <Assembly>WcfTransport.dll/WcfTransport.WcfTransport</Assembly>
+    </Transport>
+    <ThrottleController Mode="Custom">
+      <Monitor Name="CPU">
+        <Assembly>PerfCounterMonitor.dll/PerfCounterMonitor.PerfCounterMonitorLib</Assembly>
+        <ThresholdRange>90-95</ThresholdRange>
+        <SleepInterval>400</SleepInterval>
+        <Parameters>Processor</Parameters>
+        <Parameters>% Processor Time</Parameters>
+        <Parameters>_Total</Parameters>
+        <Parameters>@ServerName</Parameters>
+      </Monitor>
+      <ThrottleCondition>CPU</ThrottleCondition>
+      <ThrottleInterval>400</ThrottleInterval>
+    </ThrottleController>
+  </CommonSection>
+  <Section Name="WcfSection1">
+    <SrcFilePath>@FilePath\Size_2K.Xml</SrcFilePath>
+    <DstLocation>
+      <Parameters>
+        <ClientType>WcfTwoWaysVoid</ClientType>
+        <Transactional>false</Transactional>
+        <ShutdownDelay>3000</ShutdownDelay>
+        <MaxConcurrentMessages>10000</MaxConcurrentMessages>
+        <ClientEndPointName>Orchestration Single Message Box</ClientEndPointName>
+      </Parameters>
+    </DstLocation>
+  </Section>
+</LoadGenFramework>

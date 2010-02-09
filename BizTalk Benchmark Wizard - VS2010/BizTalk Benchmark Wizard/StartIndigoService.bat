@@ -1,0 +1,1 @@
+Artefacts\IndigoService\IndigoService.exe IndigoTwoWaysVoid Artefacts\IndigoService\Response.xml false
