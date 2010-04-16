@@ -49,7 +49,7 @@ namespace BizTalk_Benchmark_Wizard
         long _totalCpuValue2;
         long _totalCpuValue3;
         long _totalProcessedValue;
-        long _totalRreceivedValue;
+        long _totalReceivedValue;
         long _timerCount;
         bool _isWarmingUp = true;
         bool _showCpuGauges = false;
@@ -210,6 +210,7 @@ namespace BizTalk_Benchmark_Wizard
             finally
             {
                 btnGenerateReport.IsEnabled = true;
+                this.Cursor = Cursors.Arrow;
             }
         }
         private void btnTestService_Click(object sender, RoutedEventArgs e)
@@ -259,7 +260,7 @@ namespace BizTalk_Benchmark_Wizard
             {
                 string config = string.Format("[SCENARIO {0}] {1}*BTS({2}*CPU({3})({4}Ghz) {5}GB RAM) {6}*MsgBox",
                     cbScenario.Text.StartsWith("Messaging") ? "1" : "2",
-                    _btsServers.Count,
+                    ((Environment)environments.SelectedItem).NumberOfActiveBizTalkServers.ToString(),
                     txtNoOfCpu.Text.Replace("_", ""),
                     cbhCores.Text.Replace(" Core", ""),
                     txtCpuGhz.Text,
@@ -270,7 +271,7 @@ namespace BizTalk_Benchmark_Wizard
                     config = config.Substring(0, 60);
 
                 HighScoreService.SupplyHSSoapClient client = new BizTalk_Benchmark_Wizard.HighScoreService.SupplyHSSoapClient();
-                client.Supply(txtInitials.Text, (int)_avgProcessedValue, DateTime.Now, config);
+                client.Supply(txtInitials.Text.Replace(",","."), (int)_avgProcessedValue, DateTime.Now, config);
             }
             catch
             {
@@ -297,7 +298,7 @@ namespace BizTalk_Benchmark_Wizard
             _totalCpuValue2 = 0;
             _totalCpuValue3 = 0;
             _totalProcessedValue = 0;
-            _totalRreceivedValue = 0;
+            _totalReceivedValue = 0;
             _timerCount = 0;
             _loadGenHelper = new LoadGenHelper();
             btnNext.Content = "Next";
@@ -417,8 +418,9 @@ namespace BizTalk_Benchmark_Wizard
         #region Private Methods
         void ShowResult()
         {
+            ResultGrid.DataContext = null;
             Results.Clear();
-            
+            double acceptable = 0.8;
             Environment environment = (Environment)environments.SelectedItem;
             bool cpuSuccess1 = _avgCpuValue1 < (long)environment.MaxExpectedCpuUtilizationBizTalkRxHost ? true : false;
             bool cpuSuccess2 = _avgCpuValue2 < (long)environment.MaxExpectedCpuUtilizationBizTalkTxHost ? true : false;
@@ -452,7 +454,6 @@ namespace BizTalk_Benchmark_Wizard
                 Status = cpuSuccess3 ? "Succeeded" : "Failed"
             });
 
-
             //Processed
             Results.Add(new Result()
             {
@@ -477,9 +478,13 @@ namespace BizTalk_Benchmark_Wizard
                 lblResultDescription.Text = @"<LineBreak/>Congratulations, the test completed with expected results. If you wich to further analyze the environment we recommend you to study the Data Collector Sets created using the <Hyperlink NavigateUri=""http://www.codeplex.com/PAL"">Performance Analysis of Logs (PAL) tool</Hyperlink>.";
                 picSucess.Source = new System.Windows.Media.Imaging.BitmapImage(new Uri("pack://application:,,,/BizTalk Benchmark Wizard;component/Resources/Images/passed.png"));
             }
-           
-
-
+            else if ((double)environment.MinExpectedDocsProcessed * acceptable < (double)_avgProcessedValue)
+            {
+                lblSucess.Text = "Acceptable";
+                lblResultDescription.Text = @"<LineBreak/>The test completed with an acceptable result. If you wich to further analyze the environment we recommend you to study the Data Collector Sets created using the <Hyperlink NavigateUri=""http://www.codeplex.com/PAL"">Performance Analysis of Logs (PAL) tool</Hyperlink>.";
+                picSucess.Source = new System.Windows.Media.Imaging.BitmapImage(new Uri("pack://application:,,,/BizTalk Benchmark Wizard;component/Resources/Images/trafficlight_yellow.png"));
+            
+            }
         }
         void RefreshPreRequsites()
         {
@@ -706,6 +711,7 @@ namespace BizTalk_Benchmark_Wizard
                     ShowResult();
                     tabControl1.SelectedIndex++;
                     btnNext.IsEnabled = true;
+                    
                 }));
             //this.Dispatcher.BeginInvoke(DispatcherPriority.ApplicationIdle, new Action(delegate() { tabControl1.SelectedIndex++; }));
             //this.Dispatcher.BeginInvoke(DispatcherPriority.ApplicationIdle, new Action(delegate() { btnNext.IsEnabled = true; }));
@@ -716,7 +722,7 @@ namespace BizTalk_Benchmark_Wizard
             _loadGenHelper.OnStepComplete -= new LoadGenHelper.InitiateStepHandler(OnStepComplete);
             _perflogHelper.OnStepComplete -= new PerflogHelper.InitiateStepHandler(OnStepComplete);
             _loadGenHelper.OnComplete -= new LoadGenHelper.CompleteHandler(OnTestComplete);
-
+            this.Cursor = Cursors.Arrow;
         }
         private void OnCollectCounterData(object sender, ElapsedEventArgs e)
         {
@@ -760,14 +766,14 @@ namespace BizTalk_Benchmark_Wizard
                     _totalCpuValue3 += (long)cpuValue3 > 100 ? 100 : (int)cpuValue3;
 
                     _totalProcessedValue += (long)processedValue;
-                    _totalRreceivedValue += (long)receivedValue;
+                    _totalReceivedValue += (long)receivedValue;
 
                     _avgCpuValue1 = _totalCpuValue1 / _timerCount;
                     _avgCpuValue2 = _totalCpuValue2 / _timerCount;
                     _avgCpuValue3 = _totalCpuValue3 / _timerCount; 
 
                     _avgProcessedValue = _totalProcessedValue / _timerCount; //(long)((_avgProcessedValue + processedValue) * _timerCount);
-                    _avgRreceivedValue = _totalRreceivedValue / _timerCount; //(long)((_avgRreceivedValue + receivedValue) * _timerCount);
+                    _avgRreceivedValue = _totalReceivedValue / _timerCount; //(long)((_avgRreceivedValue + receivedValue) * _timerCount);
                 }
                 if (_showCpuGauges)
                 {

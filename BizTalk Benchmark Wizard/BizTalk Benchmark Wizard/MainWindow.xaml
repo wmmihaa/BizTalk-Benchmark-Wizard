@@ -182,12 +182,14 @@
                     <Grid Background="Transparent">
                         <Label Height="61" Margin="20,34,19,0" VerticalAlignment="Top" FontSize="30" FontWeight="Bold" FontFamily="Calibri">Welcome to BizTalk Benchmark Wizard</Label>
 
-                        <Label Margin="40,80,19,129" Name="label2"  FontFamily="Calibri">
+                        <Label Margin="40,80,19,107.5" Name="label2"  FontFamily="Calibri">
                             <TextBlock TextWrapping="Wrap">The purpose of this tool is to verify your BizTalk environment performs as expected. The typical use case where you would <LineBreak/>use the BizTalk Benchmark Wizard would be after BizTalk Server is installed and before deploying any solutions to the environment.<LineBreak/>
                                 <LineBreak/>BizTalk Benchmark Wizard performs load to BizTalk Server in relation to a specific scenario. During the execution of the test, counter information is collected and benchmarked against collected statistics relevant to your BizTalk Server environment<LineBreak/>
                                 After completion of the test, a result is presented showing whether or not your BizTalk investment is performing as you could expect.<LineBreak/>
-                                <LineBreak/>The executed scenarios may or may not be relative to any realistic scenario, and is only intended for testing. The BizTalk Benchmark Wizard has been developed in relation to the <Bold><Italic>BizTalk Server 2009 Scale Out Testing Study</Italic></Bold>. More information about the study can be found <Hyperlink NavigateUri="http://msdn.microsoft.com/en-us/library/ee377068(BTS.10).aspx" RequestNavigate="Hyperlink_RequestNavigate" >here</Hyperlink>.</TextBlock>
-                        </Label>
+                                <LineBreak/>The executed scenarios may or may not be relative to any realistic scenario, and is only intended for testing. The BizTalk Benchmark Wizard has been developed in relation to the <Bold><Italic>BizTalk Server 2009 Scale Out Testing Study</Italic></Bold>. More information about the study can be found <Hyperlink NavigateUri="http://msdn.microsoft.com/en-us/library/ee377068(BTS.10).aspx" RequestNavigate="Hyperlink_RequestNavigate" >here</Hyperlink>.<LineBreak/><LineBreak/>
+                            Good Luck!</TextBlock>
+                        
+</Label>
 
                     </Grid>
                 </TabItem>
@@ -481,12 +483,12 @@
                     <Grid>
                         <StackPanel Orientation="Vertical" Margin="20">
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                                <Image Name="picSucess" Source="Resources/Images/failed.png" Width="100" Height="100"/>
+                                <Image Name="picSucess" Source="Resources/Images/trafficlight_red.png" Width="80" Height="80"/>
                                 <Label FontSize="42" FontWeight="Bold" VerticalAlignment="Center">
                                     <TextBlock Name="lblSucess" Text="Failed!"/>
                                 </Label>
                             </StackPanel>
-                            
+                            <StackPanel Height="10"/>
                             <StackPanel HorizontalAlignment="Center">
                                 <my:DataGrid Name="ResultGrid" 
                                      ItemsSource="{Binding}" 
@@ -529,7 +531,7 @@
                 </TextBlock>
                 <TextBlock Name="lblVersion" Text="Version:1.0.0.0"/>
             </StackPanel>
-            <Button Canvas.Left="501" Canvas.Top="365" Height="23" Name="btnBack" Width="74" Click="btnBack_Click" Style="{DynamicResource RoundedButton1}" Visibility="Hidden">Back</Button>
+            <Button Canvas.Left="501" Canvas.Top="365" Height="23" Name="btnBack" Width="74" Click="btnBack_Click" Style="{DynamicResource RoundedButton}" Visibility="Hidden">Back</Button>
             <Button Canvas.Left="581" Canvas.Top="365" Height="23" Name="btnNext" Width="74" Click="btnNext_Click" Style="{DynamicResource RoundedButton}" >Next</Button>
         </Canvas>
 
@@ -576,6 +578,51 @@
                             <StackPanel Width="5"/>
                             <Button Height="23" Style="{DynamicResource RoundedButton}" HorizontalAlignment="Right" Name="btnCancel1" VerticalAlignment="Bottom" Width="75" Click="btnCancel_Click">Cancel</Button>
                             
+                        </StackPanel>
+                    </StackPanel>
+                </Grid>
+            </Grid>
+        </Popup>
+        <Popup x:Name="PopupServiceAccount" 
+               AllowsTransparency="True"
+               IsOpen="False"
+               Width="400"
+               Height="210"
+               Placement="Center" PopupAnimation="Fade">
+
+            <Grid>
+                <dropShadow:SystemDropShadowChrome CornerRadius="3,13,3,13" Color="#71000000">
+                    <Grid x:Name="MyElementx" />
+                </dropShadow:SystemDropShadowChrome>
+
+                <Grid>
+                    <Border Margin="0,0,5,5"
+			                BorderBrush="Gainsboro"
+			                CornerRadius="5,5,5,5"
+			                BorderThickness="1,1,1,1"
+			                Background="{StaticResource BrushedMetalBackground}"/>
+
+                    <StackPanel Orientation="Vertical" Width="365" Margin="0,25">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock><Bold>Please enter the user name and password of service account<LineBreak/>
+                                running each of the user defined Perfmon collector sets</Bold><LineBreak/></TextBlock>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Label Height="28" HorizontalAlignment="Left" VerticalAlignment="Top" Width="139.944">Service account:</Label>
+                            <TextBox x:Name="txtServiceAccount" Height="23" Width="215.557" VerticalAlignment="Top" TextAlignment="Right"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Label Height="28" HorizontalAlignment="Left" VerticalAlignment="Top" Width="139.944">Password:</Label>
+                            <PasswordBox Name="txtServiceAccountPassword" Height="23" VerticalAlignment="Top" Width="215.557" Password=""></PasswordBox>
+                            <StackPanel Width="5"/>
+
+                        </StackPanel>
+                        <StackPanel Height="15"/>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,10,0">
+                            <Button Height="23" Style="{DynamicResource RoundedButton}" Name="btnServiceAccountOk" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="75.263">Ok</Button>
+                            <StackPanel Width="5"/>
+                            <Button Height="23" Style="{DynamicResource RoundedButton}" HorizontalAlignment="Right" Name="btnServiceAccountCancel" VerticalAlignment="Bottom" Width="75">Cancel</Button>
+
                         </StackPanel>
                     </StackPanel>
                 </Grid>

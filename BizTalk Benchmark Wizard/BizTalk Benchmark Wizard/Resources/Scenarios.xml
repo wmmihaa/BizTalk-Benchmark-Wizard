@@ -22,8 +22,8 @@
         <MaxExpectedCpuUtilizationBizTalkRxHost>95</MaxExpectedCpuUtilizationBizTalkRxHost>
         <MaxExpectedCpuUtilizationBizTalkTxHost>95</MaxExpectedCpuUtilizationBizTalkTxHost>
         <MaxExpectedCpuUtilizationSql>95</MaxExpectedCpuUtilizationSql>
-        <MinExpectedDocsProcessed>300</MinExpectedDocsProcessed>
-        <MinExpectedDocsReceived>300</MinExpectedDocsReceived>
+        <MinExpectedDocsProcessed>200</MinExpectedDocsProcessed>
+        <MinExpectedDocsReceived>200</MinExpectedDocsReceived>
       </Environment>
       <Environment>
         <Name>1*BTS(1*CPU(Quad)) + 1*SQL(1*CPU(Quad))</Name>
@@ -36,8 +36,8 @@
         <MaxExpectedCpuUtilizationBizTalkRxHost>95</MaxExpectedCpuUtilizationBizTalkRxHost>
         <MaxExpectedCpuUtilizationBizTalkTxHost>95</MaxExpectedCpuUtilizationBizTalkTxHost>
         <MaxExpectedCpuUtilizationSql>50</MaxExpectedCpuUtilizationSql>
-        <MinExpectedDocsProcessed>700</MinExpectedDocsProcessed>
-        <MinExpectedDocsReceived>700</MinExpectedDocsReceived>
+        <MinExpectedDocsProcessed>350</MinExpectedDocsProcessed>
+        <MinExpectedDocsReceived>350</MinExpectedDocsReceived>
       </Environment>
       <Environment>
         <Name>1*BTS(1*CPU(Quad)) + 1*SQL(2*CPU(Quad))</Name>
@@ -50,8 +50,8 @@
         <MaxExpectedCpuUtilizationBizTalkRxHost>95</MaxExpectedCpuUtilizationBizTalkRxHost>
         <MaxExpectedCpuUtilizationBizTalkTxHost>95</MaxExpectedCpuUtilizationBizTalkTxHost>
         <MaxExpectedCpuUtilizationSql>50</MaxExpectedCpuUtilizationSql>
-        <MinExpectedDocsProcessed>700</MinExpectedDocsProcessed>
-        <MinExpectedDocsReceived>700</MinExpectedDocsReceived>
+        <MinExpectedDocsProcessed>490</MinExpectedDocsProcessed>
+        <MinExpectedDocsReceived>490</MinExpectedDocsReceived>
       </Environment>
       <Environment>
         <Name>1*BTS(2*CPU(Quad)) + 1*SQL(2*CPU(Quad))</Name>
@@ -64,8 +64,8 @@
         <MaxExpectedCpuUtilizationBizTalkRxHost>95</MaxExpectedCpuUtilizationBizTalkRxHost>
         <MaxExpectedCpuUtilizationBizTalkTxHost>95</MaxExpectedCpuUtilizationBizTalkTxHost>
         <MaxExpectedCpuUtilizationSql>50</MaxExpectedCpuUtilizationSql>
-        <MinExpectedDocsProcessed>1000</MinExpectedDocsProcessed>
-        <MinExpectedDocsReceived>1000</MinExpectedDocsReceived>
+        <MinExpectedDocsProcessed>700</MinExpectedDocsProcessed>
+        <MinExpectedDocsReceived>700</MinExpectedDocsReceived>
       </Environment>
       <Environment>
         <Name>2*BTS(1*CPU(Quad)) + 1*SQL(2*CPU(Quad))</Name>
@@ -78,8 +78,8 @@
         <MaxExpectedCpuUtilizationBizTalkRxHost>80</MaxExpectedCpuUtilizationBizTalkRxHost>
         <MaxExpectedCpuUtilizationBizTalkTxHost>70</MaxExpectedCpuUtilizationBizTalkTxHost>
         <MaxExpectedCpuUtilizationSql>60</MaxExpectedCpuUtilizationSql>
-        <MinExpectedDocsProcessed>1100</MinExpectedDocsProcessed>
-        <MinExpectedDocsReceived>1100</MinExpectedDocsReceived>
+        <MinExpectedDocsProcessed>770</MinExpectedDocsProcessed>
+        <MinExpectedDocsReceived>770</MinExpectedDocsReceived>
       </Environment>
       <Environment>
         <Name>2*BTS(2*CPU(Quad)) + 1*SQL(2*CPU(Quad))</Name>
@@ -92,8 +92,8 @@
         <MaxExpectedCpuUtilizationBizTalkRxHost>75</MaxExpectedCpuUtilizationBizTalkRxHost>
         <MaxExpectedCpuUtilizationBizTalkTxHost>60</MaxExpectedCpuUtilizationBizTalkTxHost>
         <MaxExpectedCpuUtilizationSql>60</MaxExpectedCpuUtilizationSql>
-        <MinExpectedDocsProcessed>1300</MinExpectedDocsProcessed>
-        <MinExpectedDocsReceived>1300</MinExpectedDocsReceived>
+        <MinExpectedDocsProcessed>910</MinExpectedDocsProcessed>
+        <MinExpectedDocsReceived>910</MinExpectedDocsReceived>
       </Environment>
       <Environment>
         <Name>2*BTS(2*CPU(Quad)) + 1*SQL(4*CPU(Quad))</Name>
@@ -106,8 +106,8 @@
         <MaxExpectedCpuUtilizationBizTalkRxHost>75</MaxExpectedCpuUtilizationBizTalkRxHost>
         <MaxExpectedCpuUtilizationBizTalkTxHost>60</MaxExpectedCpuUtilizationBizTalkTxHost>
         <MaxExpectedCpuUtilizationSql>45</MaxExpectedCpuUtilizationSql>
-        <MinExpectedDocsProcessed>1400</MinExpectedDocsProcessed>
-        <MinExpectedDocsReceived>1400</MinExpectedDocsReceived>
+        <MinExpectedDocsProcessed>980</MinExpectedDocsProcessed>
+        <MinExpectedDocsReceived>980</MinExpectedDocsReceived>
       </Environment>
     </Environments>
   </Scenario>
@@ -134,8 +134,8 @@
         <MaxExpectedCpuUtilizationBizTalkRxHost>95</MaxExpectedCpuUtilizationBizTalkRxHost>
         <MaxExpectedCpuUtilizationBizTalkTxHost>95</MaxExpectedCpuUtilizationBizTalkTxHost>
         <MaxExpectedCpuUtilizationSql>95</MaxExpectedCpuUtilizationSql>
-        <MinExpectedDocsProcessed>200</MinExpectedDocsProcessed>
-        <MinExpectedDocsReceived>200</MinExpectedDocsReceived>
+        <MinExpectedDocsProcessed>140</MinExpectedDocsProcessed>
+        <MinExpectedDocsReceived>140</MinExpectedDocsReceived>
       </Environment>
       <Environment>
         <Name>1*BTS(1*CPU(Quad)) + 1*SQL(1*CPU(Quad))</Name>
@@ -148,8 +148,8 @@
         <MaxExpectedCpuUtilizationBizTalkRxHost>95</MaxExpectedCpuUtilizationBizTalkRxHost>
         <MaxExpectedCpuUtilizationBizTalkTxHost>95</MaxExpectedCpuUtilizationBizTalkTxHost>
         <MaxExpectedCpuUtilizationSql>60</MaxExpectedCpuUtilizationSql>
-        <MinExpectedDocsProcessed>300</MinExpectedDocsProcessed>
-        <MinExpectedDocsReceived>300</MinExpectedDocsReceived>
+        <MinExpectedDocsProcessed>210</MinExpectedDocsProcessed>
+        <MinExpectedDocsReceived>210</MinExpectedDocsReceived>
       </Environment>
       <Environment>
         <Name>1*BTS(1*CPU(Quad)) + 1*SQL(2*CPU(Quad))</Name>
@@ -162,8 +162,8 @@
         <MaxExpectedCpuUtilizationBizTalkRxHost>95</MaxExpectedCpuUtilizationBizTalkRxHost>
         <MaxExpectedCpuUtilizationBizTalkTxHost>95</MaxExpectedCpuUtilizationBizTalkTxHost>
         <MaxExpectedCpuUtilizationSql>60</MaxExpectedCpuUtilizationSql>
-        <MinExpectedDocsProcessed>350</MinExpectedDocsProcessed>
-        <MinExpectedDocsReceived>350</MinExpectedDocsReceived>
+        <MinExpectedDocsProcessed>240</MinExpectedDocsProcessed>
+        <MinExpectedDocsReceived>240</MinExpectedDocsReceived>
       </Environment>
       <Environment>
         <Name>1*BTS(2*CPU(Quad)) + 1*SQL(2*CPU(Quad))</Name>
@@ -176,8 +176,8 @@
         <MaxExpectedCpuUtilizationBizTalkRxHost>95</MaxExpectedCpuUtilizationBizTalkRxHost>
         <MaxExpectedCpuUtilizationBizTalkTxHost>95</MaxExpectedCpuUtilizationBizTalkTxHost>
         <MaxExpectedCpuUtilizationSql>60</MaxExpectedCpuUtilizationSql>
-        <MinExpectedDocsProcessed>380</MinExpectedDocsProcessed>
-        <MinExpectedDocsReceived>380</MinExpectedDocsReceived>
+        <MinExpectedDocsProcessed>270</MinExpectedDocsProcessed>
+        <MinExpectedDocsReceived>270</MinExpectedDocsReceived>
       </Environment>
       <Environment>
         <Name>2*BTS(1*CPU(Quad)) + 1*SQL(2*CPU(Quad))</Name>
@@ -190,12 +190,12 @@
         <MaxExpectedCpuUtilizationBizTalkRxHost>80</MaxExpectedCpuUtilizationBizTalkRxHost>
         <MaxExpectedCpuUtilizationBizTalkTxHost>70</MaxExpectedCpuUtilizationBizTalkTxHost>
         <MaxExpectedCpuUtilizationSql>60</MaxExpectedCpuUtilizationSql>
-        <MinExpectedDocsProcessed>410</MinExpectedDocsProcessed>
-        <MinExpectedDocsReceived>410</MinExpectedDocsReceived>
+        <MinExpectedDocsProcessed>290</MinExpectedDocsProcessed>
+        <MinExpectedDocsReceived>290</MinExpectedDocsReceived>
       </Environment>
       <Environment>
         <Name>2*BTS(2*CPU(Quad)) + 1*SQL(2*CPU(Quad))</Name>
-        <Description>Three server installation. 2 BizTalk Servers with 2 CPU (Quad) and one SQL serverwith 2 CPU (Quad)</Description>
+        <Description>Three server installation. 2 BizTalk Servers with 2 CPU (Quad) and one SQL serverwith 2 CPU's (Quad)</Description>
         <LoadGenScriptFile>Orchestration Single Message Box_002.xml</LoadGenScriptFile>
         <NuberOfActiveBizTalkServers>2</NuberOfActiveBizTalkServers>
         <BizTalkServerConfiguration></BizTalkServerConfiguration>
@@ -204,12 +204,12 @@
         <MaxExpectedCpuUtilizationBizTalkRxHost>75</MaxExpectedCpuUtilizationBizTalkRxHost>
         <MaxExpectedCpuUtilizationBizTalkTxHost>60</MaxExpectedCpuUtilizationBizTalkTxHost>
         <MaxExpectedCpuUtilizationSql>60</MaxExpectedCpuUtilizationSql>
-        <MinExpectedDocsProcessed>460</MinExpectedDocsProcessed>
-        <MinExpectedDocsReceived>460</MinExpectedDocsReceived>
+        <MinExpectedDocsProcessed>320</MinExpectedDocsProcessed>
+        <MinExpectedDocsReceived>320</MinExpectedDocsReceived>
       </Environment>
       <Environment>
         <Name>2*BTS(2*CPU(Quad)) + 1*SQL(4*CPU(Quad))</Name>
-        <Description>Three server installation. 2 BizTalk Servers with 2 CPU (Quad) and one SQL serverwith FOUR CPU (Quad)</Description>
+        <Description>Three server installation. 2 BizTalk Servers with 2 CPU (Quad) and one SQL server with 4 CPU's (Quad)</Description>
         <LoadGenScriptFile>Orchestration Single Message Box_002.xml</LoadGenScriptFile>
         <NuberOfActiveBizTalkServers>2</NuberOfActiveBizTalkServers>
         <BizTalkServerConfiguration></BizTalkServerConfiguration>
@@ -218,8 +218,8 @@
         <MaxExpectedCpuUtilizationBizTalkRxHost>75</MaxExpectedCpuUtilizationBizTalkRxHost>
         <MaxExpectedCpuUtilizationBizTalkTxHost>60</MaxExpectedCpuUtilizationBizTalkTxHost>
         <MaxExpectedCpuUtilizationSql>45</MaxExpectedCpuUtilizationSql>
-        <MinExpectedDocsProcessed>520</MinExpectedDocsProcessed>
-        <MinExpectedDocsReceived>520</MinExpectedDocsReceived>
+        <MinExpectedDocsProcessed>370</MinExpectedDocsProcessed>
+        <MinExpectedDocsReceived>370</MinExpectedDocsReceived>
       </Environment>
     </Environments>
   </Scenario>

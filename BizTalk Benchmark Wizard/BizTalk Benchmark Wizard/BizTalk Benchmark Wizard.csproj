@@ -266,7 +266,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Artefacts\BizTalk\Installing Host ReadMe.txt" />
-    <Content Include="Artefacts\BizTalk\CleanUpHosts.vbs" />
+    <None Include="Artefacts\BizTalk\CleanUpHosts.vbs" />
     <Content Include="Artefacts\BizTalk\InstallHosts.vbs" />
     <Content Include="Artefacts\IndigoService\IndigoService.exe" />
     <Content Include="Artefacts\IndigoService\IndigoService.new.exe" />
@@ -285,7 +285,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Artefacts\IndigoService\Response.xml" />
-    <None Include="Artefacts\BizTalk\BizTalk Benchmark Wizard.BindingInfo.xml" />
     <Resource Include="Resources\Images\unknown.png" />
     <Resource Include="Resources\Images\gear_ok.png" />
     <Resource Include="Resources\Images\gear_pause.png" />
@@ -293,6 +292,9 @@
     <Resource Include="Resources\Images\gear_information.png" />
     <Resource Include="Resources\Images\BBW_Logo.png" />
     <Resource Include="Resources\Images\bbw.png" />
+    <Resource Include="Resources\Images\trafficlight_green.png" />
+    <Resource Include="Resources\Images\trafficlight_red.png" />
+    <Resource Include="Resources\Images\trafficlight_yellow.png" />
     <Content Include="Resources\LoadGenScripts\Messaging Single and Multi Message Box_001.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -328,6 +330,9 @@
     <Content Include="Artefacts\IndigoService\IndigoService.exe.org" />
     <Content Include="Artefacts\IndigoService\StartIndigoService.bat" />
     <Content Include="Artefacts\BizTalk\BizTalk Benchmark Wizard.msi" />
+    <Content Include="Artefacts\Registry settings\CLR Hosting\CLR_BBW_PxHost.reg" />
+    <Content Include="Artefacts\Registry settings\CLR Hosting\CLR_BBW_RxHost.reg" />
+    <Content Include="Artefacts\Registry settings\CLR Hosting\CLR_BBW_TxHost.reg" />
     <None Include="BizTalk Benchmark Wizard.exe.manifest" />
     <None Include="Properties\DataSources\BizTalk_Benchmark_Wizard.Reports.TestResult.datasource" />
     <None Include="Service References\HighScoreService\Reference.svcmap">
