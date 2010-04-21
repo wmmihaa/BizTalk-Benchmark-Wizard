@@ -147,7 +147,8 @@ namespace BizTalk_Benchmark_Wizard
                     DoEvents();
                     PrepareTest();
                     break;
-                case 6:
+                case 7:
+                    _loadGenHelper.StopAllTests();
                     break;
                 case 8: 
                     this.Close();
@@ -387,9 +388,9 @@ namespace BizTalk_Benchmark_Wizard
                     break;
                 case 6:
                     //Run test
-                    btnNext.Content = "Next";
+                    btnNext.Content = "Stop";
                     btnBack.IsEnabled = false;
-                    btnNext.IsEnabled = false;
+                    btnNext.IsEnabled = true;
                     break;
                 case 7:
                     //Show result
@@ -418,6 +419,7 @@ namespace BizTalk_Benchmark_Wizard
         #region Private Methods
         void ShowResult()
         {
+            btnNext.Content = "Close";
             ResultGrid.DataContext = null;
             Results.Clear();
             double acceptable = 0.8;
@@ -475,13 +477,25 @@ namespace BizTalk_Benchmark_Wizard
             if (cpuSuccess1 && cpuSuccess2 && cpuSuccess3 && processedSuccess && receivedSuccess)
             {
                 lblSucess.Text = "Succeeded";
-                lblResultDescription.Text = @"<LineBreak/>Congratulations, the test completed with expected results. If you wich to further analyze the environment we recommend you to study the Data Collector Sets created using the <Hyperlink NavigateUri=""http://www.codeplex.com/PAL"">Performance Analysis of Logs (PAL) tool</Hyperlink>.";
-                picSucess.Source = new System.Windows.Media.Imaging.BitmapImage(new Uri("pack://application:,,,/BizTalk Benchmark Wizard;component/Resources/Images/passed.png"));
+                lblResultDescription.Inlines.Clear();
+                lblResultDescription.Inlines.Add(new LineBreak());
+                lblResultDescription.Inlines.Add("Congratulations, the test completed with expected results. If you wich to further analyze the environment we recommend you to study the Data Collector Sets created using the ");
+
+                Hyperlink hlink = new Hyperlink(new Run("Performance Analysis of Logs (PAL) tool")) { NavigateUri = new Uri("http://www.codeplex.com/PAL") };
+                lblResultDescription.Inlines.Add(hlink);
+
+                picSucess.Source = new System.Windows.Media.Imaging.BitmapImage(new Uri("pack://application:,,,/BizTalk Benchmark Wizard;component/Resources/Images/trafficlight_green.png"));
             }
             else if ((double)environment.MinExpectedDocsProcessed * acceptable < (double)_avgProcessedValue)
             {
                 lblSucess.Text = "Acceptable";
-                lblResultDescription.Text = @"<LineBreak/>The test completed with an acceptable result. If you wich to further analyze the environment we recommend you to study the Data Collector Sets created using the <Hyperlink NavigateUri=""http://www.codeplex.com/PAL"">Performance Analysis of Logs (PAL) tool</Hyperlink>.";
+                lblResultDescription.Inlines.Clear();
+                lblResultDescription.Inlines.Add(new LineBreak());
+                lblResultDescription.Inlines.Add("The test completed with an acceptable result. If you wich to further analyze the environment we recommend you to study the Data Collector Sets created using the ");
+
+                Hyperlink hlink = new Hyperlink(new Run("Performance Analysis of Logs (PAL) tool")) { NavigateUri = new Uri("http://www.codeplex.com/PAL") };
+                lblResultDescription.Inlines.Add(hlink);
+
                 picSucess.Source = new System.Windows.Media.Imaging.BitmapImage(new Uri("pack://application:,,,/BizTalk Benchmark Wizard;component/Resources/Images/trafficlight_yellow.png"));
             
             }
@@ -697,7 +711,8 @@ namespace BizTalk_Benchmark_Wizard
                     _timer.Start();
                     tabControl1.SelectedIndex++;
                     btnNext.Visibility = Visibility.Visible;
-                    btnNext.IsEnabled=false;
+                    btnNext.Content = "Stop";
+//                    btnNext.IsEnabled=false;
                     DoEvents();
                     break;
             }

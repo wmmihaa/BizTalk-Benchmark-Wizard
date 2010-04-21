@@ -134,8 +134,11 @@ namespace BizTalk_Benchmark_Wizard.Helper
         }
         public void StopAllTests()
         {
-            foreach (LoadGen.LoadGen loadGen in _loadGenClients)
-                loadGen.Stop();
+            _loadGen.Stop();
+            //foreach (LoadGen.LoadGen loadGen in _loadGenClients)
+            //    loadGen.Stop();
+            
+            //LoadGen_Stopped(null, new LoadGenStopEventArgs(0,_loadGen.LoadGenStartTime, _loadGen.LoadGenStopTime));
         }
         public bool TestIndigoService(string server)
         {
