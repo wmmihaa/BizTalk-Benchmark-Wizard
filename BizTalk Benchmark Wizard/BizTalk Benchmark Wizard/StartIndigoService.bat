@@ -1,1 +1,1 @@
-Artefacts\IndigoService\IndigoService.exe IndigoTwoWaysVoid Artefacts\IndigoService\Response.xml false
+"%~dp0Artefacts\IndigoService\IndigoService.exe" IndigoTwoWaysVoid "%~dp0Artefacts\IndigoService\Response.xml" false
