@@ -73,6 +73,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <Content Include="StartIndigoService.bat">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BizTalkBenchmarkWizard.PerformanceCounterHelper\BizTalkBenchmarkWizard.PerformanceCounterHelper.csproj">
