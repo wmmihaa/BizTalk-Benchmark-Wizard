@@ -485,6 +485,7 @@ namespace BizTalk_Benchmark_Wizard
                 lblResultDescription.Inlines.Add(hlink);
 
                 picSucess.Source = new System.Windows.Media.Imaging.BitmapImage(new Uri("pack://application:,,,/BizTalk Benchmark Wizard;component/Resources/Images/trafficlight_green.png"));
+                btnSubmitHighScore.IsEnabled = true;
             }
             else if ((double)environment.MinExpectedDocsProcessed * acceptable < (double)_avgProcessedValue)
             {
@@ -497,7 +498,20 @@ namespace BizTalk_Benchmark_Wizard
                 lblResultDescription.Inlines.Add(hlink);
 
                 picSucess.Source = new System.Windows.Media.Imaging.BitmapImage(new Uri("pack://application:,,,/BizTalk Benchmark Wizard;component/Resources/Images/trafficlight_yellow.png"));
-            
+                btnSubmitHighScore.IsEnabled = true;
+            }
+            else
+            {
+                lblSucess.Text = "Failed";
+                lblResultDescription.Inlines.Clear();
+                lblResultDescription.Inlines.Add(new LineBreak());
+                lblResultDescription.Inlines.Add("The test was not completed with an acceptable result. If you wich to further analyze the environment we recommend you to study the Data Collector Sets created using the ");
+
+                Hyperlink hlink = new Hyperlink(new Run("Performance Analysis of Logs (PAL) tool")) { NavigateUri = new Uri("http://www.codeplex.com/PAL") };
+                lblResultDescription.Inlines.Add(hlink);
+
+                picSucess.Source = new System.Windows.Media.Imaging.BitmapImage(new Uri("pack://application:,,,/BizTalk Benchmark Wizard;component/Resources/Images/trafficlight_red.png"));
+                btnSubmitHighScore.IsEnabled = false;
             }
         }
         void RefreshPreRequsites()
